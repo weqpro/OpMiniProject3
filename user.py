@@ -15,4 +15,4 @@ class User(Base):
     surname = Column(String(55))
     email = Column(String(255), unique=True, index=True)
     password = Column(String(255))
-    phone_number = Column(String(15), unique=True)
+    
