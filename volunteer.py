@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from models import Volunteer, Soldier, AidRequest
+from models import Volunteer
 from repository_base import RepositoryBase
 
 class VolunteerRepositoryBase(RepositoryBase[Volunteer], ABC):
