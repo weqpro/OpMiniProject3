@@ -1,7 +1,11 @@
 [project]
 name = "op-miniproject"
 version = "2025.03.23"
-dependencies = ["fastapi"]
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "psycopg[binary]"
+]
 requires-python = ">=3.12"
 authors = [{ name = "Konovalenko Stanislav" }]
 readme = "README.md"
