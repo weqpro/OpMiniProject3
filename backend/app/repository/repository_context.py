@@ -1,6 +1,6 @@
-from collections.abc import AsyncGenerator
 import asyncio
 import os
+from typing import AsyncContextManager
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     create_async_engine,
@@ -50,7 +50,6 @@ class RepositoryContext:
             return f.read().rstrip("\n")
 
     @property
-    async def session(self) -> AsyncGenerator[AsyncSession]:
+    def session(self) -> AsyncContextManager[AsyncSession]:
         """returns yields a session from session pool"""
-        async with self.__session_maker() as session:
-            yield session
+        return self.__session_maker()
