@@ -22,10 +22,13 @@ services:
   api:
     image: docker.io/library/backend_api:latest
     environment:
-      DATABASE_URL: postgres+psycopg://fastapi:{}@postgresql:5432/mydatabase
+      DATABASE_URL: postgresql+psycopg://fastapi:{passwd}@postgresql:5432/postgres
+      DATABASE_PASSWORD_FILE: /run/secrets/postgres_passwd
     networks:
       - backend
       - frontend
+    secrets:
+      - postgres_passwd
     depends_on:
       - postgresql
 
