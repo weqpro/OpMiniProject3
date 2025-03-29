@@ -18,7 +18,7 @@ class Soldier(Base):
     surname: Mapped[str] = mapped_column(String(55))
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     password: Mapped[str] = mapped_column(String(255))
-    email: Mapped[str] = mapped_column(String(15), unique=True)
+    phone_number: Mapped[str] = mapped_column(String(15), unique=True)
     unit: Mapped[str] = mapped_column(String(100))
     subunit: Mapped[str] = mapped_column(String(100))
     battalion: Mapped[str] = mapped_column(String(255))
