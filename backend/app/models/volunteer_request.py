@@ -2,6 +2,7 @@
 
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, mapped_column, Mapped
+
 from app.models.base import Base
 
 
@@ -16,5 +17,6 @@ class VolunteerRequest(Base):
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"))
     aid_request_id: Mapped[int] = mapped_column(ForeignKey("request.id"))
 
-    volunteer = relationship("Volunteer", back_populates="requests")
-    aid_request = relationship("AidRequest", back_populates="volunteers")
+    volunteer: Mapped["Volunteer"] = relationship("Volunteer", back_populates="volunteer_requests")
+    aid_request: Mapped["AidRequest"] = relationship(
+        "AidRequest", back_populates="volunteer_requests")
