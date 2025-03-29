@@ -1,8 +1,10 @@
 '''category model'''
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship, declarative_base
 
-Base = declarative_base()
+from sqlalchemy import String
+from sqlalchemy.orm import relationship, mapped_column, Mapped
+
+from app.models.base import Base
+
 
 class Category(Base):
     '''
@@ -10,7 +12,8 @@ class Category(Base):
     '''
     __tablename__ = "category"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100))
+    id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(255))
 
-    requests = relationship("AidRequest", back_populates="category")
+    requests: Mapped[list["AidRequest"]] = relationship(
+        "AidRequest", back_populates="category", cascade="all, delete-orphan")

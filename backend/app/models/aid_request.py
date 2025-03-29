@@ -27,9 +27,11 @@ class AidRequest(Base):
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("category.id"))
 
-    # soldier = relationship("Soldier", back_populates="requests")
-    # category = relationship("Category", back_populates="requests")
-    # volunteers = relationship("VolunteerRequest", back_populates="aid_request")
+
+    category: Mapped["Category"] = relationship("Category", back_populates="requests")
+    soldier: Mapped["Soldier"] = relationship("Soldier", back_populates="requests")
+    volunteers: Mapped[list["Volunteer"]] = relationship(
+        "Volunteer", secondary="volunteer_aid_association", back_populates="aid_requests")
 
     @staticmethod
     def create_dummy() -> "AidRequest": ...

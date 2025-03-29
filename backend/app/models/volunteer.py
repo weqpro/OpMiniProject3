@@ -1,8 +1,12 @@
 '''volunteer model'''
-from sqlalchemy import Column, Integer, String, DECIMAL
-from sqlalchemy.orm import relationship, declarative_base
 
-Base = declarative_base()
+from typing import List
+
+from sqlalchemy import Integer, String, Float
+from sqlalchemy.orm import relationship, mapped_column, Mapped
+
+from app.models.base import Base
+
 
 class Volunteer(Base):
     '''
@@ -10,13 +14,15 @@ class Volunteer(Base):
     '''
     __tablename__ = "volunteer"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(55))
-    surname = Column(String(55))
-    email = Column(String(255), unique=True, index=True)
-    password = Column(String(255))
-    phone_number = Column(String(15), unique=True)
-    rating = Column(DECIMAL(2,1), default=0.0)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(55), nullable=False)
+    surname: Mapped[str] = mapped_column(String(55), nullable=False)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
+    password: Mapped[str] = mapped_column(String(255), nullable=False)
+    phone_number: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
+    rating: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
 
-    requests = relationship("VolunteerRequest", back_populates="volunteer")
-    reviews = relationship("Review", back_populates="volunteer")
+    requests: Mapped[List["VolunteerRequest"]] = relationship(
+        "VolunteerRequest", back_populates="volunteer")
+    reviews: Mapped[List["Review"]] =  relationship(
+        "Review", back_populates="volunteer", cascade="all, delete-orphan")
