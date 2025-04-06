@@ -1,0 +1,188 @@
+<div class="top-bar">
+    <div class="top-left">
+      <a routerLink="/">
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+      </a>
+    </div>
+    <div class="top-right">
+      <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
+        <mat-icon>apps</mat-icon>
+      </button>
+      <mat-menu #catalogMenu="matMenu">
+        <button mat-menu-item>Техніка</button>
+        <button mat-menu-item>Медикаменти</button>
+        <button mat-menu-item>Спорядження</button>
+        <button mat-menu-item>Продукти</button>
+      </mat-menu>
+      <button mat-icon-button (click)="toggleSearch()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <mat-form-field *ngIf="showSearch" class="search-field" appearance="outline">
+        <mat-label>Пошук</mat-label>
+        <input matInput [(ngModel)]="searchQuery" placeholder="Введіть запит..." />
+      </mat-form-field>
+
+      <button mat-button class="header-button" routerLink="/create">Опублікувати оголошення</button>
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+        <button mat-menu-item (click)="logout()">Вийти</button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <div class="profile-wrapper">
+    <mat-tab-group>
+      <mat-tab label="Про себе">
+        <div class="profile-section">
+          <div class="profile-header">
+            <button mat-icon-button disabled>
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <div>
+              <h2>Ім’я Прізвище</h2>
+            </div>
+          </div>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>add_circle</mat-icon> Додати фото профілю
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Форма для завантаження фото...</p>
+          </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>edit</mat-icon> Редагувати інформацію про себе
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>....</p>
+          </mat-expansion-panel>
+  
+          <h3 class="section-title">Підтвердьте свій профіль</h3>
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title><mat-icon>verified_user</mat-icon> Підтвердити особу</mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="confirmation-fields">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Підрозділ</mat-label>
+                  <input matInput placeholder="Введіть підрозділ" />
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Військова частина</mat-label>
+                  <input matInput placeholder="Введіть номер частини" />
+                </mat-form-field>
+              
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Батальйон</mat-label>
+                  <input matInput placeholder="Введіть батальйон" />
+                </mat-form-field>
+              </div>              
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>Перевірка та зміна електронної адреси</p>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title><mat-icon>phone</mat-icon> Номер телефону</mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>Додавання або підтвердження телефону</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+  
+          <h3 class="section-title">Про себе</h3>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>info</mat-icon> Додати інформацію про себе
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <textarea matInput placeholder="Опишіть ваш досвід, обов’язки, потреби..."></textarea>
+          </mat-expansion-panel>
+        </div>
+      </mat-tab>
+  
+      <mat-tab label="Налаштування">
+        <div class="settings-section">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Відгуки</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Тут будуть відгуки</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Налаштування сповіщень</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Налаштування сповіщень</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Пароль</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Зміна паролю</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Електронна адреса адреса</mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>Редагування електронної адреси</p>
+          </mat-expansion-panel>
+  
+          <div class="settings-actions">
+            <button mat-button color="primary">Вийти</button><br>
+            <button mat-button color="warn">Видалити обліковий запис</button>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+  
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+          <a routerLink="/">Головна</a>
+          <a routerLink="/about">Про нас</a>
+        </div>
+  
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>foris&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+  

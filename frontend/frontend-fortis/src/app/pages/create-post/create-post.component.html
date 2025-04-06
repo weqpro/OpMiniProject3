@@ -1,0 +1,150 @@
+<div class="top-bar">
+  <div class="top-left">
+    <a routerLink="/">
+      <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+    </a>
+  </div>
+
+  <div class="top-right">
+    <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
+      <mat-icon>apps</mat-icon>
+    </button>
+
+    <mat-menu #catalogMenu="matMenu">
+      <button mat-menu-item (click)="selectCategory('Зв`язок')">Зв'язок</button>
+      <button mat-menu-item (click)="selectCategory('Техніка')">Техніка</button>
+      <button mat-menu-item (click)="selectCategory('Одяг')">Одяг</button>
+      <button mat-menu-item (click)="selectCategory('Спорядження')">Спорядження</button>
+      <button mat-menu-item (click)="selectCategory('Медикаменти')">Медицина</button>
+      <button mat-menu-item (click)="selectCategory('Транспорт')">Транспорт</button>
+      <button mat-menu-item (click)="selectCategory('Продукти харчування')">Продукти харчування</button>
+    </mat-menu>
+
+    <button mat-icon-button (click)="toggleSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <mat-form-field *ngIf="showSearch" class="search-field" appearance="outline">
+      <mat-label>Пошук</mat-label>
+      <input matInput [(ngModel)]="searchQuery" placeholder="Введіть запит..." />
+    </mat-form-field>
+
+    <button mat-button class="header-button">Опублікувати оголошення</button>
+
+    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+      <button mat-menu-item (click)="logout()">Вийти</button>
+    </mat-menu>
+    
+  </div>
+</div>
+
+<div class="form-wrapper">
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Ваш запит</mat-label>
+    <input matInput placeholder="Введіть назву запиту" />
+  </mat-form-field>
+
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Опис</mat-label>
+    <textarea matInput placeholder="Опишіть всі необхідні деталі"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button class="green-button">Додати фото</button>
+
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Локація</mat-label>
+    <mat-select>
+      <mat-option value="bila-tserkva">Біла Церква</mat-option>
+      <mat-option value="berdychiv">Бердичів</mat-option>
+      <mat-option value="brovary">Бровари</mat-option>
+      <mat-option value="chernihiv">Чернігів</mat-option>
+      <mat-option value="chernivtsi">Чернівці</mat-option>
+      <mat-option value="dnipro">Дніпро</mat-option>
+      <mat-option value="ivano-frankivsk">Івано-Франківськ</mat-option>
+      <mat-option value="kamianets-podilskyi">Кам'янець-Подільський</mat-option>
+      <mat-option value="kharkiv">Харків</mat-option>
+      <mat-option value="khmelnytskyi">Хмельницький</mat-option>
+      <mat-option value="kolomyia">Коломия</mat-option>
+      <mat-option value="konotop">Конотоп</mat-option>
+      <mat-option value="kramatorsk">Краматорськ</mat-option>
+      <mat-option value="kremenchuk">Кременчук</mat-option>
+      <mat-option value="kropyvnytskyi">Кропивницький</mat-option>
+      <mat-option value="kyiv">Київ</mat-option>
+      <mat-option value="lutsk">Луцьк</mat-option>
+      <mat-option value="lviv">Львів</mat-option>
+      <mat-option value="mykolaiv">Миколаїв</mat-option>
+      <mat-option value="odesa">Одеса</mat-option>
+      <mat-option value="pavlohrad">Павлоград</mat-option>
+      <mat-option value="poltava">Полтава</mat-option>
+      <mat-option value="rivnе">Рівне</mat-option>
+      <mat-option value="smila">Сміла</mat-option>
+      <mat-option value="sumy">Суми</mat-option>
+      <mat-option value="ternopil">Тернопіль</mat-option>
+      <mat-option value="uzhhorod">Ужгород</mat-option>
+      <mat-option value="vinnytsia">Вінниця</mat-option>
+      <mat-option value="zaporizhzhia">Запоріжжя</mat-option>
+      <mat-option value="zhytomyr">Житомир</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Крайній термін</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="mm/dd/yyyy" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div>
+    <mat-label>Оберіть теги:</mat-label>
+    <mat-chip-listbox multiple>
+      <mat-chip-option
+        *ngFor="let tag of allTags"
+        [selected]="tag.selected"
+        (selectionChange)="tag.selected = $event.selected">
+        {{ tag.name }}
+      </mat-chip-option>
+    </mat-chip-listbox>
+  </div>
+
+  <button mat-raised-button color="primary" class="publish-button">Опублікувати</button>
+</div>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <a routerLink="/">
+        <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+      </a>
+    </div>
+
+    <div class="footer-center">
+      <div class="footer-links">
+        <a routerLink="/contacts">Контакти</a>
+      </div>
+
+      <div class="footer-contacts">
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>Lviv, Ukraine</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <span>foris&#64;gmail.com</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>call</mat-icon>
+          <span>+380 567 239 175</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-right">
+      <p>Fortis © 2025 All rights reserved</p>
+    </div>
+  </div>
+</footer>
