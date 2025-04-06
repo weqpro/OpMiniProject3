@@ -1,0 +1,90 @@
+<div class="top-bar">
+    <div class="top-left">
+      <a routerLink="/">
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+      </a>
+    </div>
+    <div class="top-right">
+      <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
+        <mat-icon>apps</mat-icon>
+      </button>
+      <mat-menu #catalogMenu="matMenu">
+        <button mat-menu-item>Техніка</button>
+        <button mat-menu-item>Медикаменти</button>
+        <button mat-menu-item>Спорядження</button>
+        <button mat-menu-item>Продукти</button>
+      </mat-menu>
+  
+      <button mat-icon-button>
+        <mat-icon>search</mat-icon>
+      </button>
+  
+      <button mat-button class="header-button" routerLink="/create">Опублікувати оголошення</button>
+  
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/login">Увійти</button>
+        <button mat-menu-item>Зареєструватися</button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <div class="login-wrapper">
+    <h2>Увійти</h2>
+  
+    <mat-form-field appearance="outline" class="login-input">
+      <mat-label>Електронна пошта</mat-label>
+      <input matInput type="email" [(ngModel)]="email">
+    </mat-form-field>
+  
+    <mat-form-field appearance="outline" class="login-input">
+      <mat-label>Пароль</mat-label>
+      <input matInput type="password" [(ngModel)]="password">
+    </mat-form-field>
+  
+    <a class="forgot-password">Забули пароль?</a>
+  
+    <button mat-flat-button color="primary" class="login-button" (click)="login()">Увійти</button>
+  
+    <a class="register-link" routerLink="/register">Зареєструватися</a>
+  </div>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+  
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+          <a routerLink="/">Головна</a>
+          <a routerLink="/about">Про нас</a>
+        </div>
+  
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>foris&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+  
