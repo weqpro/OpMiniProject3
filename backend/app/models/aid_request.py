@@ -52,7 +52,7 @@ class AidRequest(Base):
             location="Kyiv",
             tags=["medical", "clothing"],
             # status="pending",
-            status=AidRequestStatus.PENDING
+            status=AidRequestStatus.PENDING,
             soldier_id=1,
             category_id=1,
         )
