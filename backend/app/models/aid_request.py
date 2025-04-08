@@ -31,7 +31,7 @@ class AidRequest(Base):
     location: Mapped[str] = mapped_column(String(100))
     tags: Mapped[List[str]] = mapped_column(ARRAY(String))
     # status: Mapped[str] = mapped_column(String(40))
-    status: Mapped[AidRequestStatus] = mapped_column(Enum(AidRequestStatus), default=AidRequestStatus.PENDING)
+    status: Mapped[AidRequestStatus] = mapped_column(PyEnum(AidRequestStatus), default=AidRequestStatus.PENDING)
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("category.id"))
     volunteer_deadline: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
