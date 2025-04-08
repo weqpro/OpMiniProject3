@@ -24,3 +24,22 @@ def set_volunteer_deadline(db: Session, aid_request_id: int, deadline: datetime.
         db.commit()
         db.refresh(db_aid_request)
     return db_aid_request
+
+def delete_aid_request(db: Session, aid_request_id: int, soldier_id: int):
+    aid_request = db.query(models.AidRequest).filter(models.AidRequest.id == aid_request_id, models.AidRequest.soldier_id == soldier_id).first()
+    
+    if aid_request:
+        db.delete(aid_request)
+        db.commit()
+        return True
+    return False
+
+def reject_aid_request(db: Session, aid_request_id: int, volunteer_id: int):
+    aid_request = db.query(models.AidRequest).filter(models.AidRequest.id == aid_request_id).first()
+    
+    if aid_request:
+        if volunteer_id in [volunteer.id for volunteer in aid_request.volunteers]:
+            aid_request.status = 'Очікування'
+            db.commit()
+            return True
+    return False
