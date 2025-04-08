@@ -3,10 +3,17 @@
 import datetime
 from typing import List
 
+from enum import Enum as PyEnum
 from sqlalchemy import String, ForeignKey, LargeBinary, DateTime, ARRAY
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base import Base
+
+
+class AidRequestStatus(PyEnum):
+    PENDING = "Очікування"
+    IN_PROGRESS = "В процесі"
+    COMPLETED = "Виконано"
 
 
 class AidRequest(Base):
@@ -23,9 +30,11 @@ class AidRequest(Base):
     end_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
     location: Mapped[str] = mapped_column(String(100))
     tags: Mapped[List[str]] = mapped_column(ARRAY(String))
-    status: Mapped[str] = mapped_column(String(40))
+    # status: Mapped[str] = mapped_column(String(40))
+    status: Mapped[AidRequestStatus] = mapped_column(Enum(AidRequestStatus), default=AidRequestStatus.PENDING)
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
     category_id: Mapped[int] = mapped_column(ForeignKey("category.id"))
+    volunteer_deadline: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
     category: Mapped["Category"] = relationship("Category", back_populates="requests")
@@ -42,7 +51,8 @@ class AidRequest(Base):
             end_date=datetime.datetime(2023, 12, 31),
             location="Kyiv",
             tags=["medical", "clothing"],
-            status="pending",
+            # status="pending",
+            status=AidRequestStatus.PENDING
             soldier_id=1,
             category_id=1,
         )
