@@ -4,14 +4,14 @@ from fastapi import FastAPI
 from dependency_injector.wiring import inject, Provide
 from sqlalchemy.orm import Session
 
-from app.containers.application_container import ApplicationContainer
-from app.models.aid_request import AidRequest
-from app.schemas.responses.search_response import AidRequestSearchResponse
-from app.schemas.aid_request import AidRequestCreate, AidRequestOut
-from app.services.aid_request_service import AidRequestService
-from app.models.review import Review
-from app.schemas.review import ReviewCreate, ReviewOut 
-from app.services.review_service import ReviewService # дописати сервіс для відгуку
+from backend.app.containers.application_container import ApplicationContainer
+from backend.app.models.aid_request import AidRequest
+from backend.app.schemas.responses.search_response import AidRequestSearchResponse
+from backend.app.schemas.aid_request import AidRequestCreate, AidRequestOut
+from backend.app.services.aid_request_service import AidRequestService
+from backend.app.models.review import Review
+from backend.app.schemas.review import ReviewCreate, ReviewOut 
+from backend.app.services.review_service import ReviewService # дописати сервіс для відгуку
 
 global app
 app = FastAPI()
