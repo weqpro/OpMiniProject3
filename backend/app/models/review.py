@@ -5,7 +5,7 @@ from typing import List
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from sqlalchemy import Integer, ForeignKey, Boolean, ARRAY, String, Text
 
-from app.models.base import Base
+from backend.app.models.base import Base
 
 
 class Review(Base):

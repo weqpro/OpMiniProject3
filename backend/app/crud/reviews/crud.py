@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from . import models, schemas
+from backend.app import models, schemas
 
 def create_review(db: Session, review: schemas.ReviewCreate):
     db_review = models.Review(**review.dict())

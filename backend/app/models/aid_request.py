@@ -7,7 +7,7 @@ from enum import Enum as PyEnum
 from sqlalchemy import String, ForeignKey, LargeBinary, DateTime, ARRAY
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
-from app.models.base import Base
+from backend.app.models.base import Base
 
 
 class AidRequestStatus(PyEnum):

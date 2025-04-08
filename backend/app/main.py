@@ -33,7 +33,7 @@ async def read_root(
 @inject
 async def create_aid_request(
     aid_request: AidRequestCreate,
-    db: Session = Provide[ApplicationContainer.db],  # Ін'єкція сесії БД
+    db: Session = Provide[ApplicationContainer.db],
     aid_request_service: AidRequestService = Provide[ApplicationContainer.aid_request_service],
 ):
     """
