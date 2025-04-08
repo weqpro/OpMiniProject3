@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.containers.application_container import ApplicationContainer
 from app.models.aid_request import AidRequest
 from app.schemas.responses.search_response import AidRequestSearchResponse
+from app.schemas.aid_request import AidRequestCreate, AidRequestOut
 from app.services.aid_request_service import AidRequestService
 from app.models.review import Review
 from app.schemas.review import ReviewCreate, ReviewOut 
@@ -27,6 +28,19 @@ async def read_root(
     aid_request_service: AidRequestService = Provide[ApplicationContainer],
 ):
     return {"result": await aid_request_service.dummy_search()}
+
+@app.post("/aid-requests/", response_model=AidRequestOut)
+@inject
+async def create_aid_request(
+    aid_request: AidRequestCreate,
+    db: Session = Provide[ApplicationContainer.db],  # Ін'єкція сесії БД
+    aid_request_service: AidRequestService = Provide[ApplicationContainer.aid_request_service],
+):
+    """
+    Create a new aid request by a soldier.
+    """
+    created_aid_request = await aid_request_service.create_aid_request(db, aid_request)
+    return created_aid_request
 
 @app.post("/reviews/", response_model=ReviewOut)
 @inject
