@@ -5,7 +5,7 @@ from sqlalchemy import LargeBinary
 from pydantic import BaseModel
 
 
-class AidRequest(BaseModel):
+class AidRequestBase(BaseModel):
     '''
     The schema used to validate and structure data
     related to aid requests
@@ -20,3 +20,13 @@ class AidRequest(BaseModel):
     status: str
     soldier_id: int
     category_id: int
+    
+class AidRequestCreate(AidRequestBase):
+    pass
+
+class AidRequestOut(AidRequestBase):
+    id: int
+    status: str
+
+    class Config:
+        orm_mode = True
