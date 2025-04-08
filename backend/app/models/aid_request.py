@@ -34,4 +34,15 @@ class AidRequest(Base):
         "Volunteer", secondary="volunteer_aid_association", back_populates="aid_requests")
 
     @staticmethod
-    def create_dummy() -> "AidRequest": ...
+    def create_dummy() -> "AidRequest":
+        return AidRequest(
+            name="Dummy Aid Request",
+            description="Description of the aid request",
+            image=b"image_data",
+            end_date=datetime.datetime(2023, 12, 31),
+            location="Kyiv",
+            tags=["medical", "clothing"],
+            status="pending",
+            soldier_id=1,
+            category_id=1,
+        )
