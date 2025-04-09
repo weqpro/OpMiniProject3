@@ -26,4 +26,12 @@ export class VolonteerService {
       })
     );
   }
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.error(`Error deleting volonteer with ID ${id}:`, error);
+        return throwError(() => new Error('Could not delete volonteer. Please try again.'));
+      })
+    );
+  }
 }

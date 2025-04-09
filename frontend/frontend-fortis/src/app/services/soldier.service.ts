@@ -26,4 +26,12 @@ export class SoldierService {
       })
     );
   }
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.error(`Error deleting soldier with ID ${id}:`, error);
+        return throwError(() => new Error('Could not delete soldier. Please try again.'));
+      })
+    );
+  }
 }
