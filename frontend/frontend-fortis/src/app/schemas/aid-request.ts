@@ -2,35 +2,33 @@ export class AidRequest{
   id: number;
   name: string;
   description: string;
-  image: string;
+  image_path: string;
   endDate: Date;
   location: string;
-  tags: string[];
   status: string;
-  soldierId: number;
-  categoryId: number;
+  soldier_id: number;
+  volunteer_id: number;
 
   constructor(
     id: number,
     name: string,
     description: string,
-    image: string,
+    image_path: string,
     endDate: Date,
     location: string,
-    tags: string[],
     status: string,
-    soldierId: number,
-    categoryId: number
+    soldier_id: number,
+    volunteer_id: number,
+
   ) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.image = image;
+    this.image_path = image_path;
     this.endDate = endDate;
     this.location = location;
-    this.tags = tags;
     this.status = status;
-    this.soldierId = soldierId;
-    this.categoryId = categoryId;
+    this.soldier_id = soldier_id;
+    this.volunteer_id = volunteer_id
   }
 }
