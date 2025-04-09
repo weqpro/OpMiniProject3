@@ -28,4 +28,5 @@ export class SoldierHomeComponent {
   logout(): void {
     console.log('Користувач вийшов');
   }
+
 }
