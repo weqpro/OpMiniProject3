@@ -1,19 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Soldier } from '../schemas/soldier';
 import { Observable, catchError, throwError } from 'rxjs';
-import { Volonteer } from '../schemas/volonteer';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VolonteerService {
+export class SoldierService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://your-api.com/volunteers';
+  private apiUrl = 'https://your-api.com/soldiers';
 
-  create(volonteer: Volonteer): Observable<any> {
-    return this.http.post(this.apiUrl, volonteer).pipe(
+  create(soldier: Soldier): Observable<any> {
+    return this.http.post(this.apiUrl, soldier).pipe(
       catchError((error) => {
-        console.error('Sending erroe', error);
+        console.error('Sending error', error);
         return throwError(() => new Error('Try again'));
       })
     );
