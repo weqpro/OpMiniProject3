@@ -1,38 +1,29 @@
-'''AidRequest schema module'''
-from typing import List
+"""AidRequest schema module"""
+
 import datetime
-from sqlalchemy import LargeBinary
+
 from pydantic import BaseModel
-from enum import Enum
 
-class AidRequestStatusEnum(str, Enum):
-    PENDING = "Очікування"
-    IN_PROGRESS = "В процесі"
-    COMPLETED = "Виконано"
+from app.schemas.category import Category
 
-class AidRequestBase(BaseModel):
-    '''
+
+class AidRequestSchema(BaseModel):
+    """
     The schema used to validate and structure data
     related to aid requests
-    '''
+    """
+
     id: int
     name: str
     description: str
-    image: LargeBinary
+    image: str
     end_date: datetime.datetime
     location: str
-    tags: List[str]
+    tags: list[str]
     status: str
     soldier_id: int
-    category_id: int
-    volunteer_deadline: datetime.datetime
-    
-class AidRequestCreate(AidRequestBase):
-    pass
-
-class AidRequestOut(AidRequestBase):
-    id: int
-    status: AidRequestStatusEnum
+    category: Category
+    deadline: datetime.datetime
 
     class Config:
         orm_mode = True

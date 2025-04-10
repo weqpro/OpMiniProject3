@@ -2,18 +2,19 @@
 
 import datetime
 from typing import List
-
 from enum import Enum as PyEnum
-from sqlalchemy import String, ForeignKey, LargeBinary, DateTime, ARRAY
+
+from sqlalchemy import String, ForeignKey, DateTime, ARRAY
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
-from backend.app.models.base import Base
+from app.models.base import Base
+from app.models.category import Category
 
 
 class AidRequestStatus(PyEnum):
-    PENDING = "Очікування"
-    IN_PROGRESS = "В процесі"
-    COMPLETED = "Виконано"
+    PENDING = "pending"
+    IN_PROGRESS = "in_progres"
+    COMPLETED = "completed"
 
 
 class AidRequest(Base):
@@ -24,35 +25,42 @@ class AidRequest(Base):
     __tablename__ = "aid_request"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
-    name: Mapped[str] = mapped_column(String(255))
+    name: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
     description: Mapped[str] = mapped_column(String(1000))
-    image: Mapped[LargeBinary] = mapped_column(LargeBinary)
-    end_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True))
+    image: Mapped[str] = mapped_column(String(255))
+    end_date: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), index=True, nullable=False
+    )
     location: Mapped[str] = mapped_column(String(100))
-    tags: Mapped[List[str]] = mapped_column(ARRAY(String))
+
     # status: Mapped[str] = mapped_column(String(40))
-    status: Mapped[AidRequestStatus] = mapped_column(PyEnum(AidRequestStatus), default=AidRequestStatus.PENDING)
-    soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
-    category_id: Mapped[int] = mapped_column(ForeignKey("category.id"))
-    volunteer_deadline: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    status: Mapped[str] = mapped_column(
+        default=AidRequestStatus.PENDING, nullable=False
+    )
+    deadline: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
+    status: Mapped[str] = mapped_column(String(40), nullable=False)
 
+    soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"), nullable=False)
+    volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"), nullable=True)
 
-    category: Mapped["Category"] = relationship("Category", back_populates="requests")
-    soldier: Mapped["Soldier"] = relationship("Soldier", back_populates="requests")
-    volunteers: Mapped[list["Volunteer"]] = relationship(
-        "Volunteer", secondary="volunteer_aid_association", back_populates="aid_requests")
+    category: Mapped[Category] = relationship()
+    # soldier: Mapped[Soldier] = relationship()
+    # volunteer: Mapped[Volunteer] = relationship()
 
     @staticmethod
     def create_dummy() -> "AidRequest":
         return AidRequest(
-            name="Dummy Aid Request",
-            description="Description of the aid request",
-            image=b"image_data",
-            end_date=datetime.datetime(2023, 12, 31),
-            location="Kyiv",
-            tags=["medical", "clothing"],
-            # status="pending",
-            status=AidRequestStatus.PENDING,
-            soldier_id=1,
-            category_id=1,
+            id=123,
+            name="Name",
+            description="Some description",
+            image="shit",
+            end_date=datetime.datetime.now(),
+            location="somewhere",
+            tags=["josci", "duje"],
+            status="not done",
+            soldier_id=1234,
+            category=None,
         )

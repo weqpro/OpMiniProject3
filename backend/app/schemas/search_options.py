@@ -1,2 +1,6 @@
-class SearchOptions:
-    def __init__(self, json: str | None = None) -> None: ...
+from pydantic import BaseModel
+
+
+class SearchOptions(BaseModel):
+    text: str
+    tags: list[str]

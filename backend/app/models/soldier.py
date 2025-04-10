@@ -1,16 +1,21 @@
-'''soldier model'''
+"""soldier model"""
 
-from typing import List
+from typing import List, TYPE_CHECKING
 
 from sqlalchemy import String
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base import Base
 
+from app.models.aid_request import AidRequest
+from app.models.review import Review
+
+
 class Soldier(Base):
-    '''
+    """
     Represents a military member who can submit aid requests
-    '''
+    """
+
     __tablename__ = "soldier"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
@@ -20,10 +25,10 @@ class Soldier(Base):
     password: Mapped[str] = mapped_column(String(255))
     phone_number: Mapped[str] = mapped_column(String(15), unique=True)
     unit: Mapped[str] = mapped_column(String(100))
-    subunit: Mapped[str] = mapped_column(String(100))
+    subsubunit: Mapped[str] = mapped_column(String(100))
     battalion: Mapped[str] = mapped_column(String(255))
 
-    requests: Mapped[List["AidRequest"]] = relationship(
-        "AidRequest", back_populates="soldier", cascade="all, delete-orphan")
-    reviews: Mapped[List["Review"]] = relationship(
-        "Review", back_populates="soldier", cascade="all, delete-orphan")
+    requests: Mapped[List[AidRequest]] = relationship(
+        AidRequest, cascade="all, delete-orphan"
+    )
+    reviews: Mapped[List[Review]] = relationship(Review, cascade="all, delete-orphan")

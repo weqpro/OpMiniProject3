@@ -1,12 +1,16 @@
 import asyncio
+from collections.abc import AsyncGenerator
 import os
-from typing import AsyncContextManager
+from contextlib import asynccontextmanager
+
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     create_async_engine,
     async_sessionmaker,
     AsyncEngine,
 )
+
+from app.utils import Singleton
 
 
 class MissingEnviromentVariableError(Exception):
@@ -15,7 +19,7 @@ class MissingEnviromentVariableError(Exception):
     pass
 
 
-class RepositoryContext:
+class RepositoryContext(metaclass=Singleton):
     def __init__(self) -> None:
         password: str = self.__get_passwd()
         connection: str | None = os.getenv("DATABASE_URL")
@@ -49,7 +53,17 @@ class RepositoryContext:
         with open(path) as f:
             return f.read().rstrip("\n")
 
-    @property
-    def session(self) -> AsyncContextManager[AsyncSession]:
-        """returns yields a session from session pool"""
-        return self.__session_maker()
+    @asynccontextmanager
+    async def session_maker(self) -> AsyncGenerator[AsyncSession, None]:
+        session: AsyncSession = self.__session_maker()
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
+
+
+def get_repository_context() -> RepositoryContext:
+    return RepositoryContext()

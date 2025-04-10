@@ -1,60 +1,47 @@
-"""
-module of RepositoryBase implementation
-"""
+"""module of RepositoryBase implementation"""
 
-from typing import Sequence
-from typing import Type, Any
-from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
+from contextlib import AbstractAsyncContextManager
+from typing import Type
+from collections.abc import Callable, Sequence
+from sqlalchemy import select, update
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.expression import ColumnExpressionArgument
-from app.repository.repository_context import RepositoryContext
 
 
 class RepositoryBase[T]:
-    """
-    Class of RepositoryBase implementation
-    """
+    """Class of RepositoryBase implementation"""
 
-    def __init__(self, repository: RepositoryContext, model: Type[T]):
-        self.__repository = repository
-        self.__model = model
+    def __init__(
+        self,
+        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]],
+        model: Type[T],
+    ):
+        self._session_maker = session_maker
+        self._model = model
 
     async def create(self, value: T) -> T:
-        """
-        Adds new object to database
-        """
-        async with self.__repository.session as session:
-            try:
-                session.add(value)
-                await session.commit()
-                await session.refresh(value)
-                return value
-            except SQLAlchemyError as e:
-                await session.rollback()
-                raise e
+        """Adds new object to database"""
+        async with self._session_maker() as session:
+            session.add(value)
+            await session.commit()
+            await session.refresh(value)
+            return value
 
     async def delete(self, value: T) -> None:
-        """
-        Deletes object by id
-        """
-        async with self.__repository.session as session:
-            try:
-                await session.delete(value)
-                await session.commit()
-                return
-            except SQLAlchemyError as e:
-                await session.rollback()
-                raise e
+        """Deletes object by id"""
+        async with self._session_maker() as session:
+            await session.delete(value)
+            await session.commit()
+            return
 
     async def find(
-        self, *order_by: ColumnElement | str, **filter_by: Any
+        self,
+        *order_by: ColumnElement | str,  # **filter_by: Any
     ) -> Sequence[T]:
-        """
-        Gets objects with the specified ordering, and filtering.
-        """
-        async with self.__repository.session as session:
-            stmt = select(self.__model).order_by(*order_by).filter_by(**filter_by)
+        """Gets objects with the specified ordering, and filtering."""
+        async with self._session_maker() as session:
+            stmt = select(self._model).order_by(*order_by)  # .filter_by(**filter_by)
             result = await session.execute(stmt)
             return result.scalars().all()
 
@@ -62,17 +49,20 @@ class RepositoryBase[T]:
         self,
         condition: ColumnExpressionArgument[bool],
         *order_by: ColumnElement | str,
-        **filter_by: Any,
+        # **filter_by: Any,
     ) -> Sequence[T]:
-        """
-        Gets objects with the specified ordering, and filtering.
-        """
-        async with self.__repository.session as session:
+        """Gets objects with the specified ordering, and filtering."""
+        async with self._session_maker() as session:
             stmt = (
-                select(self.__model)
-                .where(condition)
-                .order_by(*order_by)
-                .filter_by(**filter_by)
+                select(self._model).where(condition).order_by(*order_by)
+                #       .filter_by(**filter_by)
             )
             result = await session.execute(stmt)
             return result.scalars().all()
+
+    async def update(self, condition: ColumnExpressionArgument[bool], **values) -> None:
+        async with self._session_maker() as session:
+            stmt = update(self._model).where(condition).values(**values)
+            await session.execute(stmt)
+            await session.commit()
+            return
