@@ -9,12 +9,14 @@ from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base import Base
 from app.models.category import Category
+import app.schemas.aid_request
 
 
 class AidRequestStatus(PyEnum):
     PENDING = "pending"
     IN_PROGRESS = "in_progres"
     COMPLETED = "completed"
+
 
 
 class AidRequest(Base):
@@ -32,7 +34,15 @@ class AidRequest(Base):
         DateTime(timezone=True), index=True, nullable=False
     )
     location: Mapped[str] = mapped_column(String(100))
+    tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
+    status: Mapped[str] = mapped_column(String(40), nullable=False)
 
+    soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"), nullable=False)
+    volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"), nullable=True)
+
+    category: Mapped[Category] = relationship()
+    # soldier: Mapped[Soldier] = relationship()
+    # volunteer: Mapped[Volunteer] = relationship()
     # status: Mapped[str] = mapped_column(String(40))
     status: Mapped[str] = mapped_column(
         default=AidRequestStatus.PENDING, nullable=False
@@ -43,12 +53,10 @@ class AidRequest(Base):
     tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
     status: Mapped[str] = mapped_column(String(40), nullable=False)
 
-    soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"), nullable=False)
-    volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"), nullable=True)
-
-    category: Mapped[Category] = relationship()
-    # soldier: Mapped[Soldier] = relationship()
-    # volunteer: Mapped[Volunteer] = relationship()
+    category: Mapped["Category"] = relationship("Category", back_populates="requests")
+    soldier: Mapped["Soldier"] = relationship("Soldier", back_populates="requests")
+    volunteers: Mapped[list["Volunteer"]] = relationship(
+        "Volunteer", secondary="volunteer_aid_association", back_populates="aid_requests")
 
     @staticmethod
     def create_dummy() -> "AidRequest":
