@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {SearchOptions} from '../schemas/search-options';
 import {AidRequest} from '../schemas/aid-request';
+import {catchError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +48,32 @@ export class AidRequestService {
 
   getRequestById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
+  }
+
+  getUnassignedRequests(): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`${this.apiUrl}/unassigned`).pipe(
+      catchError((error) => {
+        console.error('Error loading unassigned requests:', error);
+        return throwError(() => new Error('Failed to load unassigned requests.'));
+      })
+    );
+  }
+
+  getRequestsBySoldier(soldierId: number): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`${this.apiUrl}/by-soldier/${soldierId}`).pipe(
+      catchError((error) => {
+        console.error(`Error loading requests for soldier ${soldierId}:`, error);
+        return throwError(() => new Error('Failed to load soldier’s requests.'));
+      })
+    );
+  }
+
+  getCompletedRequests(): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`${this.apiUrl}/completed`).pipe(
+      catchError((error) => {
+        console.error('Error loading completed requests:', error);
+        return throwError(() => new Error('Failed to load completed requests.'));
+      })
+    );
   }
 }
