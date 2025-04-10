@@ -5,9 +5,10 @@ export class Soldier{
   phonenumb:string;
   name:string;
   surname:string;
-  unit:string;
-  subunit:string;
   battalion:string;
+  photo_path:string;
+  bio:string;
+
 
 
   constructor(
@@ -17,9 +18,9 @@ export class Soldier{
     phonenumb:string,
     name: string,
     surname:string,
-    unit:string,
-    subunit:string,
     battalion:string,
+    photo_path:string,
+    bio:string,
   ){
     this.id = id;
     this.email = email;
@@ -27,8 +28,8 @@ export class Soldier{
     this.phonenumb = phonenumb;
     this.name = name;
     this.surname = surname;
-    this.unit = unit;
-    this.subunit = subunit;
     this.battalion = battalion;
+    this.photo_path = photo_path;
+    this.bio = bio;
   }
 }

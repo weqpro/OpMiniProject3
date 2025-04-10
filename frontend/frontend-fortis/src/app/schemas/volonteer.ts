@@ -2,26 +2,30 @@ export class Volonteer{
   id:number;
   email:string;
   password:string;
-  phonenumbe:string;
+  phonenumber:string;
   name:string;
   surname:string;
-  rating:number
+  photo_path:string;
+  bio:string;
   constructor(
     id:number,
     email:string,
     password:string,
-    phonenumbe:string,
+    phonenumber:string,
     name:string,
     surname:string,
-    rating:number,
+    photo_path:string,
+    bio:string,
+
   ) {
     this.id = id;
     this.email = email;
     this.password = password;
-    this.phonenumbe = phonenumbe;
+    this.phonenumber = phonenumber;
     this.name = name;
     this.surname = surname;
-    this.rating = rating
+    this.photo_path = photo_path;
+    this.bio = bio;
   }
 }
 

@@ -13,8 +13,24 @@ export class SoldierService {
   create(soldier: Soldier): Observable<any> {
     return this.http.post(this.apiUrl, soldier).pipe(
       catchError((error) => {
-        console.error('Sending error', error);
-        return throwError(() => new Error('Try again'));
+        console.error('Error creating soldier:', error);
+        return throwError(() => new Error('Could not create soldier. Please try again.'));
+      })
+    );
+  }
+  getById(id: number): Observable<Soldier> {
+    return this.http.get<Soldier>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.error(`Error fetching soldier with ID ${id}:`, error);
+        return throwError(() => new Error('Could not fetch soldier. Please try again.'));
+      })
+    );
+  }
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
+      catchError((error) => {
+        console.error(`Error deleting soldier with ID ${id}:`, error);
+        return throwError(() => new Error('Could not delete soldier. Please try again.'));
       })
     );
   }
