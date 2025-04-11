@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgresql:
+  postgres:
     image: postgres
     environment:
       POSTGRES_USER: fastapi
@@ -22,7 +22,7 @@ services:
   api:
     image: docker.io/library/backend_api:latest
     environment:
-      DATABASE_URL: postgresql+psycopg://fastapi:{passwd}@postgresql:5432/postgres
+      DATABASE_URL: postgresql+psycopg://fastapi:{passwd}@postgres:5432/postgres
       DATABASE_PASSWORD_FILE: /run/secrets/postgres_passwd
     networks:
       - backend

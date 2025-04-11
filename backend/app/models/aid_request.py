@@ -4,7 +4,8 @@ import datetime
 from typing import List
 from enum import Enum as PyEnum
 
-from sqlalchemy import String, ForeignKey, DateTime, ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base import Base
@@ -28,9 +29,6 @@ class AidRequest(Base):
     name: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
     description: Mapped[str] = mapped_column(String(1000))
     image: Mapped[str] = mapped_column(String(255))
-    end_date: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), index=True, nullable=False
-    )
     location: Mapped[str] = mapped_column(String(100))
     tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
     status: Mapped[str] = mapped_column(String(40), nullable=False)
@@ -55,7 +53,7 @@ class AidRequest(Base):
             name="Name",
             description="Some description",
             image="shit",
-            end_date=datetime.datetime.now(),
+            deadline=datetime.datetime.now(),
             location="somewhere",
             tags=["josci", "duje"],
             status="not done",

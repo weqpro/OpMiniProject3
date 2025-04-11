@@ -1,6 +1,6 @@
 """soldier model"""
 
-from typing import List, TYPE_CHECKING
+from typing import List
 
 from sqlalchemy import String
 from sqlalchemy.orm import relationship, mapped_column, Mapped

@@ -4,7 +4,7 @@ import datetime
 
 from pydantic import BaseModel
 
-from app.schemas.category import Category
+from app.schemas.category import CategorySchema
 
 
 class AidRequestSchema(BaseModel):
@@ -17,12 +17,11 @@ class AidRequestSchema(BaseModel):
     name: str
     description: str
     image: str
-    end_date: datetime.datetime
     location: str
     tags: list[str]
     status: str
     soldier_id: int
-    category: Category
+    category: CategorySchema
     deadline: datetime.datetime
 
     class Config:

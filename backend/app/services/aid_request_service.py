@@ -1,5 +1,8 @@
+from collections.abc import Sequence
 from fastapi import Depends
 
+from app.models.category import Category
+from app.schemas.category import CategorySchema
 from app.schemas.search_options import SearchOptions
 from app.schemas.aid_request import AidRequestSchema
 from app.models.aid_request import AidRequest
@@ -16,19 +19,35 @@ class AidRequestService:
     ) -> None:
         self.__repository: AidRequestRepository = aid_request_repository
 
-    async def search(self, search_options: SearchOptions | None = None) -> None:
+    async def search(
+        self, search_options: SearchOptions | None = None
+    ) -> list[AidRequest]:
         if search_options is None:
             search_options = SearchOptions(text="", tags=[])
 
-        await self.__repository.find_by_condition(
-            AidRequest.name.contains(search_options.text)
+        aid_requests: Sequence[AidRequest] = await self.__repository.find_by_condition(
+            AidRequest.name.contains(search_options.text),
+            AidRequest.tags.overlap(search_options.tags),
         )
+        return list(aid_requests)
 
     async def dummy_search(self) -> list[AidRequest]:
         return [AidRequest.create_dummy(), AidRequest.create_dummy()]
 
-    async def create_aid_request(self, aid_request: AidRequestSchema) -> AidRequest:
-        return await self.__repository.create(AidRequest(**aid_request.model_dump()))
+    async def create_aid_request(
+        self,
+        aid_request: AidRequestSchema,
+    ) -> AidRequest:
+        aid_request_data = aid_request.model_dump()
+        category_data = aid_request_data.pop("category", None)
+
+        new_aid_request: AidRequest = AidRequest(**aid_request_data)
+
+        if category_data is not None:
+            new_category = Category(**category_data)
+            new_aid_request.category = new_category
+
+        return await self.__repository.create(new_aid_request)
 
     # async def update_aid_request_status(
     #     self, db, aid_request_id: int, status: str

@@ -1,6 +1,6 @@
 """volunteer model"""
 
-from typing import List, TYPE_CHECKING
+from typing import List
 
 from sqlalchemy import Integer, String, Float
 from sqlalchemy.orm import relationship, mapped_column, Mapped

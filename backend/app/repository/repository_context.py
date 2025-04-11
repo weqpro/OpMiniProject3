@@ -9,8 +9,15 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     AsyncEngine,
 )
+from sqlalchemy import text
+import sqlalchemy.exc
 
 from app.utils import Singleton
+
+from app.models.soldier import Soldier
+from app.models.volunteer import Volunteer
+from app.models.aid_request import AidRequest
+from app.models.base import Base
 
 
 class MissingEnviromentVariableError(Exception):
@@ -40,7 +47,21 @@ class RepositoryContext(metaclass=Singleton):
             self.__engine, expire_on_commit=False
         )
 
-        print("Created")
+        asyncio.create_task(self.init_db())
+
+    async def init_db(self):
+        print("Connecting to db...", flush=True)
+        try:
+            async with self.__engine.begin() as conn:
+                await conn.execute(
+                    text("ALTER TABLE aid_request DROP COLUMN IF EXISTS end_date")
+                )
+                await conn.run_sync(Base.metadata.create_all)
+        except sqlalchemy.exc.OperationalError as e:
+            print(f"Failed (retry after 2s)\ne:{e}")
+            await asyncio.sleep(2)
+            await self.init_db()
+        print("Conected to database", flush=True)
 
     def __del__(self) -> None:
         asyncio.run(self.__engine.dispose())
