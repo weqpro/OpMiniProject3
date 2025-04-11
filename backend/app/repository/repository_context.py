@@ -53,9 +53,6 @@ class RepositoryContext(metaclass=Singleton):
         print("Connecting to db...", flush=True)
         try:
             async with self.__engine.begin() as conn:
-                await conn.execute(
-                    text("ALTER TABLE aid_request DROP COLUMN IF EXISTS end_date")
-                )
                 await conn.run_sync(Base.metadata.create_all)
         except sqlalchemy.exc.OperationalError as e:
             print(f"Failed (retry after 2s)\ne:{e}")
