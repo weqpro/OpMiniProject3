@@ -39,16 +39,16 @@ class SoldierRepository(RepositoryBase[Soldier], SoldierRepositoryBase):
             result = await session.execute(stmt)
             return result.scalars().all()
 
-    @override
-    async def find_by_condition(
-    self,
-    condition: Any,
-    *order_by: ColumnElement | str,
-) -> Sequence[Soldier]:
-        async with self._session_maker() as session:
-            stmt = select(self._model).where(condition).order_by(*order_by)
-            result = await session.execute(stmt)
-            return result.scalars().all()
+#     @override
+#     async def find_by_condition(
+#     self,
+#     condition: Any,
+#     *order_by: ColumnElement | str,
+# ) -> Sequence[Soldier]:
+#         async with self._session_maker() as session:
+#             stmt = select(self._model).where(condition).order_by(*order_by)
+#             result = await session.execute(stmt)
+#             return result.scalars().all()
 
 
 async def get_soldier_repository(

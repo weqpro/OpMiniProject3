@@ -21,30 +21,6 @@ class CategoryRepository(RepositoryBase[Category], CategoryRepositoryBase):
         )
         super().__init__(session_maker, Category)
 
-    @override
-    async def find(self, *order_by: ColumnElement | str) -> Sequence[Category]:
-        async with self._session_maker() as session:
-            stmt = select(self._model).order_by(*order_by)
-            result = await session.execute(stmt)
-            return result.scalars().all()
-
-    @override
-    async def find_by_condition(
-        self,
-        condition: Any,
-        *order_by: ColumnElement | str,
-    ) -> Sequence[Category]:
-        async with self._session_maker() as session:
-            stmt = select(self._model).where(condition).order_by(*order_by)
-            result = await session.execute(stmt)
-            return result.scalars().all()
-
-    async def get_categories_for_request(self, request_id: int) -> list[Category]:
-        async with self._session_maker() as session:
-            stmt = select(self._model).where(self._model.request_id == request_id)
-            result = await session.execute(stmt)
-            return result.scalars().all()
-
 
 async def get_category_repository(
     context: RepositoryContext = Depends(get_repository_context),
