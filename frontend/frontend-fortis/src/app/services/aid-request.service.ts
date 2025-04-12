@@ -4,6 +4,7 @@ import {Observable, throwError} from 'rxjs';
 import {SearchOptions} from '../schemas/search-options';
 import {AidRequest} from '../schemas/aid-request';
 import {catchError} from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -76,4 +77,16 @@ export class AidRequestService {
       })
     );
   }
+
+  getFiltered(options: SearchOptions): Observable<AidRequest[]> {
+    let params = new HttpParams();
+    if (options.text) {
+      params = params.set('search', options.text);
+    }
+    if (options.tags && options.tags.length > 0) {
+      params = params.set('tags', options.tags.join(','));
+    }
+    return this.http.get<AidRequest[]>(this.apiUrl, { params });
+  }
+
 }
