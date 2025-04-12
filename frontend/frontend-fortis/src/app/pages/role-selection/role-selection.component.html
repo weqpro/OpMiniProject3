@@ -5,22 +5,9 @@
       </a>
     </div>
     <div class="top-right">
-      <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
-        <mat-icon>apps</mat-icon>
-      </button>
-      <mat-menu #catalogMenu="matMenu">
-        <button mat-menu-item>Техніка</button>
-        <button mat-menu-item>Медикаменти</button>
-        <button mat-menu-item>Спорядження</button>
-        <button mat-menu-item>Продукти</button>
-      </mat-menu>
-  
       <button mat-icon-button>
         <mat-icon>search</mat-icon>
-      </button>
-  
-      <button mat-button class="header-button" routerLink="/create">Опублікувати оголошення</button>
-  
+      </button>  
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
@@ -31,15 +18,15 @@
   </div>
   
   <div class="role-fullscreen">
-    <div class="role-side" routerLink="/register/soldier">
-      <img src="assets/soldier.png" alt="Soldier" />
-      <h2 class="role-label">Військовий</h2>
+    <div class="role-side" (click)="navigateTo('soldier')">
+      <img src="assets/soldier.png" />
+      <h2>Військовий</h2>
     </div>
-  
-    <div class="role-side" routerLink="/register/volunteer">
-      <img src="assets/volunteer.png" alt="Volunteer" />
-      <h2 class="role-label">Волонтер</h2>
+    <div class="role-side" (click)="navigateTo('volunteer')">
+      <img src="assets/volunteer.png" />
+      <h2>Волонтер</h2>
     </div>
+
   </div>
   
   <footer class="footer">
@@ -53,8 +40,6 @@
       <div class="footer-center">
         <div class="footer-links">
           <a routerLink="/contacts">Контакти</a>
-          <a routerLink="/">Головна</a>
-          <a routerLink="/about">Про нас</a>
         </div>
         <div class="footer-contacts">
           <div class="contact-item">

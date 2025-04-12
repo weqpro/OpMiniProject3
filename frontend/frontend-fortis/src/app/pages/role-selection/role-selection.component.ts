@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router'; // ✅ Додано Router
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -19,6 +19,12 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrls: ['./role-selection.component.css']
 })
 export class RoleSelectionComponent {
+  constructor(private router: Router) {}
+
+  navigateTo(role: string) {
+    this.router.navigate([`/register/${role}`]);
+  }
+
   logout() {
     console.log('Logged out');
   }
