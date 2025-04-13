@@ -1,12 +1,11 @@
 from collections.abc import Sequence
 from fastapi import Depends
 
-from app.models.category import Category
-from app.schemas.category import CategorySchema
-from app.schemas.search_options import SearchOptions
-from app.schemas.aid_request import AidRequestSchema
-from app.models.aid_request import AidRequest
-from app.repository.aid_request_repository import (
+from app.models import Category
+from app.schemas import SearchOptionsSchema
+from app.schemas import AidRequestSchema
+from app.models import AidRequest
+from app.repository import (
     AidRequestRepository,
     get_aid_request_repository,
 )
@@ -20,10 +19,10 @@ class AidRequestService:
         self.__repository: AidRequestRepository = aid_request_repository
 
     async def search(
-        self, search_options: SearchOptions | None = None
+        self, search_options: SearchOptionsSchema | None = None
     ) -> list[AidRequest]:
         if search_options is None:
-            search_options = SearchOptions(text="", tags=[])
+            search_options = SearchOptionsSchema(text="", tags=[])
 
         aid_requests: Sequence[AidRequest] = await self.__repository.find_by_condition(
             AidRequest.name.contains(search_options.text),

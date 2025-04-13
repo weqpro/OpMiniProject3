@@ -1,44 +1,14 @@
-import datetime
-
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 
 from app.repository.repository_context import RepositoryContext
-from app.schemas.aid_request import AidRequestSchema
-from app.schemas.category import CategorySchema
-from app.schemas.search_options import SearchOptions
-from app.services.aid_request_service import AidRequestService, get_aid_request_service
+from app.routers.v1 import aid_requests_router, soldiers_router
 
 
 app = FastAPI()
 _ = RepositoryContext()
 
-
-@app.get("/api/v1/search")
-async def search(
-    aid_request_service: AidRequestService = Depends(get_aid_request_service),
-):
-    return await aid_request_service.search(SearchOptions(text="", tags=["one"]))
-
-
-@app.post("/api/v1/create")
-async def create(
-    aid_request_service: AidRequestService = Depends(get_aid_request_service),
-):
-    aid_request: AidRequestSchema = AidRequestSchema(
-        id=123,
-        name="Name",
-        description="Some description",
-        image="shit",
-        deadline=datetime.datetime.now(),
-        location="somewhere",
-        tags=["josci", "duje"],
-        status="not done",
-        soldier_id=1,
-        category=CategorySchema(id=1, name="one", request_id=123),
-    )
-
-    return await aid_request_service.create_aid_request(aid_request)
-
+app.include_router(aid_requests_router)
+app.include_router(soldiers_router)
 
 # @app.post("/aid-requests/", response_model=AidRequestOut)
 # async def create_aid_request(

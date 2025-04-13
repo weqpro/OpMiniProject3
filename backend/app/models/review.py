@@ -2,8 +2,9 @@
 
 from typing import List
 
-from sqlalchemy.orm import relationship, mapped_column, Mapped
-from sqlalchemy import Integer, ForeignKey, Boolean, ARRAY, String, Text
+from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy import Integer, ForeignKey, Boolean, String, Text
+from sqlalchemy.dialects.postgresql import ARRAY
 
 from app.models.base import Base
 
