@@ -1,19 +1,16 @@
-from collections.abc import Callable, Sequence
-from typing import override, Any
+from collections.abc import Callable
+from typing import override
 from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.elements import ColumnElement
 
-from app.contracts.repository_base import RepositoryBase
-from app.contracts.category_repository_base import CategoryRepositoryBase
-from app.models.category import Category
-from app.repository.repository_context import RepositoryContext, get_repository_context
+from app.contracts import RepositoryBase
+from app.models import Category
+from app.repository import RepositoryContext, get_repository_context
 
 
-class CategoryRepository(RepositoryBase[Category], CategoryRepositoryBase):
+class CategoryRepository(RepositoryBase[Category]):
     @override
     def __init__(self, context: RepositoryContext) -> None:
         session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
