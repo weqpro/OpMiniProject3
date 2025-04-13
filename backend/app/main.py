@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 
 from app.repository.repository_context import RepositoryContext
-from app.routers.v1 import aid_requests_router
+from app.routers.v1 import aid_requests_router, soldiers_router
 
 
 app = FastAPI()
 _ = RepositoryContext()
 
 app.include_router(aid_requests_router)
+app.include_router(soldiers_router)
 
 # @app.post("/aid-requests/", response_model=AidRequestOut)
 # async def create_aid_request(

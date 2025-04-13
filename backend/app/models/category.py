@@ -1,9 +1,9 @@
 """category model"""
 
 from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
-from app.models.base import Base
+from app.models import Base, AidRequest
 
 
 class Category(Base):
@@ -15,4 +15,4 @@ class Category(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255))
-    request_id: Mapped[int] = mapped_column(ForeignKey("aid_request.id"))
+    requests: Mapped[list[AidRequest]] = relationship(AidRequest)

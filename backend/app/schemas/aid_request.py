@@ -13,16 +13,17 @@ class AidRequestSchema(BaseModel):
     related to aid requests
     """
 
-    id: int
     name: str
     description: str
+    tags: list[str]
     image: str
     location: str
-    tags: list[str]
     status: str
-    soldier_id: int
-    category: CategorySchema
     deadline: datetime.datetime
+
+    soldier_id: int
+    volunteer_id: int
+    category_id: int
 
     class Config:
         orm_mode = True

@@ -53,6 +53,8 @@ class RepositoryContext(metaclass=Singleton):
         print("Connecting to db...", flush=True)
         try:
             async with self.__engine.begin() as conn:
+                await conn.execute(text("DROP TABLE IF EXISTS aid_request CASCADE"))
+                await conn.execute(text("DROP TABLE IF EXISTS category CASCADE"))
                 await conn.run_sync(Base.metadata.create_all)
         except sqlalchemy.exc.OperationalError as e:
             print(f"Failed (retry after 2s)\ne:{e}")
