@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.sql.expression import ColumnExpressionArgument
 
 from app.contracts.repository_base import RepositoryBase
 from app.contracts.volunteer_repository_base import VolunteerRepositoryBase
@@ -40,7 +41,7 @@ class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
     @override
     async def find_by_condition(
         self,
-        condition: Any,
+        condition: ColumnExpressionArgument[bool],
         *order_by: ColumnElement | str,
     ) -> Sequence[Volunteer]:
         async with self._session_maker() as session:
