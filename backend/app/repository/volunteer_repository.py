@@ -1,5 +1,5 @@
 from collections.abc import Callable, Sequence
-from typing import override, Any
+from typing import override
 from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
