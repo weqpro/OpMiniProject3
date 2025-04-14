@@ -30,5 +30,6 @@ export class LoginComponent {
 
   login() {
     console.log('Logging in:', this.email, this.password);
+    // АВТЕНТИФІКАЦІЯ!!!!!!
   }
 }

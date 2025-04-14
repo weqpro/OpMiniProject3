@@ -1,80 +1,84 @@
 <div class="top-bar">
-    <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
-      <mat-icon>apps</mat-icon>
-    </button>
-  
-    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    
-    <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
-      <button mat-menu-item routerLink="/login">Увійти</button>
-    </mat-menu>
+  <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
+    <mat-icon>apps</mat-icon>
+  </button>
 
-  </div>
-  
-  <mat-menu #catalogMenu="matMenu">
-    <button mat-menu-item (click)="selectCategory('Зв`язок')">Зв'язок</button>
-    <button mat-menu-item (click)="selectCategory('Техніка')">Техніка</button>
-    <button mat-menu-item (click)="selectCategory('Одяг')">Одяг</button>
-    <button mat-menu-item (click)="selectCategory('Спорядження')">Спорядження</button>
-    <button mat-menu-item (click)="selectCategory('Медикаменти')">Медицина</button>
-    <button mat-menu-item (click)="selectCategory('Транспорт')">Транспорт</button>
-    <button mat-menu-item (click)="selectCategory('Продукти харчування')">Продукти харчування</button>
-  </mat-menu>
+  <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
   <mat-menu #profileMenu="matMenu">
-    <button mat-menu-item>Мій профіль</button>
-    <button mat-menu-item>Увійти</button>
+    <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+    <button mat-menu-item routerLink="/requests">Мої запити</button>
   </mat-menu>
-  
-  <div class="main-content">
-    <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
-    
-    <mat-form-field appearance="outline" class="search-field">
-      <input matInput placeholder="Пошук" />
-      <button mat-icon-button matSuffix>
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-  
-    <button mat-raised-button class="create-button" routerLink="/create">
-      Створити оголошення
-    </button>
-      
-  </div>
+</div>
 
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-left">
-        <a routerLink="/">
-          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
-        </a>
+<div class="main-content">
+  <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+
+  <mat-form-field appearance="outline" class="search-field">
+    <input matInput placeholder="Пошук" />
+    <button mat-icon-button matSuffix>
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button mat-raised-button class="create-button" routerLink="/create">
+    Створити оголошення
+  </button>
+</div>
+
+<mat-menu #catalogMenu="matMenu">
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Автозапчастини' }">Автозапчастини</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Енергозабезпечення' }">Енергозабезпечення</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Генератори' }">Генератори</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Гігієна та санітарія' }">Гігієна та санітарія</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Інструменти / будматеріали' }">Інструменти / будматеріали</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Медикаменти' }">Медицина</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Навігація' }">Навігація</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Одяг' }">Одяг</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Побутові послуги' }">Побутові послуги</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Польовий побут' }">Польовий побут</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Продукти харчування' }">Продукти харчування</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Ремонт' }">Ремонт</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Розвідка і спостереження' }">Розвідка і спостереження</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Спорядження' }">Спорядження</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Техніка' }">Техніка</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Транспорт' }">Транспорт</button>
+  <button mat-menu-item [routerLink]="['/catalog']" [queryParams]="{ category: 'Звʼязок' }">Зв’язок</button>
+</mat-menu>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <a routerLink="/">
+        <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+      </a>
+    </div>
+
+    <div class="footer-center">
+      <div class="footer-links">
+        <a routerLink="/contacts">Контакти</a>
       </div>
-  
-      <div class="footer-center">
-        <div class="footer-links">
-          <a routerLink="/contacts">Контакти</a>
+
+      <div class="footer-contacts">
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>Lviv, Ukraine</span>
         </div>
-  
-        <div class="footer-contacts">
-          <div class="contact-item">
-            <mat-icon>location_on</mat-icon>
-            <span>Lviv, Ukraine</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>email</mat-icon>
-            <span>foris&#64;gmail.com</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>call</mat-icon>
-            <span>+380 567 239 175</span>
-          </div>
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <span>foris&#64;gmail.com</span>
         </div>
-      </div>
-  
-      <div class="footer-right">
-        <p>Fortis © 2025 All rights reserved</p>
+        <div class="contact-item">
+          <mat-icon>call</mat-icon>
+          <span>+380 567 239 175</span>
+        </div>
       </div>
     </div>
-  </footer>
+
+    <div class="footer-right">
+      <p>Fortis © 2025 All rights reserved</p>
+    </div>
+  </div>
+</footer>

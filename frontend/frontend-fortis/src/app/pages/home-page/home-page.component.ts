@@ -7,10 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  selector: 'app-soldier-home',
+  selector: 'app-home',
   standalone: true,
-  templateUrl: './soldier-home.component.html',
-  styleUrls: ['./soldier-home.component.css'],
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.css'],
   imports: [
     RouterModule,
     MatFormFieldModule,
@@ -20,10 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule
   ]
 })
-export class SoldierHomeComponent {
-  selectCategory(category: string) {
-    console.log('Обрано категорію:', category);
-  }
+export class HomeComponent {
 
   logout(): void {
     console.log('Користувач вийшов');
