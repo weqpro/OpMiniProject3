@@ -5,7 +5,7 @@ from app.models.soldier import Soldier
 from app.services import SoldierService, get_soldier_service
 from app.schemas import SoldierSchema
 
-router = APIRouter(prefix="/api/v1/soldiers", tags=["soldiers"])
+router = APIRouter(prefix="/soldiers", tags=["soldiers"])
 
 
 @router.post("/create")

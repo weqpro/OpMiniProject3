@@ -1,6 +1,6 @@
 """category model"""
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import String
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from app.models import Base, AidRequest
