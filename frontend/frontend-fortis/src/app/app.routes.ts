@@ -6,10 +6,6 @@ import { VolunteerProfileComponent } from './pages/profile/volunteer-profile/vol
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home-page/home-page.component';
 import { RoleSelectionComponent } from './pages/role-selection/role-selection.component';
-import { VolunteerRegisterComponent } from './pages/register/volunteer-register/volunteer-register.component';
-import { SoldierRegisterComponent } from './pages/register/soldier-register/soldier-register.component';
-import { CatalogComponent } from './pages/catalog/catalog/catalog.component';
-import { VolunteerHomeComponent } from './pages/volunteer-home/volunteer-home.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -20,9 +16,5 @@ export const routes: Routes = [
   { path: 'role-selection', component: RoleSelectionComponent },
   { path: 'register', component: RoleSelectionComponent },
   { path: 'profile/soldier', component: SoldierProfileComponent },
-  { path: 'volunteer-home', component: VolunteerHomeComponent },
   // { path: 'own-requests-soldier', component: OwnRequestSoldierComponent }
-  { path: 'register/soldier', component: SoldierRegisterComponent },
-  { path: 'register/volunteer', component: VolunteerRegisterComponent },
-  { path: 'catalog', component: CatalogComponent},
 ];
