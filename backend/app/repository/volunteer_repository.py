@@ -1,5 +1,6 @@
-from collections.abc import Sequence
+from collections.abc import Sequence, Callable
 from typing import override
+from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -8,18 +9,18 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.elements import ColumnElement
 from sqlalchemy.sql.expression import ColumnExpressionArgument
 
-from app.contracts.repository_base import RepositoryBase
-from app.contracts.volunteer_repository_base import VolunteerRepositoryBase
-from app.models.volunteer import Volunteer
-from app.models.aid_request import AidRequest
-from app.repository.repository_context import RepositoryContext, get_repository_context
+from app.contracts import RepositoryBase, VolunteerRepositoryBase
+from app.models import Volunteer
+from app.repository import RepositoryContext, get_repository_context
 
 
 class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        self._session_maker = context.session_maker
-        super().__init__(self._session_maker, Volunteer)
+        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
+            context.session_maker
+        )
+        super().__init__(session_maker, Volunteer)
 
     @override
     async def find(self, *order_by: ColumnElement | str) -> Sequence[Volunteer]:
@@ -50,25 +51,6 @@ class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
                     selectinload(Volunteer.reviews),
                 )
                 .order_by(*order_by)
-            )
-            result = await session.execute(stmt)
-            return result.scalars().all()
-
-    @override
-    async def get_volunteer_by_email(self, email: str) -> Volunteer | None:
-        async with self._session_maker() as session:
-            stmt = select(self._model).where(self._model.email == email)
-            result = await session.execute(stmt)
-            return result.scalars().first()
-
-    @override
-    async def get_volunteers_for_aid_request(self, aid_request_id: int) -> list[Volunteer]:
-        async with self._session_maker() as session:
-            stmt = (
-                select(self._model)
-                .join(Volunteer.requests)
-                .where(AidRequest.id == aid_request_id)
-                .options(selectinload(Volunteer.requests))
             )
             result = await session.execute(stmt)
             return result.scalars().all()

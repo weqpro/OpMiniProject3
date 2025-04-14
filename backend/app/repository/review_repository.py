@@ -1,4 +1,5 @@
-from collections.abc import Sequence
+from collections.abc import Callable
+from contextlib import AbstractAsyncContextManager
 from typing import override
 
 from fastapi import Depends
@@ -14,14 +15,11 @@ from app.repository.repository_context import RepositoryContext, get_repository_
 class ReviewRepository(RepositoryBase[Review]):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        self._session_maker = context.session_maker
-        super().__init__(self._session_maker, Review)
+        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
+            context.session_maker
+        )
 
-    async def get_reviews_for_volunteer(self, volunteer_id: int) -> list[Review]:
-        async with self._session_maker() as session:
-            stmt = select(self._model).where(self._model.volunteer_id == volunteer_id)
-            result = await session.execute(stmt)
-            return result.scalars().all()
+        super().__init__(session_maker, Review)
 
 
 async def get_review_repository(

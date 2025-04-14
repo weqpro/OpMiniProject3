@@ -1,6 +1,6 @@
 from collections.abc import Sequence
-from typing import override
-from contextlib import asynccontextmanager
+from typing import Callable, override
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -18,9 +18,10 @@ from app.repository.repository_context import RepositoryContext, get_repository_
 class SoldierRepository(RepositoryBase[Soldier], SoldierRepositoryBase):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        # Використовуємо asynccontextmanager для сесій
-        self._session_maker = context.session_maker
-        super().__init__(self._session_maker, Soldier)
+        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
+            context.session_maker
+        )
+        super().__init__(session_maker, Soldier)
 
     @override
     async def find(self, *order_by: ColumnElement | str) -> Sequence[Soldier]:
