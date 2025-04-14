@@ -1,6 +1,5 @@
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from typing import override
-from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -19,11 +18,9 @@ from app.repository.repository_context import RepositoryContext, get_repository_
 class AidRequestRepository(RepositoryBase[AidRequest], AidRequestRepositoryBase):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
-            context.session_maker
-        )
+        self._session_maker = context.session_maker
+        super().__init__(self._session_maker, AidRequest)
 
-        super().__init__(session_maker, AidRequest)
 
     # @override
     # def get_aid_request_by_soldier(self, soldier_id: int) -> list[AidRequest]:
@@ -34,6 +31,7 @@ class AidRequestRepository(RepositoryBase[AidRequest], AidRequestRepositoryBase)
     # def get_aid_request_by_category(self, category_id: int) -> list[AidRequest]:
     #     """Get all aid requests for a specific category"""
     #     pass
+
 
 
 async def get_aid_request_repository(

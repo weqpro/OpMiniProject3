@@ -1,12 +1,12 @@
-from collections.abc import Callable, Sequence
-from typing import override, Any
-from contextlib import AbstractAsyncContextManager
+from collections.abc import Sequence
+from typing import override
 
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.sql.expression import ColumnExpressionArgument
 
 from app.contracts.repository_base import RepositoryBase
 from app.contracts.volunteer_repository_base import VolunteerRepositoryBase
@@ -18,10 +18,8 @@ from app.repository.repository_context import RepositoryContext, get_repository_
 class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
-            context.session_maker
-        )
-        super().__init__(session_maker, Volunteer)
+        self._session_maker = context.session_maker
+        super().__init__(self._session_maker, Volunteer)
 
     @override
     async def find(self, *order_by: ColumnElement | str) -> Sequence[Volunteer]:
@@ -40,17 +38,17 @@ class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
     @override
     async def find_by_condition(
         self,
-        condition: Any,
+        condition: ColumnExpressionArgument[bool],
         *order_by: ColumnElement | str,
     ) -> Sequence[Volunteer]:
         async with self._session_maker() as session:
             stmt = (
                 select(self._model)
+                .where(condition)
                 .options(
                     selectinload(Volunteer.requests),
                     selectinload(Volunteer.reviews),
                 )
-                .where(condition)
                 .order_by(*order_by)
             )
             result = await session.execute(stmt)
