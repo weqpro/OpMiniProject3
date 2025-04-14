@@ -21,34 +21,17 @@ class AidRequestRepository(RepositoryBase[AidRequest], AidRequestRepositoryBase)
         self._session_maker = context.session_maker
         super().__init__(self._session_maker, AidRequest)
 
-    @override
-    async def find(self, *order_by: ColumnElement | str) -> Sequence[AidRequest]:
-        """Gets objects with the specified ordering, and filtering."""
-        async with self._session_maker() as session:
-            stmt = (
-                select(self._model)
-                .options(selectinload(AidRequest.category))
-                .order_by(*order_by)
-            )
-            result = await session.execute(stmt)
-            return result.scalars().all()
 
-    @override
-    async def find_by_condition(
-        self,
-        condition: ColumnExpressionArgument[bool],
-        *order_by: ColumnElement | str,
-    ) -> Sequence[AidRequest]:
-        """Gets objects with the specified ordering, and filtering."""
-        async with self._session_maker() as session:
-            stmt = (
-                select(self._model)
-                .options(selectinload(AidRequest.category))
-                .where(condition)
-                .order_by(*order_by)
-            )
-            result = await session.execute(stmt)
-            return result.scalars().all()
+    # @override
+    # def get_aid_request_by_soldier(self, soldier_id: int) -> list[AidRequest]:
+    #     """Get all aid requests for a specific soldier"""
+    #     pass
+    #
+    # @override
+    # def get_aid_request_by_category(self, category_id: int) -> list[AidRequest]:
+    #     """Get all aid requests for a specific category"""
+    #     pass
+
 
 
 async def get_aid_request_repository(

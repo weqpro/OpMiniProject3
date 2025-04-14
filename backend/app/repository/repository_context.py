@@ -18,12 +18,7 @@ from app.models.soldier import Soldier
 from app.models.volunteer import Volunteer
 from app.models.aid_request import AidRequest
 from app.models.base import Base
-
-
-class MissingEnviromentVariableError(Exception):
-    """if env variable was not found"""
-
-    pass
+from app.utils import MissingEnviromentVariableError
 
 
 class RepositoryContext(metaclass=Singleton):
@@ -55,6 +50,7 @@ class RepositoryContext(metaclass=Singleton):
             async with self.__engine.begin() as conn:
                 await conn.execute(text("DROP TABLE IF EXISTS aid_request CASCADE"))
                 await conn.execute(text("DROP TABLE IF EXISTS category CASCADE"))
+                await conn.run_sync(Base.metadata.drop_all)
                 await conn.run_sync(Base.metadata.create_all)
         except sqlalchemy.exc.OperationalError as e:
             print(f"Failed (retry after 2s)\ne:{e}")

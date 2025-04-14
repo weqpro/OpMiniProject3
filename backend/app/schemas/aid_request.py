@@ -4,8 +4,6 @@ import datetime
 
 from pydantic import BaseModel
 
-from app.schemas.category import CategorySchema
-
 
 class AidRequestSchema(BaseModel):
     """
@@ -22,8 +20,28 @@ class AidRequestSchema(BaseModel):
     deadline: datetime.datetime
 
     soldier_id: int
-    volunteer_id: int
-    category_id: int
+    volunteer_id: int | None
+    category_id: int | None
+
+    class Config:
+        orm_mode = True
+
+
+class AidRequestSchemaIn(BaseModel):
+    """
+    The schema used to validate and structure data
+    related to aid requests
+    """
+
+    name: str
+    description: str
+    tags: list[str]
+    image: str
+    location: str
+    deadline: datetime.datetime
+
+    volunteer_id: int | None
+    category_id: int | None
 
     class Config:
         orm_mode = True
