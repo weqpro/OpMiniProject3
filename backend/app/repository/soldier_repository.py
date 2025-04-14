@@ -1,6 +1,5 @@
 from collections.abc import Callable, Sequence
 from typing import override
-from typing import Any
 from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
@@ -22,7 +21,6 @@ class SoldierRepository(RepositoryBase[Soldier], SoldierRepositoryBase):
         session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
             context.session_maker
         )
-
         super().__init__(session_maker, Soldier)
 
     @override
@@ -42,7 +40,7 @@ class SoldierRepository(RepositoryBase[Soldier], SoldierRepositoryBase):
     @override
     async def find_by_condition(
         self,
-        condition: Any,
+        condition: ColumnExpressionArgument[bool],
         *order_by: ColumnElement | str,
     ) -> Sequence[Soldier]:
         async with self._session_maker() as session:
