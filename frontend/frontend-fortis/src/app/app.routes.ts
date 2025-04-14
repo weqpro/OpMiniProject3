@@ -8,8 +8,9 @@ import { RoleSelectionComponent } from './pages/role-selection/role-selection.co
 export const routes: Routes = [
   { path: '', component: SoldierHomeComponent },
   { path: 'create', component: CreatePostComponent },
-  { path: 'profile/soldier', component: SoldierProfileComponent },
+  { path: 'profile/soldier', component: SoldierProfileComponent},
   { path: 'login', component: LoginComponent },
   { path: 'role-selection', component: RoleSelectionComponent },
   { path: 'register', component: RoleSelectionComponent }
+  // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 ];
