@@ -1,6 +1,5 @@
-from collections.abc import Callable, Sequence
+from collections.abc import Sequence
 from typing import override
-from contextlib import AbstractAsyncContextManager
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -19,10 +18,8 @@ from app.repository.repository_context import RepositoryContext, get_repository_
 class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
     @override
     def __init__(self, context: RepositoryContext) -> None:
-        session_maker: Callable[..., AbstractAsyncContextManager[AsyncSession]] = (
-            context.session_maker
-        )
-        super().__init__(session_maker, Volunteer)
+        self._session_maker = context.session_maker
+        super().__init__(self._session_maker, Volunteer)
 
     @override
     async def find(self, *order_by: ColumnElement | str) -> Sequence[Volunteer]:
@@ -47,11 +44,11 @@ class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
         async with self._session_maker() as session:
             stmt = (
                 select(self._model)
+                .where(condition)
                 .options(
                     selectinload(Volunteer.requests),
                     selectinload(Volunteer.reviews),
                 )
-                .where(condition)
                 .order_by(*order_by)
             )
             result = await session.execute(stmt)
