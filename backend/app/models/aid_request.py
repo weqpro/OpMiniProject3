@@ -2,19 +2,13 @@
 
 import datetime
 from typing import List
-from enum import Enum as PyEnum
 
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy import String, ForeignKey, DateTime
 from sqlalchemy.orm import mapped_column, Mapped
 
 from app.models.base import Base
-
-
-class AidRequestStatus(PyEnum):
-    PENDING = "pending"
-    IN_PROGRESS = "in_progres"
-    COMPLETED = "completed"
+from app.utils import AidRequestStatus
 
 
 class AidRequest(Base):

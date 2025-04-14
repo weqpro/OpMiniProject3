@@ -3,12 +3,13 @@ from fastapi import Depends
 
 from app.models import Category
 from app.schemas import SearchOptionsSchema
-from app.schemas import AidRequestSchema
+from app.schemas import AidRequestSchema, AidRequestSchemaIn
 from app.models import AidRequest
 from app.repository import (
     AidRequestRepository,
     get_aid_request_repository,
 )
+from app.utils import AidRequestStatus
 
 
 class AidRequestService:
@@ -34,17 +35,14 @@ class AidRequestService:
         return [AidRequest.create_dummy(), AidRequest.create_dummy()]
 
     async def create_aid_request(
-        self,
-        aid_request: AidRequestSchema,
+        self, aid_request: AidRequestSchemaIn, soldier_id: int
     ) -> AidRequest:
         aid_request_data = aid_request.model_dump()
-        category_data = aid_request_data.pop("category", None)
-
-        new_aid_request: AidRequest = AidRequest(**aid_request_data)
-
-        if category_data is not None:
-            new_category = Category(**category_data)
-            new_aid_request.category = new_category
+        new_aid_request: AidRequest = AidRequest(
+            soldier_id=soldier_id,
+            status=AidRequestStatus.PENDING,
+            **aid_request_data,
+        )
 
         return await self.__repository.create(new_aid_request)
 

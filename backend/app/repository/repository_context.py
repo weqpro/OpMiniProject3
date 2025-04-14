@@ -18,12 +18,7 @@ from app.models.soldier import Soldier
 from app.models.volunteer import Volunteer
 from app.models.aid_request import AidRequest
 from app.models.base import Base
-
-
-class MissingEnviromentVariableError(Exception):
-    """if env variable was not found"""
-
-    pass
+from app.utils import MissingEnviromentVariableError
 
 
 class RepositoryContext(metaclass=Singleton):

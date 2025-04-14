@@ -6,7 +6,9 @@ dependencies = [
   "uvicorn[standard]",
   "psycopg[binary]",
   "sqlalchemy[asyncio]",
-  "dependency-injector",
+  "pyjwt",
+  "passlib[bcrypt]",
+  "python-multipart",
 ]
 requires-python = ">=3.12"
 authors = [{ name = "Konovalenko Stanislav" }]

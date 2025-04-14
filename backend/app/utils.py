@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 class Singleton(type):
     _instances = {}
 
@@ -5,3 +8,15 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+class MissingEnviromentVariableError(Exception):
+    """if env variable was not found"""
+
+    pass
+
+
+class AidRequestStatus(Enum):
+    PENDING = "pending"
+    IN_PROGRESS = "in_progres"
+    COMPLETED = "completed"

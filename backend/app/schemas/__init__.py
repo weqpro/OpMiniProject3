@@ -1,4 +1,4 @@
 from .search_options import SearchOptionsSchema
-from .aid_request import AidRequestSchema
+from .aid_request import AidRequestSchema, AidRequestSchemaIn
 from .category import CategorySchema
 from .soldier import SoldierSchema
