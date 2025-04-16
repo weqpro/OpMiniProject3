@@ -5,14 +5,12 @@ import { catchError, tap } from 'rxjs/operators';
 
 interface AuthResponse {
   access_token: string;
-  expires_in: number;
   token_type: string;
-  scope?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = 'endpoint';
+  private authUrl = 'api/auth/token';
   private accessToken: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -24,8 +22,6 @@ export class AuthService {
       grant_type: 'password',
       username: username,
       password: password,
-      client_id: '#',
-      client_secret: '#'
     });
 
     const headers = new HttpHeaders({
