@@ -1,23 +1,48 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
+interface AuthResponse {
+  access_token: string;
+  token_type: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = 'https://api.example.com/auth';
+  private authUrl = 'api/auth/token';
+  private accessToken: string | null = null;
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
   constructor(private http: HttpClient) {}
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.authUrl}/login`, credentials).pipe(
-      tap(response => localStorage.setItem('token', response.token))
+
+  login(username: string, password: string): Observable<AuthResponse> {
+    const body = new URLSearchParams({
+      grant_type: 'password',
+      username: username,
+      password: password,
+    });
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<AuthResponse>(this.authUrl, body.toString(), { headers }).pipe(
+      tap(response => {
+        this.accessToken = response.access_token;
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError((error: HttpErrorResponse) => throwError(() => new Error(error.message)))
     );
   }
+
   logout(): void {
-    localStorage.removeItem('token');
+    this.accessToken = null;
+    this.isAuthenticatedSubject.next(false);
   }
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+
+  getAccessToken(): string | null {
+    return this.accessToken;
   }
 }
