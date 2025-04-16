@@ -16,7 +16,7 @@ class SoldierService:
     ) -> None:
         self.__repository: SoldierRepository = soldier_repository
 
-    async def create_soldier(
+    async def create(
         self,
         soldier: SoldierSchema,
     ) -> Soldier:
@@ -30,7 +30,6 @@ class SoldierService:
             Soldier.email == email
         )
         return next(iter(result), None)
-
 
 async def get_soldier_service(
     soldier_repository: SoldierRepository = Depends(get_soldier_repository),

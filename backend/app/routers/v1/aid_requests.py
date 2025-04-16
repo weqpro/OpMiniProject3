@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 
-from app.schemas import SearchOptionsSchema, AidRequestSchema
-from app.services import AidRequestService, get_aid_request_service
-
+from app.schemas.aid_request import AidRequestSchema, AidRequestSchemaIn
+from app.schemas.search_options import SearchOptionsSchema
+from app.services.aid_request_service import AidRequestService, get_aid_request_service
+from app.auth import get_current_soldier, get_current_volunteer
 router = APIRouter(prefix="/aid_requests", tags=["aid_requests"])
 
 
@@ -16,10 +17,75 @@ async def search(
 
     return await aid_request_service.search(search_options)
 
-
-@router.post("/create")
-async def create(
-    aid_request: AidRequestSchema,
-    aid_request_service: AidRequestService = Depends(get_aid_request_service),
+@router.delete("/{request_id}")
+async def delete(
+    request_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
 ):
-    return await aid_request_service.create_aid_request(aid_request)
+    await service.delete(request_id)
+    return {"ok": True}
+
+@router.get("/{request_id}", response_model=AidRequestSchema)
+async def get_by_id(
+    request_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    result = await service.get_by_id(request_id)
+    if not result:
+        raise HTTPException(404, detail="Request not found")
+    return result
+
+@router.put("/{request_id}", response_model=AidRequestSchema)
+async def update(
+    request_id: int,
+    arequest: AidRequestSchemaIn,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    updated = await service.update(request_id, arequest)
+    if not updated:
+        raise HTTPException(404, detail="Request not found")
+    return updated
+
+@router.post("/{request_id}/publish", response_model=AidRequestSchema)
+async def publish(
+    request_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    updated = await service.publish(request_id)
+    if not updated:
+        raise HTTPException(404, detail="Request not found")
+    return updated
+
+@router.get("/by-soldier/{soldier_id}", response_model=list[AidRequestSchema])
+async def get_by_soldier(
+    soldier_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    return await service.get_by_soldier(soldier_id)
+
+@router.get("/unassigned", response_model=list[AidRequestSchema])
+async def get_unassigned(
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    return await service.get_unassigned()
+
+@router.post("/", response_model=AidRequestSchema)
+async def create(
+    arequest: AidRequestSchemaIn,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    return await service.create(arequest, soldier_id=user["id"])
+
+@router.get("/", response_model=list[AidRequestSchema])
+async def get_all(
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    return await service.get_all()

@@ -1,21 +1,20 @@
-"""Soldier schema module"""
-
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
-class SoldierSchema(BaseModel):
-    """
-    The schema used to validate and structure data
-    related to soldier
-    """
-
+class SoldierSchemaIn(BaseModel):
     name: str
     surname: str
-    email: str
+    email: EmailStr
     password: str
     phone_number: str
     unit: str
     subsubunit: str
     battalion: str
 
-    model_config = {"from_attributes": True}
+
+class SoldierSchema(SoldierSchemaIn):
+    id: int
+
+    class Config:
+        from_attributes = True
+

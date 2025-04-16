@@ -1,6 +1,6 @@
 import asyncio
-from collections.abc import AsyncGenerator
 import os
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import (
@@ -12,25 +12,23 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy import text
 import sqlalchemy.exc
 
-from app.utils import Singleton
-
+from app.utils import Singleton, MissingEnviromentVariableError
+from app.models.base import Base
 from app.models.soldier import Soldier
 from app.models.volunteer import Volunteer
 from app.models.aid_request import AidRequest
-from app.models.base import Base
-from app.utils import MissingEnviromentVariableError
 
 
 class RepositoryContext(metaclass=Singleton):
     def __init__(self) -> None:
-        password: str = self.__get_passwd()
-        connection: str | None = os.getenv("DATABASE_URL")
+        password = "1234"
+        connection = "postgresql+asyncpg://postgres:1234@localhost:5432/fortistest"
 
         if connection is None:
-            raise MissingEnviromentVariableError("Could not get DATABASE_URL")
+            raise MissingEnviromentVariableError("Missing DB connection string")
 
         self.__engine: AsyncEngine = create_async_engine(
-            connection.format(passwd=password),
+            connection,
             echo=False,
             pool_size=20,
             max_overflow=10,
@@ -41,8 +39,6 @@ class RepositoryContext(metaclass=Singleton):
         self.__session_maker: async_sessionmaker[AsyncSession] = async_sessionmaker(
             self.__engine, expire_on_commit=False
         )
-
-        asyncio.create_task(self.init_db())
 
     async def init_db(self):
         print("Connecting to db...", flush=True)
@@ -56,18 +52,18 @@ class RepositoryContext(metaclass=Singleton):
             print(f"Failed (retry after 2s)\ne:{e}")
             await asyncio.sleep(2)
             await self.init_db()
-        print("Conected to database", flush=True)
+        print("Connected to database", flush=True)
 
-    def __del__(self) -> None:
-        asyncio.run(self.__engine.dispose())
-
-    def __get_passwd(self) -> str:
-        """get s a password from secrets"""
-        path = os.getenv("DATABASE_PASSWORD_FILE")
-        if path is None:
-            raise MissingEnviromentVariableError("Could not get DATABASE_PASSWORD_FILE")
-        with open(path) as f:
-            return f.read().rstrip("\n")
+    def __del__(self):
+        if hasattr(self, "_RepositoryContext__engine"):
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    asyncio.create_task(self.__engine.dispose())
+                else:
+                    loop.run_until_complete(self.__engine.dispose())
+            except Exception:
+                pass
 
     @asynccontextmanager
     async def session_maker(self) -> AsyncGenerator[AsyncSession, None]:

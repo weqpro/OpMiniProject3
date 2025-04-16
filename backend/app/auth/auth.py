@@ -15,6 +15,8 @@ from app.services import SoldierService
 from app.services.soldier_service import get_soldier_service
 from app.utils import MissingEnviromentVariableError
 
+from app.models.volunteer import Volunteer
+from app.repository.volunteer_repository import get_volunteer_repository, VolunteerRepository
 
 def __get_passwd() -> str:
     """get s a password from secrets"""
@@ -92,3 +94,28 @@ async def get_current_soldier(
     if soldier is None:
         raise auth_exception
     return soldier
+
+async def get_current_volunteer(
+    token: str = Depends(oauth2_scheme),
+    volunteer_repo: VolunteerRepository = Depends(get_volunteer_repository),
+) -> Volunteer:
+    auth_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not verify credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        token_data: TokenData = TokenData(username=username)
+
+        if token_data.username is None:
+            raise auth_exception
+    except InvalidTokenError:
+        raise auth_exception
+
+    volunteer: Volunteer | None = await volunteer_repo.find_by_email(token_data.username)
+    if volunteer is None:
+        raise auth_exception
+    return volunteer
