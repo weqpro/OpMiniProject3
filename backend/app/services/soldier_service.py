@@ -1,7 +1,8 @@
 from collections.abc import Sequence
 from fastapi import Depends
 
-from app.schemas import SoldierSchema
+from .encoder.encoder import get_password_hash
+from app.schemas import SoldierSchemaIn
 from app.models import Soldier
 from app.repository import (
     SoldierRepository,
@@ -16,11 +17,11 @@ class SoldierService:
     ) -> None:
         self.__repository: SoldierRepository = soldier_repository
 
-    async def create(
-        self,
-        soldier: SoldierSchema,
-    ) -> Soldier:
-        return await self.__repository.create(Soldier(**soldier.model_dump()))
+    async def create_soldier(self, data: SoldierSchemaIn) -> Soldier:
+        data_dict = data.model_dump()
+        data_dict["password"] = await get_password_hash(data_dict["password"])
+        soldier = Soldier(**data_dict)
+        return await self.__repository.create(soldier)
 
     async def get_all(self) -> Sequence[Soldier]:
         return await self.__repository.find()

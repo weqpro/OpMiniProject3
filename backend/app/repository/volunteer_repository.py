@@ -55,6 +55,10 @@ class VolunteerRepository(RepositoryBase[Volunteer], VolunteerRepositoryBase):
             result = await session.execute(stmt)
             return result.scalars().all()
 
+    async def find_by_email(self, email: str) -> Volunteer | None:
+        result = await self.find_by_condition(Volunteer.email == email)
+        return next(iter(result), None)
+
 
 async def get_volunteer_repository(
     context: RepositoryContext = Depends(get_repository_context),

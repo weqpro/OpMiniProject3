@@ -20,14 +20,13 @@ from app.repository.volunteer_repository import get_volunteer_repository, Volunt
 
 def __get_passwd() -> str:
     """get s a password from secrets"""
-    path = os.getenv("JWT_SECRET_FILE")
+    path = "sercret"
     if path is None:
         raise MissingEnviromentVariableError("Could not get DATABASE_PASSWORD_FILE")
     with open(path) as f:
         return f.read().rstrip("\n")
 
-
-JWT_SECRET: str = __get_passwd()
+JWT_SECRET: str = "secret"
 ALGORITHM: str = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 20
 

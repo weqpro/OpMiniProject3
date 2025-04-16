@@ -1,6 +1,7 @@
 """AidRequest schema module"""
 
 import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -43,5 +44,29 @@ class AidRequestSchemaIn(BaseModel):
     volunteer_id: int | None
     category_id: int | None
 
+class AidRequestSchemaInWithoutVolId(BaseModel):
+    name: str
+    description: str
+    tags: list[str]
+    image: str
+    location: str
+    deadline: datetime.datetime
+    category_id: int
+
     class Config:
         orm_mode = True
+
+class AidRequestSchemaUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[list[str]] = None
+    image: Optional[str] = None
+    location: Optional[str] = None
+    deadline: Optional[datetime.datetime] = None
+    volunteer_id: Optional[int] = None
+    category_id: Optional[int] = None
+
+    class Config:
+        arbitrary_types_allowed = True
+        from_attributes = True
+

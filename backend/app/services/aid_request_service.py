@@ -1,10 +1,10 @@
 from collections.abc import Sequence
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy.sql.expression import ColumnExpressionArgument
 
 from app.models import Category
 from app.schemas import SearchOptionsSchema
-from app.schemas import AidRequestSchema, AidRequestSchemaIn
+from app.schemas import AidRequestSchema, AidRequestSchemaIn, AidRequestSchemaInWithoutVolId, AidRequestSchemaUpdate
 from app.models import AidRequest
 from app.repository import (
     AidRequestRepository,
@@ -76,56 +76,70 @@ class AidRequestService:
     #     )
 
     async def get_all(self) -> Sequence[AidRequest]:
-        return await self._repo.find()
+        return await self.__repository.find()
 
     async def get_by_id(self, request_id: int) -> AidRequest | None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
+        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
         return next(iter(result), None)
 
     async def get_by_soldier(self, soldier_id: int) -> Sequence[AidRequest]:
-        return await self._repo.find_by_condition(AidRequest.soldier_id == soldier_id)
+        return await self.__repository.find_by_condition(AidRequest.soldier_id == soldier_id)
 
     async def get_unassigned(self) -> Sequence[AidRequest]:
-        return await self._repo.find_by_condition(AidRequest.volunteer_id.is_(None))
+        return await self.__repository.find_by_condition(AidRequest.volunteer_id.is_(None))
 
 
     async def create(
-        self, aid_request: AidRequestSchemaIn, soldier_id: int
+        self, aid_request: AidRequestSchemaInWithoutVolId, soldier_id: int
     ) -> AidRequest:
         aid_request_data = aid_request.model_dump()
         new_aid_request: AidRequest = AidRequest(
-            soldier_id=soldier_id,
-            status=AidRequestStatus.PENDING,
+
+        soldier_id=soldier_id,
+            status=AidRequestStatus.PENDING.value,
             **aid_request_data,
         )
         return await self.__repository.create(new_aid_request)
 
-
     async def update(
-        self, request_id: int, data: AidRequestSchemaIn
-    ) -> AidRequest | None:
+            self, request_id: int, data: AidRequestSchemaUpdate
+    ) -> AidRequest:
+        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
+        entity: AidRequest | None = next(iter(result), None)
+
+        if not entity:
+            raise HTTPException(status_code=404, detail="Request not found")
+
+        update_data = data.model_dump(exclude_unset=True)
+
+        for key, value in update_data.items():
+            if hasattr(entity, key):
+                setattr(entity, key, value)
+
+        await self.__repository.update(
+            condition=(AidRequest.id == entity.id),
+            **update_data
+        )
+
+        return entity
+
+    async def delete(self, request_id: int) -> None:
         result = await self.__repository.find_by_condition(AidRequest.id == request_id)
         entity = next(iter(result), None)
         if entity:
-            for key, value in data.model_dump(exclude_unset=True).items():
-                setattr(entity, key, value)
-            return await self.__repository.update(entity)
-        return None
-
-
-    async def delete(self, request_id: int) -> None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
-        entity = next(iter(result), None)
-        if entity:
-            await self._repo.delete(entity)
+            await self.__repository.delete(entity)
 
     async def publish(self, request_id: int) -> AidRequest | None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
-        entity = next(iter(result), None)
-        if entity:
-            entity.status = AidRequestStatus.IN_PROGRESS.value
-            return await self._repo.update(entity)
-        return None
+        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
+        entity: AidRequest | None = next(iter(result), None)
+
+        if not entity:
+            return None
+
+        entity.status = AidRequestStatus.IN_PROGRESS.value
+        await self.__repository.update(condition=(AidRequest.id == entity.id), status=entity.status)
+        return entity
+
 
 async def get_aid_request_service(
     aid_request_repository: AidRequestRepository = Depends(get_aid_request_repository),

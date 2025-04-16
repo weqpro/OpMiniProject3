@@ -1,15 +1,25 @@
 from abc import ABC, abstractmethod
+from typing import Sequence
 from app.models.aid_request import AidRequest
 
-
 class AidRequestRepositoryBase(ABC):
-    ...
-    # @abstractmethod
-    # def get_aid_request_by_soldier(self, soldier_id: int) -> list[AidRequest]:
-    #     """Get all aid requests for a specific soldier"""
-    #     pass
-    #
-    # @abstractmethod
-    # def get_aid_request_by_category(self, category_id: int) -> list[AidRequest]:
-    #     """Get all aid requests for a specific category"""
-    #     pass
+
+    @abstractmethod
+    async def create(self, value: AidRequest) -> AidRequest:
+        ...
+
+    @abstractmethod
+    async def update(self, condition, **values) -> None:
+        ...
+
+    @abstractmethod
+    async def delete(self, value: AidRequest) -> None:
+        ...
+
+    @abstractmethod
+    async def find(self, *order_by) -> Sequence[AidRequest]:
+        ...
+
+    @abstractmethod
+    async def find_by_condition(self, condition, *order_by) -> Sequence[AidRequest]:
+        ...
