@@ -82,7 +82,6 @@ async def update_request(
         raise HTTPException(status_code=404, detail="Request not found")
     return updated
 
-# LAST — dynamic route!
 @router.get("/{request_id}", response_model=AidRequestSchema)
 async def get_by_id(
     request_id: int,
