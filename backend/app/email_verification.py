@@ -11,7 +11,8 @@ user_data = {}
 
 
 def email_validator(email_ad):
-    pattern = r"^(?!\.)(?!.*\.\.)[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})*$"
+    pattern = r"^(?!\.)(?!.*\.\.)[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9-]\
+        +)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})*$"
     return re.match(pattern, email_ad) is not None
 
 
@@ -54,7 +55,7 @@ async def send_code(email_address, otp):
         print(f"Error sending email: {e}")
     finally:
         await server.quit()
-        
+
 async def is_email_registered(email_address, soldier_service, volunteer_service):
     soldier = await soldier_service.get_with_email(email_address)
     if soldier is not None:
@@ -84,7 +85,7 @@ async def validate_email_and_send_code(
     if not can_generate_new_code(email_address):
         print("Please wait before generating a new code")
         return
-    
+
     otp = create_otp()
     user_data[email_address] = {
         "code": otp,
@@ -95,11 +96,11 @@ async def validate_email_and_send_code(
     await send_code(email_address, otp)
 
 
-async def main():
-    email = input("Enter your email: ")
-    soldier_service = await get_soldier_service()
-    volunteer_service = await get_volunteer_service()
+# async def main():
+#     email = input("Enter your email: ")
+#     soldier_service = await get_soldier_service()
+#     volunteer_service = await get_volunteer_service()
 
-    await validate_email_and_send_code(email, soldier_service, volunteer_service)
+#     await validate_email_and_send_code(email, soldier_service, volunteer_service)
 
-asyncio.run(main())
+# asyncio.run(main())
