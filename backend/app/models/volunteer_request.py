@@ -17,6 +17,9 @@ class VolunteerRequest(Base):
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"))
     aid_request_id: Mapped[int] = mapped_column(ForeignKey("request.id"))
 
-    volunteer: Mapped["Volunteer"] = relationship("Volunteer", back_populates="volunteer_requests")
+    volunteer: Mapped["Volunteer"] = relationship(
+        "Volunteer", back_populates="volunteer_requests"
+    )
     aid_request: Mapped["AidRequest"] = relationship(
-        "AidRequest", back_populates="volunteer_requests")
+        "AidRequest", back_populates="volunteer_requests"
+    )

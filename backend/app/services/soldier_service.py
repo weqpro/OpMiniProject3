@@ -31,6 +31,7 @@ class SoldierService:
         )
         return next(iter(result), None)
 
+
 async def get_soldier_service(
     soldier_repository: SoldierRepository = Depends(get_soldier_repository),
 ) -> SoldierService:

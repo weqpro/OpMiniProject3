@@ -88,7 +88,6 @@ class AidRequestService:
     async def get_unassigned(self) -> Sequence[AidRequest]:
         return await self._repo.find_by_condition(AidRequest.volunteer_id.is_(None))
 
-
     async def create(
         self, aid_request: AidRequestSchemaIn, soldier_id: int
     ) -> AidRequest:
@@ -100,7 +99,6 @@ class AidRequestService:
         )
         return await self.__repository.create(new_aid_request)
 
-
     async def update(
         self, request_id: int, data: AidRequestSchemaIn
     ) -> AidRequest | None:
@@ -111,7 +109,6 @@ class AidRequestService:
                 setattr(entity, key, value)
             return await self.__repository.update(entity)
         return None
-
 
     async def delete(self, request_id: int) -> None:
         result = await self._repo.find_by_condition(AidRequest.id == request_id)
@@ -126,6 +123,7 @@ class AidRequestService:
             entity.status = AidRequestStatus.IN_PROGRESS.value
             return await self._repo.update(entity)
         return None
+
 
 async def get_aid_request_service(
     aid_request_repository: AidRequestRepository = Depends(get_aid_request_repository),
