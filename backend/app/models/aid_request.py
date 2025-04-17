@@ -20,10 +20,10 @@ class AidRequest(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
-    description: Mapped[str] = mapped_column(String(1000))
+    description: Mapped[str] = mapped_column(String(1000), nullable=False)
     tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
-    image: Mapped[str] = mapped_column(String(255))
-    location: Mapped[str] = mapped_column(String(100))
+    image: Mapped[str] = mapped_column(String(255), nullable=True)
+    location: Mapped[str] = mapped_column(String(100), nullable=True)
     status: Mapped[str] = mapped_column(
         String(40), default=AidRequestStatus.PENDING, nullable=False
     )

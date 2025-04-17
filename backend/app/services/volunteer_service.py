@@ -22,6 +22,7 @@ class VolunteerService:
         if entity:
             await self.__repo.delete(entity)
 
+
 async def get_volunteer_service(
     repo: VolunteerRepository = Depends(get_volunteer_repository),
 ) -> VolunteerService:

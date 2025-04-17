@@ -3,7 +3,7 @@
 from typing import List
 
 from sqlalchemy.orm import mapped_column, Mapped
-from sqlalchemy import Integer, ForeignKey, Boolean, String, Text
+from sqlalchemy import Float, Integer, ForeignKey, Boolean, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from app.models.base import Base
@@ -20,6 +20,7 @@ class Review(Base):
     review_text: Mapped[str] = mapped_column(Text, nullable=False)
     reported: Mapped[bool] = mapped_column(Boolean, default=False)
     tags: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=True)
+    rating: Mapped[float] = mapped_column(Float, default=5.0, nullable=False)
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"))
 
