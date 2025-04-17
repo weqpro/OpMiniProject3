@@ -27,9 +27,7 @@ class Volunteer(Base):
     )
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     phone_number: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
-    ratings: Mapped[list[float]] = mapped_column(
-        ARRAY[Float], default=[], nullable=False
-    )
+    ratings: Mapped[list[float]] = mapped_column(ARRAY(Float), nullable=False)
 
     requests: Mapped[list[AidRequest]] = relationship()
     reviews: Mapped[list[Review]] = relationship(Review, cascade="all, delete-orphan")

@@ -1,7 +1,6 @@
 """soldier model"""
 
 from datetime import datetime
-from typing import List
 
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import relationship, mapped_column, Mapped
@@ -34,7 +33,7 @@ class Soldier(Base):
     )
     # battalion: Mapped[str] = mapped_column(String(255))
 
-    requests: Mapped[List[AidRequest]] = relationship(
+    requests: Mapped[list[AidRequest]] = relationship(
         AidRequest, cascade="all, delete-orphan"
     )
-    reviews: Mapped[List[Review]] = relationship(Review, cascade="all, delete-orphan")
+    reviews: Mapped[list[Review]] = relationship(Review, cascade="all, delete-orphan")
