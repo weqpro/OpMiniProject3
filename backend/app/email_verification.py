@@ -1,23 +1,20 @@
 import re
 import random
-import datetime, time
-import sqlite3
-import smtplib
+import datetime
+import asyncio
+from aiosmtplib import SMTP
 from email.message import EmailMessage
 
 user_data = {}
 
 
 def email_validator(email_ad):
-    pattern = r"^(?!\.)(?!.*\.\.)[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9-]\
-        +)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})*$"
-
+    pattern = r"^(?!\.)(?!.*\.\.)[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})*$"
     return re.match(pattern, email_ad) is not None
 
 
 def create_otp():
-    otp = "".join(str(random.randint(0, 9)) for _ in range(6))
-    return otp
+    return "".join(str(random.randint(0, 9)) for _ in range(6))
 
 
 def can_generate_new_code(email):
@@ -37,27 +34,27 @@ def is_code_valid(email, code):
     return (datetime.datetime.now() - created_at).total_seconds() <= 600
 
 
-def send_code(email_address, otp):
+async def send_code(email_address, otp):
+    msg = EmailMessage()
+    msg["Subject"] = "OTP Verification"
+    msg["From"] = "Fortis <noreply@fortis.com>"
+    msg["To"] = email_address
+    msg.set_content(f"Your verification code is: {otp}")
+
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login("pereima.pn@ucu.edu.ua", "dhnf wrbl cwvu gyhw")
-
-        msg = EmailMessage()
-        msg["Subject"] = "OTP Verification"
-        msg["From"] = "Fortis <noreply@fortis.com>"
-        msg["To"] = email_address
-        msg.set_content(f"Your verification code is: {otp}")
-
-        server.send_message(msg)
+        server = SMTP(hostname="smtp.gmail.com", port=587, start_tls=True)
+        await server.connect()
+        # await server.starttls()
+        await server.login("pereima.pn@ucu.edu.ua", "kuko ggfb ivhw ezts")
+        await server.send_message(msg)
         print(f"OTP has been sent to {email_address}")
     except Exception as e:
         print(f"Error sending email: {e}")
     finally:
-        server.quit()
+        await server.quit()
 
 
-def validate_email_and_send_code(email_address):
+async def validate_email_and_send_code(email_address):
     if not email_validator(email_address):
         print("Invalid email address")
         return
@@ -73,8 +70,11 @@ def validate_email_and_send_code(email_address):
         "created_at": datetime.datetime.now(),
     }
 
-    send_code(email_address, otp)
+    await send_code(email_address, otp)
 
 
-# email = input("Enter your email: ")
-# validate_email_and_send_code(email)
+# async def main():
+#     email = input("Enter your email: ")
+#     await validate_email_and_send_code(email)
+
+# asyncio.run(main())
