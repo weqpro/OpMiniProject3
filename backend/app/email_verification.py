@@ -4,6 +4,8 @@ import datetime
 import asyncio
 from aiosmtplib import SMTP
 from email.message import EmailMessage
+from app.services.soldier import get_soldier_service
+from app.services.volunteer import get_volunteer_service
 
 user_data = {}
 
@@ -36,7 +38,7 @@ def is_code_valid(email, code):
 
 async def send_code(email_address, otp):
     msg = EmailMessage()
-    msg["Subject"] = "OTP Verification"
+    msg["Subject"] = "Account Verification"
     msg["From"] = "Fortis <noreply@fortis.com>"
     msg["To"] = email_address
     msg.set_content(f"Your verification code is: {otp}")
@@ -52,17 +54,37 @@ async def send_code(email_address, otp):
         print(f"Error sending email: {e}")
     finally:
         await server.quit()
+        
+async def is_email_registered(email_address, soldier_service, volunteer_service):
+    soldier = await soldier_service.get_with_email(email_address)
+    if soldier is not None:
+        print("This email is already registered as a soldier.")
+        return True
+
+    volunteer = await volunteer_service.get_with_email(email_address)
+    if volunteer is not None:
+        print("This email is already registered as a volunteer.")
+        return True
+
+    return False
 
 
-async def validate_email_and_send_code(email_address):
+async def validate_email_and_send_code(
+    email_address,
+    soldier_service,
+    volunteer_service,
+):
     if not email_validator(email_address):
         print("Invalid email address")
+        return
+
+    if await is_email_registered(email_address, soldier_service, volunteer_service):
         return
 
     if not can_generate_new_code(email_address):
         print("Please wait before generating a new code")
         return
-
+    
     otp = create_otp()
     user_data[email_address] = {
         "code": otp,
@@ -73,8 +95,11 @@ async def validate_email_and_send_code(email_address):
     await send_code(email_address, otp)
 
 
-# async def main():
-#     email = input("Enter your email: ")
-#     await validate_email_and_send_code(email)
+async def main():
+    email = input("Enter your email: ")
+    soldier_service = await get_soldier_service()
+    volunteer_service = await get_volunteer_service()
 
-# asyncio.run(main())
+    await validate_email_and_send_code(email, soldier_service, volunteer_service)
+
+asyncio.run(main())

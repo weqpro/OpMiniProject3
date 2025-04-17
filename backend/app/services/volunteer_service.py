@@ -21,6 +21,10 @@ class VolunteerService:
         entity = next(iter(result), None)
         if entity:
             await self.__repo.delete(entity)
+            
+    async def get_with_email(self, email: str) -> Volunteer | None:
+        result = await self.__repo.find_by_condition(Volunteer.email == email)
+        return next(iter(result), None)
 
 
 async def get_volunteer_service(
