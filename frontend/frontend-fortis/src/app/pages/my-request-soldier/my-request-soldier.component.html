@@ -1,0 +1,30 @@
+<div class="container">
+  <h2 class="title">Мої запити</h2>
+  <hr class="divider" />
+
+  <div class="request-card" *ngFor="let request of this.requests">
+    <img [src]="request.image" alt="Request image" class="request-image" />
+
+    <div class="request-content">
+      <h3 class="request-title">{{ request.title }}</h3>
+      <p><strong>Статус</strong> — {{ request.status }}</p>
+
+      <div class="request-actions">
+        <ng-container *ngIf="this.userRole === 'soldier'">
+          <button
+            mat-button
+            color="primary"
+            *ngIf="request.status === 'Опубліковано'"
+          >
+            Редагувати
+          </button>
+          <button mat-button color="accent">Залишити відгук</button>
+        </ng-container>
+        <ng-container *ngIf="this.userRole === 'volunteer'">
+          <a href="#" class="action-link">Деталі запиту</a>
+          <a href="#" class="action-link">Профіль військового</a>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

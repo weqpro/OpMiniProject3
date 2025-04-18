@@ -1,0 +1,52 @@
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.divider {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.request-card {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.request-image {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.request-content {
+  flex: 1;
+}
+
+.request-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.request-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-link {
+  text-decoration: none;
+  color: #007BFF;
+  font-weight: 500;
+  cursor: pointer;
+}
