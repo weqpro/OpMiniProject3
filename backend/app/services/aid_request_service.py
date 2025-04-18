@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+
 from fastapi import Depends
 from sqlalchemy.sql.expression import ColumnExpressionArgument
 
@@ -46,34 +47,6 @@ class AidRequestService:
         )
 
         return await self.__repository.create(new_aid_request)
-
-    # async def update_aid_request_status(
-    #     self, db, aid_request_id: int, status: str
-    # ) -> AidRequest:
-    #     return await self.__repository.update_aid_request_status(
-    #         db=db, aid_request_id=aid_request_id, status=status
-    #     )
-    #
-    # async def set_volunteer_deadline(
-    #     self, db, aid_request_id: int, deadline: datetime.datetime
-    # ) -> AidRequestOut:
-    #     return await self.__repository.set_volunteer_deadline(
-    #         db=db, aid_request_id=aid_request_id, deadline=deadline
-    #     )
-    #
-    # async def delete_aid_request(
-    #     self, db, aid_request_id: int, soldier_id: int
-    # ) -> bool:
-    #     return await self.__repository.delete_aid_request(
-    #         db=db, aid_request_id=aid_request_id, soldier_id=soldier_id
-    #     )
-    #
-    # async def reject_aid_request(
-    #     self, db, aid_request_id: int, volunteer_id: int
-    # ) -> bool:
-    #     return await self.__repository.reject_aid_request(
-    #         db=db, aid_request_id=aid_request_id, volunteer_id=volunteer_id
-    #     )
 
     async def get_all(self) -> Sequence[AidRequest]:
         return await self.__repository.find()

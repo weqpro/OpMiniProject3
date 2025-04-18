@@ -14,6 +14,7 @@ async def get_one(
 ):
     return await service.get_by_id(volunteer_id)
 
+
 @router.delete("/{volunteer_id}")
 async def delete(
     volunteer_id: int,

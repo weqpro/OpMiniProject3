@@ -54,7 +54,9 @@ class RepositoryBase[T]:
         """Gets objects with the specified ordering, and filtering."""
         async with self._session_maker() as session:
             stmt = (
-                select(self._model).where(condition).order_by(*order_by)
+                select(self._model)
+                .where(condition)
+                .order_by(*order_by)
                 #       .filter_by(**filter_by)
             )
             result = await session.execute(stmt)

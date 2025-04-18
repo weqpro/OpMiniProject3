@@ -9,4 +9,3 @@ router.include_router(aid_requests_router)
 router.include_router(volunteers_router)
 router.include_router(soldiers_router)
 router.include_router(auth_router)
-

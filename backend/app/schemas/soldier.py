@@ -17,4 +17,3 @@ class SoldierSchema(SoldierSchemaIn):
 
     class Config:
         from_attributes = True
-
