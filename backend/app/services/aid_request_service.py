@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+
 from fastapi import Depends
 from sqlalchemy.sql.expression import ColumnExpressionArgument
 
@@ -47,46 +48,22 @@ class AidRequestService:
 
         return await self.__repository.create(new_aid_request)
 
-    # async def update_aid_request_status(
-    #     self, db, aid_request_id: int, status: str
-    # ) -> AidRequest:
-    #     return await self.__repository.update_aid_request_status(
-    #         db=db, aid_request_id=aid_request_id, status=status
-    #     )
-    #
-    # async def set_volunteer_deadline(
-    #     self, db, aid_request_id: int, deadline: datetime.datetime
-    # ) -> AidRequestOut:
-    #     return await self.__repository.set_volunteer_deadline(
-    #         db=db, aid_request_id=aid_request_id, deadline=deadline
-    #     )
-    #
-    # async def delete_aid_request(
-    #     self, db, aid_request_id: int, soldier_id: int
-    # ) -> bool:
-    #     return await self.__repository.delete_aid_request(
-    #         db=db, aid_request_id=aid_request_id, soldier_id=soldier_id
-    #     )
-    #
-    # async def reject_aid_request(
-    #     self, db, aid_request_id: int, volunteer_id: int
-    # ) -> bool:
-    #     return await self.__repository.reject_aid_request(
-    #         db=db, aid_request_id=aid_request_id, volunteer_id=volunteer_id
-    #     )
-
     async def get_all(self) -> Sequence[AidRequest]:
-        return await self._repo.find()
+        return await self.__repository.find()
 
     async def get_by_id(self, request_id: int) -> AidRequest | None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
+        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
         return next(iter(result), None)
 
     async def get_by_soldier(self, soldier_id: int) -> Sequence[AidRequest]:
-        return await self._repo.find_by_condition(AidRequest.soldier_id == soldier_id)
+        return await self.__repository.find_by_condition(
+            AidRequest.soldier_id == soldier_id
+        )
 
     async def get_unassigned(self) -> Sequence[AidRequest]:
-        return await self._repo.find_by_condition(AidRequest.volunteer_id.is_(None))
+        return await self.__repository.find_by_condition(
+            AidRequest.volunteer_id.is_(None)
+        )
 
     async def create(
         self, aid_request: AidRequestSchemaIn, soldier_id: int
@@ -102,27 +79,15 @@ class AidRequestService:
     async def update(
         self, request_id: int, data: AidRequestSchemaIn
     ) -> AidRequest | None:
+        return await self.__repository.update(
+            AidRequest.id == request_id, **data.model_dump()
+        )
+
+    async def delete(self, request_id: int) -> None:
         result = await self.__repository.find_by_condition(AidRequest.id == request_id)
         entity = next(iter(result), None)
         if entity:
-            for key, value in data.model_dump(exclude_unset=True).items():
-                setattr(entity, key, value)
-            return await self.__repository.update(entity)
-        return None
-
-    async def delete(self, request_id: int) -> None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
-        entity = next(iter(result), None)
-        if entity:
-            await self._repo.delete(entity)
-
-    async def publish(self, request_id: int) -> AidRequest | None:
-        result = await self._repo.find_by_condition(AidRequest.id == request_id)
-        entity = next(iter(result), None)
-        if entity:
-            entity.status = AidRequestStatus.IN_PROGRESS.value
-            return await self._repo.update(entity)
-        return None
+            await self.__repository.delete(entity)
 
 
 async def get_aid_request_service(

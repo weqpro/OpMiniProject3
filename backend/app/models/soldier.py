@@ -1,8 +1,8 @@
 """soldier model"""
 
-from typing import List
+from datetime import datetime
 
-from sqlalchemy import String
+from sqlalchemy import DateTime, String
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.models.base import Base
@@ -19,16 +19,21 @@ class Soldier(Base):
     __tablename__ = "soldier"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
-    name: Mapped[str] = mapped_column(String(55))
-    surname: Mapped[str] = mapped_column(String(55))
-    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
-    password: Mapped[str] = mapped_column(String(255))
-    phone_number: Mapped[str] = mapped_column(String(15), unique=True)
-    unit: Mapped[str] = mapped_column(String(100))
-    subsubunit: Mapped[str] = mapped_column(String(100))
-    battalion: Mapped[str] = mapped_column(String(255))
+    name: Mapped[str] = mapped_column(String(55), nullable=False)
+    surname: Mapped[str] = mapped_column(String(55), nullable=False)
+    email: Mapped[str] = mapped_column(
+        String(255), unique=True, index=True, nullable=False
+    )
+    password: Mapped[str] = mapped_column(String(255), nullable=False)
+    phone_number: Mapped[str] = mapped_column(String(15), unique=True, nullable=True)
+    unit: Mapped[str] = mapped_column(String(100), nullable=False)
+    subsubunit: Mapped[str] = mapped_column(String(100), nullable=False)
+    verified_until: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
+    # battalion: Mapped[str] = mapped_column(String(255))
 
-    requests: Mapped[List[AidRequest]] = relationship(
+    requests: Mapped[list[AidRequest]] = relationship(
         AidRequest, cascade="all, delete-orphan"
     )
-    reviews: Mapped[List[Review]] = relationship(Review, cascade="all, delete-orphan")
+    reviews: Mapped[list[Review]] = relationship(Review, cascade="all, delete-orphan")

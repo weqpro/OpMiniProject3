@@ -1,9 +1,8 @@
 """volunteer model"""
 
-from typing import List
-
 from sqlalchemy import Integer, String, Float
 from sqlalchemy.orm import relationship, mapped_column, Mapped
+from sqlalchemy.dialects.postgresql import ARRAY
 
 from app.models.base import Base
 
@@ -28,7 +27,7 @@ class Volunteer(Base):
     )
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     phone_number: Mapped[str] = mapped_column(String(15), unique=True, nullable=False)
-    rating: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
+    ratings: Mapped[list[float]] = mapped_column(ARRAY(Float), nullable=False)
 
-    requests: Mapped[List[AidRequest]] = relationship()
-    reviews: Mapped[List[Review]] = relationship(Review, cascade="all, delete-orphan")
+    requests: Mapped[list[AidRequest]] = relationship()
+    reviews: Mapped[list[Review]] = relationship(Review, cascade="all, delete-orphan")
