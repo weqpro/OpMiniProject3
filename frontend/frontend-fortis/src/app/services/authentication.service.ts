@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import {BehaviorSubject, map, Observable, throwError} from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 interface AuthResponse {
@@ -8,6 +8,7 @@ interface AuthResponse {
   token_type: string;
 }
 
+export type UserRole = 'soldier' | 'volunteer';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private authUrl = 'api/auth/token';
@@ -44,5 +45,11 @@ export class AuthService {
 
   getAccessToken(): string | null {
     return this.accessToken;
+  }
+
+  getUserRole(): Observable<UserRole> {
+    return this.http.get<{ role: UserRole }>('/api/me').pipe(
+      map((response: { role: any; }) => response.role)
+    );
   }
 }

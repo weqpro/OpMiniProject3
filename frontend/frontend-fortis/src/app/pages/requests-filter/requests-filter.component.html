@@ -10,7 +10,7 @@
     <label>Категорія</label>
     <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
       <option value="">Будь-яка категорія</option>
-      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      <option *ngFor="let cat of this.categories" [value]="cat">{{ cat }}</option>
     </select>
   </div>
 
@@ -25,10 +25,10 @@
 <hr />
 
 <div class="request-list">
-  <div class="request-item" *ngFor="let r of requests">
-    <img [src]="r.image || 'assets/default.jpg'" alt="img" class="request-img" />
+  <div class="request-item" *ngFor="let r of this.requests">
+    <img [src]="r.image_path || 'assets/default.jpg'" alt="img" class="request-img" />
     <div class="info">
-      <h3>{{ r.title }}</h3>
+      <h3>{{ r.name }}</h3>
       <div class="meta">
         <span class="tag">Нове</span>
         <span class="location">{{ r.location }}</span>

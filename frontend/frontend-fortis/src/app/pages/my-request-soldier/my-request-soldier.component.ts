@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import {AidRequest} from '../../schemas/aid-request';
 import {AidRequestService} from '../../services/aid-request.service';
+import {AuthService, UserRole} from '../../services/authentication.service';
 
 
 @Component({
@@ -14,12 +15,20 @@ import {AidRequestService} from '../../services/aid-request.service';
 })
 export class MyRequestsComponent implements OnInit {
   requests: AidRequest[] = [];
-  userRole: 'soldier' | 'volunteer' = 'soldier';//тут треба зробити
+  userRole: UserRole | null = null;
 
-  constructor(private aidRequestService: AidRequestService) {}
+  constructor(private aidRequestService: AidRequestService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadMyRequests();
+    this.authService.getUserRole().subscribe({
+      next: role => {
+        this.userRole = role;
+        this.loadMyRequests();
+      },
+      error: err => {
+        console.error('Не вдалося отримати роль користувача', err);
+      }
+    });
   }
 
   loadMyRequests(): void {
