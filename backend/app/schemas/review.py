@@ -3,10 +3,14 @@ from typing import List, Optional
 
 class ReviewBase(BaseModel):
     """Base schema for a review."""
+    id:int
     review_text: str
+    reported: bool
     tags: List[str]
     soldier_id: int
     volunteer_id: int
+
+
 
 class ReviewCreate(ReviewBase):
     """

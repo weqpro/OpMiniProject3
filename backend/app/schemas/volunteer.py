@@ -13,3 +13,5 @@ class Volunteer(BaseModel):
     password: str
     phone_number: str
     rating: float
+    requests: List[AidRequest]
+    reviews: List[Review]

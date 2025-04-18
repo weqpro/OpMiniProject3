@@ -8,7 +8,7 @@ class SoldierSchema(BaseModel):
     The schema used to validate and structure data
     related to soldier
     """
-
+    id:int
     name: str
     surname: str
     email: str

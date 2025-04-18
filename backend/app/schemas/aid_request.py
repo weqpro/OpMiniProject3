@@ -12,7 +12,7 @@ class AidRequestSchema(BaseModel):
     The schema used to validate and structure data
     related to aid requests
     """
-
+    id : int
     name: str
     description: str
     tags: list[str]
