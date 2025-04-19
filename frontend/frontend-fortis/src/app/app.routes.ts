@@ -8,8 +8,9 @@ import { HomeComponent } from './pages/home-page/home-page.component';
 import { RoleSelectionComponent } from './pages/role-selection/role-selection.component';
 import { VolunteerRegisterComponent } from './pages/register/volunteer-register/volunteer-register.component';
 import { SoldierRegisterComponent } from './pages/register/soldier-register/soldier-register.component';
-import { CatalogComponent } from './pages/catalog/catalog/catalog.component';
-import { VolunteerHomeComponent } from './pages/volunteer-home/volunteer-home.component';
+import { RequestsFilterComponent } from './pages/requests-filter/requests-filter.component';
+import { MyRequestsComponent } from './pages/my-request-soldier/my-request-soldier.component'
+import { ReviewComponent } from './pages/review/review.component'
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -19,10 +20,9 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'role-selection', component: RoleSelectionComponent },
   { path: 'register', component: RoleSelectionComponent },
-  { path: 'profile/soldier', component: SoldierProfileComponent },
-  { path: 'volunteer-home', component: VolunteerHomeComponent },
-  // { path: 'own-requests-soldier', component: OwnRequestSoldierComponent }
+  { path: 'requests-filter', component: RequestsFilterComponent },
+  { path: 'my-requests-soldier', component: MyRequestsComponent },
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
-  { path: 'catalog', component: CatalogComponent},
+  {path: 'review', component: ReviewComponent },
 ];

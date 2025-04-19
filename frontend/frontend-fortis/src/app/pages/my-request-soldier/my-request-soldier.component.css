@@ -1,0 +1,224 @@
+/* .container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.divider {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.request-card {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+}
+
+.request-image {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.request-content {
+  flex: 1;
+}
+
+.request-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.request-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.action-link {
+  text-decoration: none;
+  color: #007BFF;
+  font-weight: 500;
+  cursor: pointer;
+} */
+
+
+/* Загальні стилі */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Верхня панель */
+.top-bar {
+  width: 100%;
+  background-color: white;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.top-left img.full-logo {
+  height: 40px;
+}
+
+.top-right {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.header-button {
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+/* Контейнер */
+.container {
+  max-width: 960px;
+  margin: auto;
+  padding-bottom: 32px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.divider {
+  margin-bottom: 24px;
+}
+
+/* Картки запитів */
+.request-card {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  align-items: flex-start;
+}
+
+.request-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.request-content {
+  flex: 1;
+}
+
+.request-title {
+  margin: 0 0 8px 0;
+}
+
+.request-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.action-link {
+  color: #39736b;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Футер */
+.footer {
+  background-color: #2c2c2c;
+  color: white;
+  padding: 30px 20px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.footer-left,
+.footer-right {
+  flex: 0 0 auto;
+}
+
+.footer-logo {
+  width: 90px;
+  margin-bottom: 10px;
+}
+
+.footer-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  font-size: 16px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+
+.footer-links a:hover {
+  color: #ccc;
+}
+
+.footer-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-right {
+  font-size: 12px;
+  opacity: 0.7;
+  white-space: nowrap;
+  align-self: flex-end;
+  margin-top: 16px;
+}

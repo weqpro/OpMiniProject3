@@ -69,6 +69,15 @@ export class AidRequestService {
     );
   }
 
+  getRequestsByVolunteer(volunteerId: number): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`${this.apiUrl}/by-volunteer/${volunteerId}`).pipe(
+      catchError((error) => {
+        console.error(`Error loading requests for volunteer ${volunteerId}:`, error);
+        return throwError(() => new Error('Failed to load volunteer’s requests.'));
+      })
+    );
+  }
+
   getCompletedRequests(): Observable<AidRequest[]> {
     return this.http.get<AidRequest[]>(`${this.apiUrl}/completed`).pipe(
       catchError((error) => {

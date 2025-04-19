@@ -1,0 +1,87 @@
+      <div class="page-wrapper">
+        <div class="top-bar">
+          <div class="top-left">
+            <a routerLink="/requests-filter">
+              <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+            </a>
+          </div>
+      
+          <div class="top-right">
+            <button mat-icon-button>
+              <mat-icon>search</mat-icon>
+            </button>
+      
+            <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+      
+            <mat-menu #profileMenu="matMenu">
+              <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+              <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+            </mat-menu>
+          </div>
+        </div>
+      
+        <main class="review-container">
+          <h1 class="title">Ваш відгук</h1>
+          <p class="subtitle">Опишіть вашу взаємодію з волонтером</p>
+      
+          <form class="form-box">
+            <mat-form-field appearance="fill" class="input-field">
+              <mat-label>Відгук</mat-label>
+              <textarea matInput rows="5"></textarea>
+            </mat-form-field>
+      
+            <div class="rating-section">
+              <label>Оцінка</label>
+              <div class="stars">
+                <mat-icon *ngFor="let star of [1,2,3,4,5]" (click)="setRating(star)" [class.filled]="star <= rating">
+                  {{ star <= rating ? 'star' : 'star_border' }}
+                </mat-icon>
+              </div>
+            </div>
+      
+            <div class="tags-list" *ngIf="tags.length > 0">
+              <mat-chip-set aria-label="Автоматичні теги">
+                <mat-chip *ngFor="let tag of tags" selected color="primary">{{ tag }}</mat-chip>
+              </mat-chip-set>
+            </div>
+            <button mat-raised-button routerLink="/requests-filter"color="primary" type="submit">Опублікувати</button>
+          </form>
+        </main>
+      
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-left">
+              <a routerLink="/requests-filter">
+                <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+              </a>
+            </div>
+      
+            <div class="footer-center">
+              <div class="footer-links">
+                <a routerLink="/contacts">Контакти</a>
+              </div>
+              <div class="footer-contacts">
+                <div class="contact-item">
+                  <mat-icon>location_on</mat-icon>
+                  <span>Lviv, Ukraine</span>
+                </div>
+                <div class="contact-item">
+                  <mat-icon>email</mat-icon>
+                  <span>fortis&#64;gmail.com</span>
+                </div>
+                <div class="contact-item">
+                  <mat-icon>call</mat-icon>
+                  <span>+380 567 239 175</span>
+                </div>
+              </div>
+            </div>
+      
+            <div class="footer-right">
+              <p>Fortis © 2025 All rights reserved</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+      

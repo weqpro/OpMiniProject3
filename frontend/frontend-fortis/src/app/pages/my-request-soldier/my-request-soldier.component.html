@@ -1,0 +1,108 @@
+<div class="page-container">
+  <div class="top-bar">
+    <div class="top-left">
+      <a routerLink="/requests-filter">
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+      </a>
+    </div>
+    <div class="top-right">
+      <button
+        *ngIf="userRole === 'soldier'"
+        mat-raised-button
+        color="primary"
+        class="header-button"
+        routerLink="/create-post"
+      >
+        Опублікувати оголошення
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button
+          mat-menu-item
+          [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'"
+        >
+          Мій профіль
+        </button>
+        <button
+          mat-menu-item
+          [routerLink]="userRole === 'soldier' ? '/own-requests-soldier' : '/own-requests-volunteer'"
+        >
+          Мої запити
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <main class="content-wrap">
+    <div class="container">
+      <h2 class="title">Мої запити</h2>
+      <hr class="divider" />
+
+      <div class="request-card" *ngFor="let request of this.requests">
+        <img
+          [src]="request.image_path"
+          alt="Request image"
+          class="request-image"
+        />
+
+        <div class="request-content">
+          <h3 class="request-title">{{ request.name }}</h3>
+          <p><strong>Статус</strong> — {{ request.status }}</p>
+
+          <div class="request-actions">
+            <ng-container *ngIf="this.userRole === 'soldier'">
+              <button
+                mat-button
+                color="primary"
+                *ngIf="request.status === 'Опубліковано'"
+              >
+                Редагувати
+              </button>
+              <button mat-button color="accent" [routerLink]="['/review']">Залишити відгук</button>
+            </ng-container>
+            <ng-container *ngIf="this.userRole === 'volunteer'">
+              <a href="#" class="action-link">Деталі запиту</a>
+              <a href="#" class="action-link">Профіль військового</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>fortis&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+</div>

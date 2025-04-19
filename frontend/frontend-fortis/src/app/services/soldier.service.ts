@@ -34,4 +34,12 @@ export class SoldierService {
       })
     );
   }
+  getProfile(): Observable<any> {
+    return this.http.get(`https://your-api.com/soldier/me`);
+  }
+  
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`https://your-api.com/soldier/me`, data);
+  }
+
 }

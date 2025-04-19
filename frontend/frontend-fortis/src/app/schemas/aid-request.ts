@@ -1,4 +1,4 @@
-export class AidRequest{
+export class AidRequest {
   id: number;
   name: string;
   description: string;
@@ -8,6 +8,7 @@ export class AidRequest{
   status: string;
   soldier_id: number;
   volunteer_id: number;
+  category_id: number;
 
   constructor(
     id: number,
@@ -19,7 +20,7 @@ export class AidRequest{
     status: string,
     soldier_id: number,
     volunteer_id: number,
-
+    category_id: number
   ) {
     this.id = id;
     this.name = name;
@@ -29,6 +30,7 @@ export class AidRequest{
     this.location = location;
     this.status = status;
     this.soldier_id = soldier_id;
-    this.volunteer_id = volunteer_id
+    this.volunteer_id = volunteer_id;
+    this.category_id = category_id;
   }
 }

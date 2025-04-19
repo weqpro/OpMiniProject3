@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SoldierService } from '../../../services/soldier.service';
+import { RouterModule, Router } from '@angular/router';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -11,6 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-soldier-profile',
@@ -19,9 +21,9 @@ import { MatListModule } from '@angular/material/list';
   styleUrls: ['./soldier-profile.component.css'],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule,
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
@@ -32,15 +34,58 @@ import { MatListModule } from '@angular/material/list';
     MatListModule
   ]
 })
-export class SoldierProfileComponent {
-  logout() {
-    console.log('Вихід з акаунта');
-  }
-
+export class SoldierProfileComponent implements OnInit {
+  profileForm!: FormGroup;
   showSearch = false;
   searchQuery = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private soldierService: SoldierService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.profileForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      unit: [''],
+      subunit: ['']
+    });
+
+    this.loadProfile();
+  }
+
+  loadProfile() {
+    this.soldierService.getProfile().subscribe({
+      next: (data) => {
+        this.profileForm.patchValue(data);
+      },
+      error: (err) => {
+        console.error('Помилка завантаження профілю:', err);
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.profileForm.valid) {
+      this.soldierService.updateProfile(this.profileForm.value).subscribe({
+        next: () => alert('Профіль оновлено'),
+        error: (err) => {
+          console.error('Помилка оновлення:', err);
+          alert('Не вдалося оновити профіль');
+        }
+      });
+    }
+  }
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }
-} 
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);  
+  }
+}

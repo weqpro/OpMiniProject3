@@ -1,0 +1,170 @@
+<div class="top-bar">
+  <div class="top-left">
+    <a routerLink="/requests-filter">
+      <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+    </a>
+  </div>
+  <div class="top-right">
+    <button mat-icon-button>
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+      <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="page-wrapper" style="font-family: 'Montserrat', sans-serif; padding-top: 32px;">
+  <mat-tab-group>
+    <mat-tab label="Про себе">
+      <div class="profile-wrapper">
+        <div class="profile-header" style="display: flex; align-items: flex-start; gap: 16px;">
+          <button mat-icon-button disabled style="transform: scale(2); margin-top: 4px;">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <div>
+            <h2>Ім’я Прізвище</h2>
+          </div>
+        </div>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>phone</mat-icon> Номер телефону
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Номер телефону</mat-label>
+            <input matInput placeholder="+380 ___ ___ ___" />
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>info</mat-icon> Про себе
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Ваш опис</mat-label>
+            <textarea matInput placeholder="Опишіть себе, досвід, обов’язки..."></textarea>
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>assignment</mat-icon> Мої запити
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div style="padding: 16px;">
+            <button mat-raised-button class="green-button" routerLink="/my-requests-soldier">
+              Перейти до запитів, які я виконую
+            </button>
+          </div>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>star</mat-icon> Мій рейтинг
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>00</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>upload</mat-icon> Завантажити фото профілю
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <input type="file" accept="image/*" />
+        </mat-expansion-panel>
+
+       
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Налаштування">
+      <div class="profile-wrapper">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Електронна адреса</mat-label>
+            <input matInput placeholder="example@email.com" />
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>lock</mat-icon> Пароль</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Новий пароль</mat-label>
+            <input matInput type="password" placeholder="Введіть новий пароль" />
+          </mat-form-field>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>category</mat-icon> Категорії пріоритету</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-chip-listbox multiple>
+            <mat-chip-option>Медикаменти</mat-chip-option>
+            <mat-chip-option>Техніка</mat-chip-option>
+            <mat-chip-option>Продукти</mat-chip-option>
+            <mat-chip-option>Спорядження</mat-chip-option>
+          </mat-chip-listbox>
+        </mat-expansion-panel>
+
+        <div class="settings-actions" style="margin-top: 12px; gap: 4px;">
+          <button mat-button color="warn" (click)="logout()">Вийти</button>
+          <button mat-button color="warn">Видалити обліковий запис</button>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <a routerLink="/requests-filter">
+        <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+      </a>
+    </div>
+
+    <div class="footer-center">
+      <div class="footer-links">
+        <a routerLink="/contacts">Контакти</a>
+      </div>
+
+      <div class="footer-contacts">
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>Lviv, Ukraine</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <span>foris&#64;gmail.com</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>call</mat-icon>
+          <span>+380 567 239 175</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-right">
+      <p>Fortis © 2025 All rights reserved</p>
+    </div>
+  </div>
+</footer>

@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -27,9 +28,32 @@ import { RouterModule } from '@angular/router';
 export class LoginComponent {
   email = '';
   password = '';
+  loading = false;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   login() {
-    console.log('Logging in:', this.email, this.password);
-    // АВТЕНТИФІКАЦІЯ!!!!!!
+    if (!this.email || !this.password) {
+      alert('Будь ласка, введіть email та пароль');
+      return;
+    }
+
+    this.loading = true;
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response: any) => {
+        localStorage.setItem('token', response.access_token);
+        alert('Успішний вхід!');
+        this.router.navigate(['/requests-filter']);
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error('Помилка входу', err);
+        alert('Невірний email або пароль');
+        this.loading = false;
+      }
+    });
   }
 }

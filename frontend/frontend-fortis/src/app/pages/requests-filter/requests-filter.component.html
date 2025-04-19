@@ -1,0 +1,112 @@
+<div class="page-container">
+  <main class="content-wrap">
+    <div class="top-bar">
+      <div class="top-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+        </a>
+      </div>
+      <div class="top-right">
+        <button
+          *ngIf="userRole === 'soldier'"
+          mat-raised-button
+          color="primary"
+          class="header-button"
+          routerLink="/create-post"
+        >
+          Опублікувати оголошення
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #profileMenu="matMenu">
+          <button
+            mat-menu-item
+            [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'"
+          >
+            Мій профіль
+          </button>
+          <button
+            mat-menu-item
+            [routerLink]="userRole === 'soldier' ? '/own-requests-soldier' : '/own-requests-volunteer'"
+          >
+            Мої запити
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Пошук..." />
+      <button (click)="this.onSearch()">
+        <i class="fas fa-search"></i> Пошук
+      </button>
+    </div>
+
+    <div class="filters">
+      <div class="filter">
+        <label>Категорія</label>
+        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+          <option value="">Будь-яка категорія</option>
+          <option *ngFor="let cat of this.categories" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+
+      <div class="sort">
+        <label>Сортування за:</label>
+        <select [(ngModel)]="this.sortOption">
+          <option *ngFor="let opt of this.sortOptions" [value]="opt">{{ opt }}</option>
+        </select>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="request-list">
+      <div class="request-item" *ngFor="let r of this.requests">
+        <img [src]="r.image_path || 'assets/default.jpg'" alt="img" class="request-img" />
+        <div class="info">
+          <h3>{{ r.name }}</h3>
+          <div class="meta">
+            <span class="tag">Нове</span>
+            <span class="location">{{ r.location }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>fortis&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+</div>
