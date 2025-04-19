@@ -3,15 +3,13 @@ from main import app  # заміни на назву свого модуля, я
 
 client = TestClient(app)
 
-
-# Aid Requests
-
+#Aid Requests
 
 def test_search_aid_requests_valid():
-    response = client.get(
-        "/api/v1/aid_requests/search",
-        params={"text": "urgent", "tags": ["medical", "supply"]},
-    )
+    response = client.get("/api/v1/aid_requests/search", params={
+        "text": "urgent",
+        "tags": ["medical", "supply"]
+    })
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
@@ -22,21 +20,18 @@ def test_search_aid_requests_missing_text():
 
 
 def test_create_aid_request_valid():
-    response = client.post(
-        "/api/v1/aid_requests/create",
-        json={
-            "name": "Need food",
-            "description": "Supplies for outpost",
-            "tags": ["food", "urgent"],
-            "image": "base64string",
-            "location": "Sector 7",
-            "status": "open",
-            "deadline": "2025-04-14T09:49:53.214Z",
-            "soldier_id": 1,
-            "volunteer_id": 2,
-            "category_id": 3,
-        },
-    )
+    response = client.post("/api/v1/aid_requests/create", json={
+        "name": "Need food",
+        "description": "Supplies for outpost",
+        "tags": ["food", "urgent"],
+        "image": "base64string",
+        "location": "Sector 7",
+        "status": "open",
+        "deadline": "2025-04-14T09:49:53.214Z",
+        "soldier_id": 1,
+        "volunteer_id": 2,
+        "category_id": 3
+    })
     assert response.status_code == 200
 
 
@@ -77,20 +72,19 @@ def test_get_all_soldiers():
     assert isinstance(response.json(), list)
 
 
-# Auth
-
+#Auth
 
 def test_login_success():
-    response = client.post(
-        "/api/auth/token",
-        data={"username": "john@example.com", "password": "securepassword"},
-    )
+    response = client.post("/api/auth/token", data={
+        "username": "john@example.com",
+        "password": "securepassword"
+    })
     assert response.status_code == 200
 
 
 def test_login_invalid():
-    response = client.post(
-        "/api/auth/token",
-        data={"username": "wrong@example.com", "password": "wrongpass"},
-    )
+    response = client.post("/api/auth/token", data={
+        "username": "wrong@example.com",
+        "password": "wrongpass"
+    })
     assert response.status_code in (400, 422)

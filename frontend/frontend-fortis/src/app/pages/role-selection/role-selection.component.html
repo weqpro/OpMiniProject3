@@ -1,0 +1,110 @@
+<div class="top-bar">
+    <div class="top-left">
+      <a routerLink="/">
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+      </a>
+    </div>
+    <div class="top-right">
+      <button mat-icon-button>
+        <mat-icon>search</mat-icon>
+      </button>  
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/login">Увійти</button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <div class="role-fullscreen">
+    <div class="role-side" (click)="navigateTo('soldier')">
+      <img src="assets/soldier.png" />
+      <h2>Військовий</h2>
+    </div>
+    <div class="role-side" (click)="navigateTo('volunteer')">
+      <img src="assets/volunteer.png" />
+      <h2>Волонтер</h2>
+    </div>
+
+  </div>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+  
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>foris&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+  
+  <style>
+  .role-fullscreen {
+    display: flex;
+    height: calc(100vh - 160px);
+    overflow: hidden;
+  }
+  
+  .role-side {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: filter 0.3s;
+  }
+  
+  .role-side:hover {
+    filter: brightness(0.9);
+  }
+  
+  .role-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  
+  .role-label {
+    z-index: 2;
+    color: white;
+    font-size: 36px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  
+  .role-side:active {
+  filter: brightness(0.3);
+}
+  </style>
+  
