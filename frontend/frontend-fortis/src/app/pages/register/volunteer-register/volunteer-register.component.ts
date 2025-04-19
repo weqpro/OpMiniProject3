@@ -33,7 +33,8 @@ export class VolunteerRegisterComponent {
     private volunteerService: VolonteerService
   ) {
     this.volunteerForm = this.fb.group({
-      fullName: ['', Validators.required],
+      surname: ['', Validators.required],
+      name: ['', Validators.required],
       phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]

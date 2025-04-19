@@ -32,12 +32,15 @@ export class SoldierRegisterComponent {
     private soldierService: SoldierService
   ) {
     this.soldierForm = this.fb.group({
+      surname: ['', Validators.required],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       phone: ['', Validators.required],
       unit: ['', Validators.required],
       subunit: ['', Validators.required],
+      battalion: ['', Validators.required],
+
     });
   }
 

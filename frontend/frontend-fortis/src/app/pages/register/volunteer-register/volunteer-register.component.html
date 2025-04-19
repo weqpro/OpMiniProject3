@@ -13,8 +13,13 @@
   
         <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()">
           <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Прізвище та ім’я</mat-label>
-            <input matInput formControlName="fullName" />
+            <mat-label>Прізвище</mat-label>
+            <input matInput formControlName="surname" />
+          </mat-form-field>
+        
+          <mat-form-field appearance="fill" class="input-field">
+            <mat-label>Ім’я</mat-label>
+            <input matInput formControlName="name" />
           </mat-form-field>
   
           <mat-form-field appearance="fill" class="input-field">
