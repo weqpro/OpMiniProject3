@@ -33,19 +33,15 @@ services:
       - jwt_secret
     depends_on:
       - postgresql
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - certs:/etc/nginx/certs
-    networks:
-      - frontend
-    depends_on:
-      - app
+  frontend:
+      image: docker.io/library/frontend_app:latest
+      ports:
+        - "80:80"
+        - "443:443"
+      networks:
+        - frontend
+      depends_on:
+        - api
 
 volumes:
   pg_data:
