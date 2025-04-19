@@ -4,8 +4,8 @@ import datetime
 import asyncio
 from aiosmtplib import SMTP
 from email.message import EmailMessage
-from app.services.soldier import get_soldier_service
-from app.services.volunteer import get_volunteer_service
+from app.services.soldier_service import get_soldier_service
+from app.services.volunteer_service import get_volunteer_service
 
 user_data = {}
 
