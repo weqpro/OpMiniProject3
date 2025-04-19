@@ -3,7 +3,6 @@ from main import app  # заміни на назву свого модуля, я
 
 client = TestClient(app)
 
-
 #Aid Requests
 
 def test_search_aid_requests_valid():
@@ -41,19 +40,23 @@ def test_create_aid_request_invalid():
     assert response.status_code == 422
 
 
-#Soldiers
+# Soldiers
+
 
 def test_create_soldier_valid():
-    response = client.post("/api/v1/soldiers/create", json={
-        "name": "John",
-        "surname": "Doe",
-        "email": "john@example.com",
-        "password": "securepassword",
-        "phone_number": "123456789",
-        "unit": "Alpha",
-        "subsubunit": "Bravo",
-        "battalion": "First"
-    })
+    response = client.post(
+        "/api/v1/soldiers/create",
+        json={
+            "name": "John",
+            "surname": "Doe",
+            "email": "john@example.com",
+            "password": "securepassword",
+            "phone_number": "123456789",
+            "unit": "Alpha",
+            "subsubunit": "Bravo",
+            "battalion": "First",
+        },
+    )
     assert response.status_code == 200
     assert "email" in response.json()
 

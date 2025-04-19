@@ -3,3 +3,4 @@ backend/.venv/
 backend/build/
 backend/op_miniproject.egg-info/
 .idea/
+*.DS_Store
