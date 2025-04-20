@@ -11,6 +11,12 @@ import { SoldierRegisterComponent } from './pages/register/soldier-register/sold
 import { RequestsFilterComponent } from './pages/requests-filter/requests-filter.component';
 import { MyRequestsComponent } from './pages/my-request-soldier/my-request-soldier.component'
 import { ReviewComponent } from './pages/review/review.component'
+import {
+  SoldierChangePasswordComponent
+} from './pages/profile/soldier-profile/soldier-change-password/soldier-change-password.component';
+import {
+  SoldierProfileEditComponent
+} from './pages/profile/soldier-profile/soldier-profile-edit/soldier-profile-edit.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -25,4 +31,6 @@ export const routes: Routes = [
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
   {path: 'review', component: ReviewComponent },
+  {path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
+  {path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent}
 ];

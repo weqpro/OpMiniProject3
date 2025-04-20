@@ -86,6 +86,14 @@ export class SoldierProfileComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']);  
+    this.router.navigate(['/login']);
+  }
+
+  editProfile() {
+    this.router.navigate(['/profile/soldier/edit']);
+  }
+
+  changePassword() {
+    this.router.navigate(['/profile/soldier/change-password']);
   }
 }

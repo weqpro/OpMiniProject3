@@ -37,9 +37,13 @@ export class SoldierService {
   getProfile(): Observable<any> {
     return this.http.get(`https://your-api.com/soldier/me`);
   }
-  
+
   updateProfile(data: any): Observable<any> {
     return this.http.put(`https://your-api.com/soldier/me`, data);
+  }
+
+  changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.post('/api/v1/soldiers/change-password', payload);
   }
 
 }
