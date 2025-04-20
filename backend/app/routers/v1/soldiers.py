@@ -9,7 +9,7 @@ from app.services import (
     get_soldier_service,
     get_aid_request_service,
 )
-from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn
+from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn, SoldierUpdateSchema
 from app.auth import get_current_soldier, get_password_hash
 
 router = APIRouter(prefix="/soldiers", tags=["soldiers"])
@@ -42,3 +42,11 @@ async def create_aid_request(
 ) -> AidRequestSchema:
     result = await aid_request_service.create_aid_request(aid_request, soldier.id)
     return AidRequestSchema.model_validate(result)
+
+@router.put("/me", response_model=SoldierSchema)
+async def update_me(
+    data: SoldierUpdateSchema,
+    service: SoldierService = Depends(get_soldier_service),
+    user=Depends(get_current_soldier),
+):
+    return await service.update_me(user.id, data)

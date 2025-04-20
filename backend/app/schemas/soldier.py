@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class SoldierSchemaIn(BaseModel):
@@ -18,3 +19,15 @@ class SoldierSchema(SoldierSchemaIn):
     class Config:
         from_attributes = True
 
+class SoldierUpdateSchema(BaseModel):
+    name: Optional[str] = None
+    surname: Optional[str] = None
+    phone_number: Optional[str] = None
+    unit: Optional[str] = None
+    subsubunit: Optional[str] = None
+    battalion: Optional[str] = None
+    password: str
+
+    class Config:
+        arbitrary_types_allowed = True
+        from_attributes = True
