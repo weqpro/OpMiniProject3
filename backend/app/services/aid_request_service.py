@@ -2,6 +2,8 @@ from collections.abc import Sequence
 
 from fastapi import Depends
 from sqlalchemy.sql.expression import ColumnExpressionArgument
+from sqlalchemy import func, or_, select
+
 
 from app.models import Category
 from app.schemas import SearchOptionsSchema
@@ -18,23 +20,50 @@ class AidRequestService:
     def __init__(
         self,
         aid_request_repository: AidRequestRepository,
+        session_maker,
     ) -> None:
         self.__repository: AidRequestRepository = aid_request_repository
+        
+        self.__session_maker = session_maker
 
-    async def search(
-        self, search_options: SearchOptionsSchema | None = None
-    ) -> list[AidRequest]:
+    async def search(self, search_options: SearchOptionsSchema | None = None) -> list[AidRequest]:
         if search_options is None:
             search_options = SearchOptionsSchema(text="", tags=[])
 
-        aid_requests: Sequence[AidRequest] = await self.__repository.find_by_condition(
-            AidRequest.name.contains(search_options.text),
-            AidRequest.tags.overlap(search_options.tags),
-        )
-        return list(aid_requests)
+        term = search_options.text or ""
+        tags = search_options.tags
 
-    async def dummy_search(self) -> list[AidRequest]:
-        return [AidRequest.create_dummy(), AidRequest.create_dummy()]
+        search_column = func.coalesce(AidRequest.name, '').self_group()
+
+        async with self.__session_maker() as session:
+            stmt = (
+                select(AidRequest)
+                .where(
+                    or_(
+                        search_column.bool_op('%')(term),
+                        AidRequest.tags.overlap(tags),
+                    )
+                )
+                .order_by(func.similarity(search_column, term).desc())
+            )
+
+            result = await session.execute(stmt)
+            return list(result.scalars().all())
+
+    # async def search(
+    #     self, search_options: SearchOptionsSchema | None = None
+    # ) -> list[AidRequest]:
+    #     if search_options is None:
+    #         search_options = SearchOptionsSchema(text="", tags=[])
+
+    #     aid_requests: Sequence[AidRequest] = await self.__repository.find_by_condition(
+    #         AidRequest.name.contains(search_options.text),
+    #         AidRequest.tags.overlap(search_options.tags),
+    #     )
+    #     return list(aid_requests)
+
+    # async def dummy_search(self) -> list[AidRequest]:
+    #     return [AidRequest.create_dummy(), AidRequest.create_dummy()]
 
     async def create_aid_request(
         self, aid_request: AidRequestSchemaIn, soldier_id: int
