@@ -1,86 +1,86 @@
 <div class="page-wrapper">
 
-    <div class="top-bar">
-      <a routerLink="/">
-        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
-      </a>
-    </div>
-  
-    <main class="register-container">
-      <div class="form-box">
-        <h1 class="title">Реєстрація</h1>
-        <p class="subtitle">Я — волонтер</p>
-  
-        <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Прізвище</mat-label>
-            <input matInput formControlName="surname" />
-          </mat-form-field>
-        
-          <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Ім’я</mat-label>
-            <input matInput formControlName="name" />
-          </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Номер телефону</mat-label>
-            <input matInput formControlName="phone" />
-          </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Електронна пошта</mat-label>
-            <input matInput formControlName="email" />
-          </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="input-field">
-            <mat-label>Пароль</mat-label>
-            <input matInput type="password" formControlName="password" />
-          </mat-form-field>
-  
-          <button class="submit-button" type="submit">
-            Зареєструватися
-          </button>
-          
-        </form>
-  
-        <button mat-button class="login-link" (click)="goToLogin()">Увійти</button>
-      </div>
-    </main>
-  
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-left">
-          <a routerLink="/">
-            <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
-          </a>
-        </div>
-  
-        <div class="footer-center">
-          <div class="footer-links">
-            <a routerLink="/contacts">Контакти</a>
-          </div>
-  
-          <div class="footer-contacts">
-            <div class="contact-item">
-              <mat-icon>location_on</mat-icon>
-              <span>Lviv, Ukraine</span>
-            </div>
-            <div class="contact-item">
-              <mat-icon>email</mat-icon>
-              <span>foris&#64;gmail.com</span>
-            </div>
-            <div class="contact-item">
-              <mat-icon>call</mat-icon>
-              <span>+380 567 239 175</span>
-            </div>
-          </div>
-        </div>
-  
-        <div class="footer-right">
-          <p>Fortis © 2025 All rights reserved</p>
-        </div>
-      </div>
-    </footer>
-  
+  <div class="top-bar">
+    <a routerLink="/">
+      <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+    </a>
   </div>
-  
+
+  <main class="register-container">
+    <div class="form-box">
+      <h1 class="title">Реєстрація</h1>
+      <p class="subtitle">Я — волонтер</p>
+
+      <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="input-field">
+          <mat-label>Ім’я</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="input-field">
+          <mat-label>Прізвище</mat-label>
+          <input matInput formControlName="surname" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="input-field">
+          <mat-label>Номер телефону</mat-label>
+          <input matInput formControlName="phone_number" />
+        </mat-form-field>
+        
+
+        <mat-form-field appearance="fill" class="input-field">
+          <mat-label>Електронна пошта</mat-label>
+          <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="input-field">
+          <mat-label>Пароль</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+
+        <button class="submit-button" type="submit">
+          Зареєструватися
+        </button>
+        
+      </form>
+
+      <button mat-button class="login-link" (click)="goToLogin()">Увійти</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>foris&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+
+</div>

@@ -11,21 +11,20 @@
 
   <form [formGroup]="soldierForm" (ngSubmit)="onSubmit()" class="form-box">
 
-    <mat-form-field appearance="fill" class="input-field">
-      <mat-label>Прізвище</mat-label>
-      <input matInput formControlName="surname" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="input-field">
-      <mat-label>Ім’я</mat-label>
-      <input matInput formControlName="name" />
-    </mat-form-field>
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Ім’я</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Прізвище</mat-label>
+        <input matInput formControlName="surname" />
+      </mat-form-field>
 
     <mat-form-field appearance="fill" class="input-field">
       <mat-label>Номер телефону</mat-label>
-      <input matInput formControlName="phone" />
+      <input matInput formControlName="phone_number" />
     </mat-form-field>
-
 
     <mat-form-field appearance="fill" class="input-field">
       <mat-label>Електронна пошта</mat-label>
@@ -45,7 +44,7 @@
 
       <mat-form-field appearance="fill" class="input-half">
         <mat-label>Підрозділ</mat-label>
-        <input matInput formControlName="subunit" />
+        <input matInput formControlName="subsubunit" />
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="input-half">

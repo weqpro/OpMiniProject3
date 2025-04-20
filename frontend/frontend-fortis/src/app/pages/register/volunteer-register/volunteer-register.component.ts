@@ -35,10 +35,10 @@ export class VolunteerRegisterComponent {
     this.volunteerForm = this.fb.group({
       surname: ['', Validators.required],
       name: ['', Validators.required],
-      phone: ['', Validators.required],
+      phone_number: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
-    });
+    });    
   }
 
   onSubmit() {
