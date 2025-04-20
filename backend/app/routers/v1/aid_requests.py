@@ -1,13 +1,17 @@
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException, Form, UploadFile, File, Depends
 from app.schemas.aid_request import (
     AidRequestSchema,
     AidRequestSchemaIn,
     AidRequestSchemaInWithoutVolId,
-    AidRequestSchemaUpdate
+    AidRequestSchemaUpdate,
+    AidRequestCreateMultipart
 )
 from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
 from app.auth import get_current_soldier, get_current_volunteer
+from fastapi.encoders import jsonable_encoder
+import os, shutil, json
+
 
 router = APIRouter(prefix="/aid_requests", tags=["aid_requests"])
 
@@ -57,11 +61,26 @@ async def get_unassigned(
 
 @router.post("/", response_model=AidRequestSchema)
 async def create(
-    arequest: AidRequestSchemaInWithoutVolId,
+    json_data: str = Form(...),
+    image: UploadFile = File(...),
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_soldier),
 ):
-    return await service.create(arequest, soldier_id=user.id)
+    data_dict = json.loads(json_data)
+    schema = AidRequestCreateMultipart(**data_dict)
+
+    os.makedirs("uploads/aid_requests", exist_ok=True)
+    image_path = f"uploads/aid_requests/{image.filename}"
+    with open(image_path, "wb") as f:
+        shutil.copyfileobj(image.file, f)
+
+    final_data = AidRequestSchemaInWithoutVolId(
+        **schema.dict(exclude={"tags"}),
+        tags=schema.tags,
+        image=image.filename
+    )
+
+    return await service.create(final_data, soldier_id=user.id)
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(
@@ -92,3 +111,4 @@ async def get_by_id(
     if not result:
         raise HTTPException(404, detail="Request not found")
     return result
+

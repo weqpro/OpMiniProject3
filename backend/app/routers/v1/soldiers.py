@@ -48,7 +48,7 @@ async def create_aid_request(
     aid_request_service: AidRequestService = Depends(get_aid_request_service),
     soldier: Soldier = Depends(get_current_soldier),
 ) -> AidRequestSchema:
-    result = await aid_request_service.create_aid_request(aid_request, soldier.id)
+    result = await aid_request_service.create(aid_request, soldier.id)
     return AidRequestSchema.model_validate(result)
 
 @router.put("/me", response_model=SoldierSchema)

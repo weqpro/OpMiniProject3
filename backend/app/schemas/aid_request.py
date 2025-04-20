@@ -56,6 +56,14 @@ class AidRequestSchemaInWithoutVolId(BaseModel):
     class Config:
         orm_mode = True
 
+class AidRequestCreateMultipart(BaseModel):
+    name: str
+    description: str
+    tags: list[str]
+    location: str
+    deadline: datetime.datetime
+    category_id: int
+
 class AidRequestSchemaUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
