@@ -27,6 +27,7 @@ class VolunteerService:
         return next(iter(result), None)
 
 
+
 async def get_volunteer_service(
     repo: VolunteerRepository = Depends(get_volunteer_repository),
 ) -> VolunteerService:
