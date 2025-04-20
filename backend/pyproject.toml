@@ -7,6 +7,7 @@ dependencies = [
   "psycopg[binary]",
   "sqlalchemy[asyncio]",
   "pyjwt",
+  "pydantic[email]",
   "passlib[bcrypt]",
   "python-multipart",
 ]
