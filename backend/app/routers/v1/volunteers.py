@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.auth import get_current_volunteer
 from app.services import VolunteerService, get_volunteer_service
-from app.schemas import VolunteerSchema, VolunteerSchemaIn
+from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut
 
 router = APIRouter(prefix="/volunteers", tags=["volunteers"])
 
@@ -21,3 +21,12 @@ async def delete(
     user=Depends(get_current_volunteer),
 ):
     return await service.delete(volunteer_id)
+
+@router.put("/me", response_model=VolunteerSchemaOut)
+async def update_me(
+    data: VolunteerUpdateSchema,
+    service: VolunteerService = Depends(get_volunteer_service),
+    user=Depends(get_current_volunteer),
+):
+    return await service.update_me(user.id, data)
+
