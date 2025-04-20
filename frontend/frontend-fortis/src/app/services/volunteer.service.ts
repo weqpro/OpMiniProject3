@@ -34,4 +34,17 @@ export class VolonteerService {
       })
     );
   }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`https://your-api.com/volunteer/me`);
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`https://your-api.com/volunteer/me`, data);//тут шось треба підставити, але то до Стаса
+  }
+
+  changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.post('/api/v1/volunteers/change-password', payload);
+  }
+
 }

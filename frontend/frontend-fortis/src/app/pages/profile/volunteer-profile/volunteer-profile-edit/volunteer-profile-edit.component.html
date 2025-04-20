@@ -1,4 +1,3 @@
-
 <div class="top-bar">
   <div class="top-left">
     <a routerLink="/requests-filter">
@@ -9,17 +8,18 @@
     <button mat-icon-button>
       <mat-icon>search</mat-icon>
     </button>
+
     <button mat-icon-button [matMenuTriggerFor]="profileMenu">
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/profile/volunteer">Мій профіль</button>
-      <button mat-menu-item routerLink="/my-requests-volunteer">Мої запити</button>
+      <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+      <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
     </mat-menu>
   </div>
 </div>
 
-<div class="page-wrapper" *ngIf="profileData">
+<div class="page-wrapper" style="font-family: 'Montserrat', sans-serif; padding-top: 32px;">
   <mat-tab-group>
     <mat-tab label="Про себе">
       <div class="profile-wrapper">
@@ -28,65 +28,58 @@
             <mat-icon>account_circle</mat-icon>
           </button>
           <div>
-            <h2>{{ profileData.name }} {{ profileData.surname }}</h2>
+            <h2>Ім’я Прізвище</h2>
           </div>
         </div>
-
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-icon>phone</mat-icon> Номер телефону
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <p style="padding: 0 16px 16px 16px;">{{ profileData.phone_number }}</p>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Номер телефону</mat-label>
+            <input matInput placeholder="+380 ___ ___ ___" />
+          </mat-form-field>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <mat-icon>email</mat-icon> Електронна адреса
+              <mat-icon>info</mat-icon> Про себе
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <p style="padding: 0 16px 16px 16px;">{{ profileData.email }}</p>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>assignment</mat-icon> Мої запити
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div style="padding: 16px;">
-            <button mat-raised-button class="green-button" routerLink="/my-requests-soldier">
-              Перейти до запитів, які я виконую
-            </button>
-          </div>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Ваш опис</mat-label>
+            <textarea matInput placeholder="Опишіть себе, досвід, обов’язки..."></textarea>
+          </mat-form-field>
         </mat-expansion-panel>
 
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>star</mat-icon> Мій рейтинг
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <p>00</p>
-        </mat-expansion-panel>
+
+
+
+
 
       </div>
     </mat-tab>
 
     <mat-tab label="Налаштування">
       <div class="profile-wrapper">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Електронна адреса</mat-label>
+            <input matInput placeholder="example@email.com" />
+          </mat-form-field>
+        </mat-expansion-panel>
 
-        <div class="settings-actions" style="margin-top: 12px; gap: 4px;">
-          <button mat-button color="warn" (click)="logout()">Вийти</button>
-          <button mat-button color="warn">Видалити обліковий запис</button>
+        <div style=" text-align: center; width: 100%">
+          <button mat-raised-button color="primary"  style="width: 95%">Зберегти зміни</button>
         </div>
-        <div class="settings-actions">
-          <button mat-flat-button color="primary" (click)="editProfile()">Редагувати профіль</button>
-          <button mat-stroked-button color="accent" (click)="changePassword()">Змінити пароль</button>
-        </div>
+
       </div>
     </mat-tab>
   </mat-tab-group>
@@ -99,10 +92,12 @@
         <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
       </a>
     </div>
+
     <div class="footer-center">
       <div class="footer-links">
         <a routerLink="/contacts">Контакти</a>
       </div>
+
       <div class="footer-contacts">
         <div class="contact-item">
           <mat-icon>location_on</mat-icon>
@@ -110,7 +105,7 @@
         </div>
         <div class="contact-item">
           <mat-icon>email</mat-icon>
-          <span>forisgmail.com</span>
+          <span>foris&#64;gmail.com</span>
         </div>
         <div class="contact-item">
           <mat-icon>call</mat-icon>
@@ -118,6 +113,7 @@
         </div>
       </div>
     </div>
+
     <div class="footer-right">
       <p>Fortis © 2025 All rights reserved</p>
     </div>

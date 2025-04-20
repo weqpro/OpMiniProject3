@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-soldier-profile',
@@ -31,26 +32,29 @@ import { FormsModule } from '@angular/forms';
     MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    MatProgressSpinner
   ]
 })
 export class SoldierProfileComponent implements OnInit {
-  profileData: any = {
-    name: 'Олександр',
-    surname: 'Шевченко',
-    phone_number: '+380671234567',
-    email: 'oleksandr.shevchenko@army.ua',
-    unit: '80-та окрема десантно-штурмова бригада',
-    subsubunit: '2-й взвод',
-    battalion: '3-й батальйон'
-  };
+  profileData: any = null;
+
+  profileForm!: FormGroup;
+  showSearch = false;
+  searchQuery = '';
 
   constructor(
+    private fb: FormBuilder,
     private soldierService: SoldierService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
+    this.loadProfile();
+  }
+
+  loadProfile() {
     this.soldierService.getProfile().subscribe({
       next: (data) => {
         this.profileData = data;
@@ -61,6 +65,27 @@ export class SoldierProfileComponent implements OnInit {
     });
   }
 
+  onSubmit() {
+    if (this.profileForm.valid) {
+      this.soldierService.updateProfile(this.profileForm.value).subscribe({
+        next: () => alert('Профіль оновлено'),
+        error: (err) => {
+          console.error('Помилка оновлення:', err);
+          alert('Не вдалося оновити профіль');
+        }
+      });
+    }
+  }
+
+  toggleSearch() {
+    this.showSearch = !this.showSearch;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
   editProfile() {
     this.router.navigate(['app-soldier-profile-edit']);
   }
@@ -68,14 +93,4 @@ export class SoldierProfileComponent implements OnInit {
   changePassword() {
     this.router.navigate(['app-soldier-change-password']);
   }
-
-
-
-
-  logout() {
-    localStorage.removeItem('token');
-    this.router.navigate(['/login']);
-  }
-
-
 }

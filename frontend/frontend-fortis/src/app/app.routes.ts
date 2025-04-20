@@ -17,6 +17,12 @@ import {
 import {
   SoldierProfileEditComponent
 } from './pages/profile/soldier-profile/soldier-profile-edit/soldier-profile-edit.component';
+import {
+  VolunteerChangePasswordComponent
+} from './pages/profile/volunteer-profile/volunteer-change-password/volunteer-change-password.component';
+import {
+  VolunteerProfileEditComponent
+} from './pages/profile/volunteer-profile/volunteer-profile-edit/volunteer-profile-edit.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -32,5 +38,7 @@ export const routes: Routes = [
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
   {path: 'review', component: ReviewComponent },
   {path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
-  {path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent}
+  {path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent},
+  {path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
+  {path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent}
 ];
