@@ -1,43 +1,79 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {MatFormField, MatInput} from '@angular/material/input';
+import {MatButton} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {SoldierService} from '../../../../services/soldier.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-soldier-profile-edit',
-  imports: [],
   templateUrl: './soldier-profile-edit.component.html',
+  styleUrls: ['./soldier-profile-edit.component.css'],
   standalone: true,
-  styleUrl: './soldier-profile-edit.component.css'
+  imports: [
+    MatFormField,
+    MatButton,
+    RouterLink,
+    FormsModule,
+    MatInput,
+    ReactiveFormsModule,
+    MatFormFieldModule
+  ]
 })
 export class SoldierProfileEditComponent implements OnInit {
+  profileData: any = {
+    name: 'Олександр',
+    surname: 'Шевченко',
+    phone_number: '+380671234567',
+    email: 'oleksandr.shevchenko@army.ua',
+    unit: '80-та окрема десантно-штурмова бригада',
+    subsubunit: '2-й взвод',
+    battalion: '3-й батальйон'
+  };
+
+  constructor(
+    private soldierService: SoldierService,
+    private router: Router
+  ) {}
+
+
   form!: FormGroup;
-
-  constructor(private fb: FormBuilder, private soldierService: SoldierService, private router: Router) {}
-
+  loading = true;
   ngOnInit(): void {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      phone_number: [''],
-      email: ['', [Validators.required, Validators.email]],
-      unit: [''],
-      subsubunit: [''],
-      battalion: ['']
+    this.soldierService.getProfile().subscribe({
+      next: (data) => {
+        this.profileData = data;
+      },
+      error: (err) => {
+        console.error('Помилка завантаження профілю:', err);
+      }
     });
 
-    this.soldierService.getProfile().subscribe(profile => {
-      this.form.patchValue(profile);
+    this.soldierService.getProfile().subscribe({
+      next: data => {
+        this.form.patchValue(data);
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Не вдалося завантажити профіль:', err);
+        this.loading = false;
+      }
     });
   }
 
-  submit() {
+  submit(): void {
     if (this.form.valid) {
       this.soldierService.updateProfile(this.form.value).subscribe({
-        next: () => this.router.navigate(['/profile/soldier']),
-        error: err => alert('Не вдалося оновити')
+        next: () => {
+          alert('Профіль оновлено!');
+          this.router.navigate(['/profile/soldier']);
+        },
+        error: err => {
+          console.error('Помилка оновлення профілю:', err);
+          alert('Не вдалося оновити профіль.');
+        }
       });
     }
   }
 }
-

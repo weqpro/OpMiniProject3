@@ -24,118 +24,136 @@
 </div>
 
 
-<div class="page-wrapper">
-  <mat-tab-group>
-    <mat-tab label="Про себе">
-      <div class="profile-wrapper">
-        <div class="profile-header" style="display: flex; align-items: flex-start; gap: 16px;">
-          <button mat-icon-button disabled style="transform: scale(2); margin-top: 4px;">
-            <mat-icon>account_circle</mat-icon>
-          </button>
-          <div>
-            <h2>Ім’я Прізвище</h2>
-          </div>
-        </div>
+<div class="profile-page" *ngIf="profileData">
+  <div class="profile-header">
+    <mat-icon class="profile-icon">account_circle</mat-icon>
+    <div class="profile-name">
+      <h2>{{ profileData.name }} {{ profileData.surname }}</h2>
+    </div>
+  </div>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>phone</mat-icon> Номер телефону
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Номер телефону</mat-label>
-            <input matInput placeholder="+380 ___ ___ ___" />
-          </mat-form-field>
-        </mat-expansion-panel>
+  <div class="profile-details">
+    <p><strong>Телефон:</strong> {{ profileData.phone_number }}</p>
+    <p><strong>Email:</strong> {{ profileData.email }}</p>
+    <p><strong>Підрозділ:</strong> {{ profileData.unit }}</p>
+    <p><strong>Субпідрозділ:</strong> {{ profileData.subsubunit }}</p>
+    <p><strong>Батальйон:</strong> {{ profileData.battalion }}</p>
+  </div>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>info</mat-icon> Про себе
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Ваш опис</mat-label>
-            <textarea matInput placeholder="Опишіть себе, досвід, обов’язки..."></textarea>
-          </mat-form-field>
-        </mat-expansion-panel>
+  <div class="profile-actions">
+    <button mat-raised-button  color="primary" (click)="editProfile()">
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>assignment</mat-icon> Мої запити
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div style="padding: 16px;">
-            <button mat-raised-button class="green-button" routerLink="/my-requests-soldier">
-              Перейти до моїх запитів
-            </button>
-          </div>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>upload</mat-icon> Завантажити фото профілю
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <input type="file" accept="image/*" />
-        </mat-expansion-panel>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Налаштування">
-      <div class="profile-wrapper">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title><mat-icon>verified_user</mat-icon> Підтвердити особу</mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="confirmation-fields">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Підрозділ</mat-label>
-              <input matInput placeholder="Введіть підрозділ" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Військова частина</mat-label>
-              <input matInput placeholder="Введіть номер частини" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Батальйон</mat-label>
-              <input matInput placeholder="Введіть батальйон" />
-            </mat-form-field>
-          </div>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Електронна адреса</mat-label>
-            <input matInput placeholder="example@email.com" />
-          </mat-form-field>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title><mat-icon>lock</mat-icon> Пароль</mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Новий пароль</mat-label>
-            <input matInput type="password" placeholder="Введіть новий пароль" />
-          </mat-form-field>
-        </mat-expansion-panel>
-
-        <div class="settings-actions">
-          <button mat-button color="warn" (click)="logout()">Вийти</button>
-          <br /><br />
-          <button mat-stroked-button color="warn">Видалити обліковий запис</button>
-        </div>        
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      Редагувати профіль
+    </button>
+    <button mat-stroked-button color="accent" (click)="changePassword()">
+      Змінити пароль
+    </button>
+  </div>
 </div>
+
+<div *ngIf="!profileData" class="loading-placeholder">
+  <p>Завантаження профілю...</p>
+</div>
+
+
+
+
+
+
+<!--<div class="page-wrapper">-->
+<!--  <mat-tab-group>-->
+<!--    <mat-tab label="Про себе">-->
+<!--      <div class="profile-wrapper">-->
+<!--        <div class="profile-header" style="display: flex; align-items: flex-start; gap: 16px;">-->
+<!--          <button mat-icon-button disabled style="transform: scale(2); margin-top: 4px;">-->
+<!--            <mat-icon>account_circle</mat-icon>-->
+<!--          </button>-->
+<!--          <div>-->
+<!--            <h2>Ім’я Прізвище</h2>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="profile-wrapper">-->
+<!--          <div class="profile-container" *ngIf="profileData">-->
+<!--            <div class="profile-header" style="display: flex; align-items: center; gap: 16px;">-->
+<!--              <button mat-icon-button disabled style="transform: scale(2);">-->
+<!--                <mat-icon>account_circle</mat-icon>-->
+<!--              </button>-->
+<!--              <h2>{{ profileData.name }} {{ profileData.surname }}</h2>-->
+<!--            </div>-->
+
+<!--            <div class="profile-info">-->
+<!--              <p><strong>Телефон:</strong> {{ profileData.phone_number }}</p>-->
+<!--              <p><strong>Email:</strong> {{ profileData.email }}</p>-->
+<!--              <p><strong>Підрозділ:</strong> {{ profileData.unit }}</p>-->
+<!--              <p><strong>Субпідрозділ:</strong> {{ profileData.subsubunit }}</p>-->
+<!--              <p><strong>Батальйон:</strong> {{ profileData.battalion }}</p>-->
+<!--            </div>-->
+
+<!--            <div class="profile-actions" style="margin-top: 16px; display: flex; gap: 12px;">-->
+<!--              <button mat-raised-button color="primary" (click)="editProfile()">-->
+<!--                Редагувати профіль-->
+<!--              </button>-->
+<!--              <button mat-stroked-button color="accent" (click)="changePassword()">-->
+<!--                Змінити пароль-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    <mat-tab label="Налаштування">-->
+<!--      <div class="profile-wrapper">-->
+<!--        <mat-expansion-panel>-->
+<!--          <mat-expansion-panel-header>-->
+<!--            <mat-panel-title><mat-icon>verified_user</mat-icon> Підтвердити особу</mat-panel-title>-->
+<!--          </mat-expansion-panel-header>-->
+<!--          <div class="confirmation-fields">-->
+<!--            <mat-form-field appearance="outline" class="full-width">-->
+<!--              <mat-label>Підрозділ</mat-label>-->
+<!--              <input matInput placeholder="Введіть підрозділ" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline" class="full-width">-->
+<!--              <mat-label>Військова частина</mat-label>-->
+<!--              <input matInput placeholder="Введіть номер частини" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline" class="full-width">-->
+<!--              <mat-label>Батальйон</mat-label>-->
+<!--              <input matInput placeholder="Введіть батальйон" />-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </mat-expansion-panel>-->
+
+<!--        <mat-expansion-panel>-->
+<!--          <mat-expansion-panel-header>-->
+<!--            <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>-->
+<!--          </mat-expansion-panel-header>-->
+<!--          <mat-form-field appearance="fill" class="full-width">-->
+<!--            <mat-label>Електронна адреса</mat-label>-->
+<!--            <input matInput placeholder="example@email.com" />-->
+<!--          </mat-form-field>-->
+<!--        </mat-expansion-panel>-->
+
+<!--        <mat-expansion-panel>-->
+<!--          <mat-expansion-panel-header>-->
+<!--            <mat-panel-title><mat-icon>lock</mat-icon> Пароль</mat-panel-title>-->
+<!--          </mat-expansion-panel-header>-->
+<!--          <mat-form-field appearance="fill" class="full-width">-->
+<!--            <mat-label>Новий пароль</mat-label>-->
+<!--            <input matInput type="password" placeholder="Введіть новий пароль" />-->
+<!--          </mat-form-field>-->
+<!--        </mat-expansion-panel>-->
+
+<!--        <div class="settings-actions">-->
+<!--          <button mat-button color="warn" (click)="logout()">Вийти</button>-->
+<!--          <br /><br />-->
+<!--          <button mat-stroked-button color="warn">Видалити обліковий запис</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-tab>-->
+<!--    </mat-tab>-->
+<!--  </mat-tab-group>-->
+<!--</div>-->
 
 <footer class="footer">
   <div class="footer-content">

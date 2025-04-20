@@ -35,32 +35,25 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class SoldierProfileComponent implements OnInit {
-  profileForm!: FormGroup;
-  showSearch = false;
-  searchQuery = '';
+  profileData: any = {
+    name: 'Олександр',
+    surname: 'Шевченко',
+    phone_number: '+380671234567',
+    email: 'oleksandr.shevchenko@army.ua',
+    unit: '80-та окрема десантно-штурмова бригада',
+    subsubunit: '2-й взвод',
+    battalion: '3-й батальйон'
+  };
 
   constructor(
-    private fb: FormBuilder,
     private soldierService: SoldierService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.profileForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      unit: [''],
-      subunit: ['']
-    });
-
-    this.loadProfile();
-  }
-
-  loadProfile() {
     this.soldierService.getProfile().subscribe({
       next: (data) => {
-        this.profileForm.patchValue(data);
+        this.profileData = data;
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -68,32 +61,21 @@ export class SoldierProfileComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    if (this.profileForm.valid) {
-      this.soldierService.updateProfile(this.profileForm.value).subscribe({
-        next: () => alert('Профіль оновлено'),
-        error: (err) => {
-          console.error('Помилка оновлення:', err);
-          alert('Не вдалося оновити профіль');
-        }
-      });
-    }
+  editProfile() {
+    this.router.navigate(['app-soldier-profile-edit']);
   }
 
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
+  changePassword() {
+    this.router.navigate(['app-soldier-change-password']);
   }
+
+
+
 
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
-  editProfile() {
-    this.router.navigate(['/profile/soldier/edit']);
-  }
 
-  changePassword() {
-    this.router.navigate(['/profile/soldier/change-password']);
-  }
 }

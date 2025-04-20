@@ -1,1 +1,45 @@
-<p>soldier-profile-edit works!</p>
+<div class="edit-profile-wrapper">
+  <h2>Редагувати профіль</h2>
+
+  <form (ngSubmit)="submit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Ім’я</mat-label>
+      <input matInput name="name" [(ngModel)]="profileData.name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Прізвище</mat-label>
+      <input matInput name="surname" [(ngModel)]="profileData.surname">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Телефон</mat-label>
+      <input matInput name="phone_number" [(ngModel)]="profileData.phone_number">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput name="email" [(ngModel)]="profileData.email">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Підрозділ</mat-label>
+      <input matInput name="unit" [(ngModel)]="profileData.unit">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Субпідрозділ</mat-label>
+      <input matInput name="subsubunit" [(ngModel)]="profileData.subsubunit">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Батальйон</mat-label>
+      <input matInput name="battalion" [(ngModel)]="profileData.battalion">
+    </mat-form-field>
+
+    <div class="button-group">
+      <button mat-flat-button color="primary" type="submit" (click)="submit()">Зберегти</button>
+      <button mat-stroked-button routerLink="/profile/soldier" type="button">Скасувати</button>
+    </div>
+  </form>
+</div>

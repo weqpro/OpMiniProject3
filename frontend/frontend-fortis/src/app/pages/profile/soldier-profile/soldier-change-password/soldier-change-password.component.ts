@@ -1,41 +1,56 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {SoldierService} from '../../../../services/soldier.service';
+import { Router } from '@angular/router';
+import { SoldierService } from '../../../../services/soldier.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-soldier-change-password',
-  imports: [],
   templateUrl: './soldier-change-password.component.html',
+  styleUrls: ['./soldier-change-password.component.css'],
   standalone: true,
-  styleUrl: './soldier-change-password.component.css'
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ]
 })
 export class SoldierChangePasswordComponent {
-  form: FormGroup;
+  passwordData = {
+    current_password: '',
+    new_password: '',
+    new_password_repeat: ''
+  };
 
-  constructor(private fb: FormBuilder, private soldierService: SoldierService, private router: Router) {
-    this.form = this.fb.group({
-      current_password: ['', Validators.required],
-      new_password: ['', Validators.required],
-      new_password_repeat: ['', Validators.required]
-    });
-  }
+  constructor(private soldierService: SoldierService, private router: Router) {}
 
-  submit() {
-    const { current_password, new_password, new_password_repeat } = this.form.value;
+  submit(): void {
+    const { current_password, new_password, new_password_repeat } = this.passwordData;
 
     if (new_password !== new_password_repeat) {
-      alert('Паролі не збігаються');
+      alert('Нові паролі не збігаються!');
       return;
     }
 
-    this.soldierService.changePassword({ current_password, new_password }).subscribe({
+    this.soldierService.changePassword({
+      current_password,
+      new_password
+    }).subscribe({
       next: () => {
-        alert('Пароль змінено');
+        alert('Пароль змінено успішно!');
         this.router.navigate(['/profile/soldier']);
       },
-      error: err => alert('Помилка зміни пароля')
+      error: err => {
+        console.error('Помилка зміни паролю:', err);
+        alert('Не вдалося змінити пароль.');
+      }
     });
   }
 }
-
