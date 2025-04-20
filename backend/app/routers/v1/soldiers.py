@@ -9,7 +9,7 @@ from app.services import (
     get_soldier_service,
     get_aid_request_service,
 )
-from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn, SoldierUpdateSchema
+from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn, SoldierUpdateSchema, ChangePasswordSchema
 from app.auth import get_current_soldier, get_password_hash
 
 router = APIRouter(prefix="/soldiers", tags=["soldiers"])
@@ -50,3 +50,12 @@ async def update_me(
     user=Depends(get_current_soldier),
 ):
     return await service.update_me(user.id, data)
+
+@router.post("/change-password")
+async def change_password(
+    data: ChangePasswordSchema,
+    service: SoldierService = Depends(get_soldier_service),
+    user=Depends(get_current_soldier),
+):
+    await service.change_password(user.email, data.current_password, data.new_password)
+    return {"detail": "Password changed"}

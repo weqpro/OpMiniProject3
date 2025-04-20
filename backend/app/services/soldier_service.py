@@ -56,6 +56,17 @@ class SoldierService:
         return SoldierSchema.model_validate(soldier)
 
 
+    async def change_password(self, email: str, old_pass: str, new_pass: str):
+        user = await self.get_with_email(email)
+        if not user or not await verify_password(old_pass, user.password):
+            raise HTTPException(status_code=403, detail="Incorrect password")
+
+        user.password = await get_password_hash(new_pass)
+        await self.__repository.update(
+            condition=(Soldier.id == user.id),
+            password=user.password
+        )
+
 async def get_soldier_service(
     soldier_repository: SoldierRepository = Depends(get_soldier_repository),
 ) -> SoldierService:

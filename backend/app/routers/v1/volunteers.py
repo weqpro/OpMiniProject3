@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from app.auth import get_current_volunteer
 from app.services import VolunteerService, get_volunteer_service
-from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut
+from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut, ChangePasswordSchema
 
 router = APIRouter(prefix="/volunteers", tags=["volunteers"])
 
@@ -30,3 +30,11 @@ async def update_me(
 ):
     return await service.update_me(user.id, data)
 
+@router.post("/change-password")
+async def change_password(
+    data: ChangePasswordSchema,
+    service: VolunteerService = Depends(get_volunteer_service),
+    user=Depends(get_current_volunteer),
+):
+    await service.change_password(user.email, data.current_password, data.new_password)
+    return {"detail": "Password changed"}

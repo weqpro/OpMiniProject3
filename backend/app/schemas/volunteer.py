@@ -34,3 +34,7 @@ class VolunteerSchema(VolunteerSchemaIn):
 
     class Config:
         from_attributes = True
+
+class ChangePasswordSchema(BaseModel):
+    current_password: str
+    new_password: str

@@ -48,6 +48,17 @@ class VolunteerService:
 
         return VolunteerSchema.model_validate(volunteer)
 
+    async def change_password(self, email: str, old_pass: str, new_pass: str):
+        result = await self.__repository.find_by_condition(Volunteer.email == email)
+        user = next(iter(result), None)
+        if not user or not await verify_password(old_pass, user.password):
+            raise HTTPException(status_code=403, detail="Incorrect password")
+
+        user.password = await get_password_hash(new_pass)
+        await self.__repository.update(
+            condition=(Volunteer.id == user.id),
+            password=user.password
+        )
 
 async def get_volunteer_service(
     repo: VolunteerRepository = Depends(get_volunteer_repository),

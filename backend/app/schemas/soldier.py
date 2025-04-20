@@ -31,3 +31,7 @@ class SoldierUpdateSchema(BaseModel):
     class Config:
         arbitrary_types_allowed = True
         from_attributes = True
+
+class ChangePasswordSchema(BaseModel):
+    current_password: str
+    new_password: str
