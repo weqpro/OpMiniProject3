@@ -33,6 +33,14 @@ async def create(
     result: Soldier = await soldier_service.create_soldier(soldier)
     return SoldierSchema.model_validate(result)
 
+@router.delete("/me")
+async def delete(
+    service: SoldierService = Depends(get_soldier_service),
+    user=Depends(get_current_soldier),
+):
+    await service.delete(user.id)
+    return {"detail": "Soldier deleted"}
+
 
 @router.post("/create_request")
 async def create_aid_request(

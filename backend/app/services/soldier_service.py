@@ -67,6 +67,13 @@ class SoldierService:
             password=user.password
         )
 
+    async def delete(self, soldier_id: int):
+        result = await self.__repository.find_by_condition(Soldier.id == soldier_id)
+        entity = next(iter(result), None)
+        if entity:
+            await self.__repository.delete(entity)
+
+
 async def get_soldier_service(
     soldier_repository: SoldierRepository = Depends(get_soldier_repository),
 ) -> SoldierService:
