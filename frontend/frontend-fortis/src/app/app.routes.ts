@@ -11,6 +11,7 @@ import { SoldierRegisterComponent } from './pages/register/soldier-register/sold
 import { RequestsFilterComponent } from './pages/requests-filter/requests-filter.component';
 import { MyRequestsComponent } from './pages/my-request-soldier/my-request-soldier.component'
 import { ReviewComponent } from './pages/review/review.component'
+import { RequestDetailsComponent } from './pages/request-details/request-details.component'
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -24,5 +25,6 @@ export const routes: Routes = [
   { path: 'my-requests-soldier', component: MyRequestsComponent },
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
-  {path: 'review', component: ReviewComponent },
+  { path: 'review', component: ReviewComponent },
+  { path: 'request-details', component: RequestDetailsComponent}
 ];
