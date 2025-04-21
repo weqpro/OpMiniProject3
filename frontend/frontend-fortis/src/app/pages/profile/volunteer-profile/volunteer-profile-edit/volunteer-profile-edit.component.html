@@ -13,8 +13,8 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
-      <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+      <button mat-menu-item routerLink="/profile/volunteer">Мій профіль</button>
+      <button mat-menu-item routerLink="/my-requests-volunteer">Мої запити</button>
     </mat-menu>
   </div>
 </div>
@@ -32,12 +32,12 @@
           <div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px;">
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Ім’я</mat-label>
-              <input matInput name="name" />
+              <input matInput name="name" [value]="profileData?.name" />
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Прізвище</mat-label>
-              <input matInput  name="surname" />
+              <input matInput name="surname" [value]="profileData?.surname" />
             </mat-form-field>
           </div>
         </mat-expansion-panel>
@@ -50,7 +50,7 @@
           </mat-expansion-panel-header>
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Номер телефону</mat-label>
-            <input matInput placeholder="+380 ___ ___ ___" />
+            <input matInput [value]="profileData?.phone_number" placeholder="+380 ___ ___ ___"  />
           </mat-form-field>
         </mat-expansion-panel>
 
@@ -62,13 +62,9 @@
           </mat-expansion-panel-header>
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Ваш опис</mat-label>
-            <textarea matInput placeholder="Опишіть себе, досвід, обов’язки..."></textarea>
+            <textarea matInput placeholder="Опишіть себе" [value]="profileData?.description"></textarea>
           </mat-form-field>
         </mat-expansion-panel>
-
-
-
-
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -77,12 +73,13 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Поточний пароль</mat-label>
-            <input matInput type="password"  name="password" required />
+            <mat-label>Поточний пароль*</mat-label>
+            <input matInput type="password" name="password" [value]="profileForm.get('password')?.value" />
           </mat-form-field>
         </mat-expansion-panel>
-        <div style=" text-align: center; width: 100%">
-          <button mat-raised-button color="primary"  style="width: 95%">Зберегти зміни</button>
+
+        <div style="text-align: center; width: 100%;">
+          <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
         </div>
       </div>
     </mat-tab>
@@ -96,18 +93,19 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Поточний пароль</mat-label>
-            <input matInput type="password"  name="password" required />
+            <mat-label>Поточний пароль*</mat-label>
+            <input matInput type="password" name="password" [value]="profileForm.get('password')?.value" />
           </mat-form-field>
         </mat-expansion-panel>
-        <div style=" text-align: center; width: 100%">
-          <button mat-raised-button color="primary"  style="width: 95%">Зберегти зміни</button>
-        </div>
 
+        <div style="text-align: center; width: 100%;">
+          <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
 </div>
+
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-left">

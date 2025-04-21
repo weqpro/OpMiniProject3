@@ -48,8 +48,8 @@ export class VolunteerProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
+      name: [''],
+      surname: [''],
       phone_number: [''],
       password: ['', Validators.required]
     });
@@ -57,10 +57,17 @@ export class VolunteerProfileEditComponent implements OnInit {
     this.loadProfile();
   }
 
+  profileData = {
+    name: 'Андрій',
+    surname: 'Шевченко',
+    email: 'andrii.shevchenko@army.ua',
+    phone_number: '+380671234567',
+    description:'oaoa'
+  };
   loadProfile() {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
-        this.profileForm.patchValue(data);
+        this.profileData = data;
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -69,20 +76,18 @@ export class VolunteerProfileEditComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.profileForm.valid) {
-      const data = this.profileForm.value;
+    const formData = this.profileForm.value;
 
-      this.volunteerService.updateProfile(data).subscribe({
-        next: () => {
-          alert('Профіль волонтера оновлено');
-          this.router.navigate(['/profile/volunteer']);
-        },
-        error: (err) => {
-          console.error('Помилка оновлення профілю волонтера:', err);
-          alert('Неправильний пароль або інша помилка');
-        }
-      });
-    }
+    this.volunteerService.updateProfile(formData).subscribe({
+      next: () => {
+        alert('Профіль оновлено');
+        this.router.navigate(['/profile/soldier']);
+      },
+      error: (err) => {
+        console.error('Помилка оновлення:', err);
+        alert('Неправильний пароль або інша помилка');
+      }
+    });
   }
 
   toggleSearch() {
