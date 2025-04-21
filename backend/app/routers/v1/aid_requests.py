@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, Query, HTTPException, Form, UploadFile, File, Depends
 from app.schemas.aid_request import (
     AidRequestSchema,
@@ -12,6 +14,7 @@ from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
 from app.auth import get_current_soldier, get_current_volunteer, get_current_user_from_token
 from fastapi.encoders import jsonable_encoder
+from fastapi.responses import FileResponse
 import os, shutil, json
 
 
@@ -84,7 +87,7 @@ async def create(
     if image:
         os.makedirs("uploads/aid_requests", exist_ok=True)
         image_name = image.filename
-        image_path = f"uploads/aid_requests/{image.filename}"
+        image_path = f"static/aid_requests/{image.filename}"
         with open(image_path, "wb") as f:
             shutil.copyfileobj(image.file, f)
 
@@ -141,3 +144,11 @@ async def get_by_id(
         raise HTTPException(404, detail="Request not found")
     return result
 
+
+@router.get("/uploads/{filename}")
+async def get_image(filename: str):
+    file_path = os.path.join("uploads", "aid_requests", filename)
+    if not os.path.exists(file_path):
+        logging.log(file_path)
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(file_path)

@@ -72,7 +72,7 @@ class AidRequestService:
     #         db=db, aid_request_id=aid_request_id, volunteer_id=volunteer_id
     #     )
 
-    async def get_all(self) -> Sequence[AidRequest]:
+    async def get_all(self) -> list[AidRequest]:
         requests = await self.__repository.find()
         return [self._add_image_url(r) for r in requests]
 
@@ -85,9 +85,9 @@ class AidRequestService:
         result = await self.__repository.find_by_condition(AidRequest.soldier_id == soldier_id)
         return [self._add_image_url(r) for r in result]
 
-    async def get_unassigned(self) -> Sequence[AidRequest]:
-        result = await self.__repository.find_by_condition(AidRequest.volunteer_id.is_(None))
-        return [self._add_image_url(r) for r in result]
+    async def get_unassigned(self) -> list[AidRequest]:
+        requests = await self.__repository.find_by_condition(AidRequest.volunteer_id.is_(None))
+        return [self._add_image_url(r) for r in requests]
 
     async def create(
         self, aid_request: AidRequestSchemaInWithoutVolId, soldier_id: int
@@ -142,9 +142,8 @@ class AidRequestService:
 
     def _add_image_url(self, entity: AidRequest) -> AidRequest:
         if entity.image:
-            entity.image = f"/static/aid_requests/{entity.image}"
+            entity.image = f"/api/v1/aid_requests/uploads/{entity.image}"
         return entity
-
 
 
 async def get_aid_request_service(
