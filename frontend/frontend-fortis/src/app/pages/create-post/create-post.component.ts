@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -47,6 +47,9 @@ export class CreatePostComponent implements OnInit {
 
   selectedFile: File | null = null;
 
+  imagePreview: string | null = null;
+  imageSelected: boolean = false;
+
   categories = [
     { id: 1, name: 'Автозапчастини' },
     { id: 2, name: 'Енергозабезпечення' },
@@ -66,7 +69,7 @@ export class CreatePostComponent implements OnInit {
     { id: 16, name: 'Транспорт' },
     { id: 17, name: 'Звʼязок' }
   ];
-  
+
   cities: string[] = [
     'Київ', 'Львів', 'Харків', 'Одеса', 'Дніпро',
     'Запоріжжя', 'Івано-Франківськ', 'Чернівці',
@@ -102,42 +105,49 @@ export class CreatePostComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       this.image = file.name;
+
+      this.imageSelected = true;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
   publishRequest(): void {
-  if (!this.category_id) {
-    alert('Оберіть категорію');
-    return;
-  }
-
-  const payload = {
-    name: this.name,
-    description: this.description,
-    location: this.location,
-    deadline: this.endDate || new Date(),
-    category_id: this.category_id
-  };
-
-  const formData = new FormData();
-  formData.append('json_data', JSON.stringify(payload));
-
-  if (this.selectedFile) {
-    formData.append('image', this.selectedFile);
-  }
-  
-  this.aidRequestService.createRequest(formData).subscribe({
-    next: () => {
-      alert('Запит створено!');
-      this.router.navigate(['/profile/soldier']);
-    },
-    error: (err) => {
-      console.error(err);
-      alert('Помилка при створенні запиту');
+    if (!this.category_id) {
+      alert('Оберіть категорію');
+      return;
     }
-  });
-}
 
+    const payload = {
+      name: this.name,
+      description: this.description,
+      location: this.location,
+      deadline: this.endDate || new Date(),
+      category_id: this.category_id
+    };
+
+    const formData = new FormData();
+    formData.append('json_data', JSON.stringify(payload));
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+
+    this.aidRequestService.createRequest(formData).subscribe({
+      next: () => {
+        alert('Запит створено!');
+        this.router.navigate(['/profile/soldier']);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Помилка при створенні запиту');
+      }
+    });
+  }
 
   logout(): void {
     this.authService.logout();

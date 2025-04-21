@@ -30,8 +30,15 @@
       <textarea matInput placeholder="Опишіть всі необхідні деталі" [(ngModel)]="description" name="description"></textarea>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="triggerImageInput()">Додати фото</button>
-    <input type="file" id="imageInput" accept="image/*" hidden (change)="onImageSelected($event)" />
+    <div style="margin-bottom: 16px;">
+      <button mat-raised-button color="primary" (click)="triggerImageInput()">Додати фото</button>
+      <input type="file" id="imageInput" accept="image/*" hidden (change)="onImageSelected($event)" />
+
+      <div class="image-preview" *ngIf="imageSelected" style="margin-top: 10px;">
+        <img *ngIf="imagePreview" [src]="imagePreview" alt="Прев'ю зображення" style="max-width: 100%; max-height: 200px; border-radius: 8px;" />
+        <p *ngIf="!imagePreview">Зображення успішно додано!</p>
+      </div>
+    </div>
 
     <mat-form-field class="full-width" appearance="outline" color="primary">
       <mat-label>Локація</mat-label>
@@ -41,7 +48,6 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    
 
     <mat-form-field class="full-width">
       <mat-label>Крайній термін</mat-label>

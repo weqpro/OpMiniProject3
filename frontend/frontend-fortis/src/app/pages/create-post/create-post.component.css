@@ -47,6 +47,16 @@ mat-form-field {
 .full-width {
   width: 100%;
 }
+.image-preview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+}
 
 textarea[matInput] {
   width: 100%;
