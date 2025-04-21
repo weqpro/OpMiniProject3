@@ -6,6 +6,7 @@ from app.schemas.aid_request import (
     AidRequestSchemaUpdate,
     AidRequestCreateMultipart
 )
+from app.utils import AidRequestStatus
 from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
 from app.auth import get_current_soldier, get_current_volunteer, get_current_user_from_token
@@ -99,11 +100,15 @@ async def assign_request_to_volunteer(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_volunteer),
 ):
-    data = AidRequestSchemaUpdate(volunteer_id=user.id)
+    data = AidRequestSchemaUpdate(
+        volunteer_id=user.id,
+        status=AidRequestStatus.IN_PROGRESS.value
+    )
     updated = await service.update(request_id, data)
     if not updated:
         raise HTTPException(status_code=404, detail="Request not found")
     return updated
+
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(
