@@ -56,6 +56,9 @@ class SoldierRepository(RepositoryBase[Soldier], SoldierRepositoryBase):
             result = await session.execute(stmt)
             return result.scalars().all()
 
+    async def find_by_email(self, email: str) -> Soldier | None:
+        result = await self.find_by_condition(Soldier.email == email)
+        return next(iter(result), None)
 
 async def get_soldier_repository(
     context: RepositoryContext = Depends(get_repository_context),

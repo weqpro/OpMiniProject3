@@ -4,5 +4,6 @@ from .auth import (
     get_password_hash,
     authenticate_soldier,
     create_access_token,
-    verify_password
+    verify_password,
+    get_current_user_from_token
 )

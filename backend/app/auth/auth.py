@@ -1,10 +1,9 @@
 import os
 from datetime import timedelta, datetime, timezone
 from typing import Literal
-
 import jwt
 from passlib.context import CryptContext
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import InvalidTokenError,PyJWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
@@ -17,6 +16,8 @@ from app.utils import MissingEnviromentVariableError
 
 from app.models.volunteer import Volunteer
 from app.repository.volunteer_repository import get_volunteer_repository, VolunteerRepository
+
+from app.repository.soldier_repository import get_soldier_repository
 
 def __get_passwd() -> str:
     """get s a password from secrets"""
@@ -118,3 +119,31 @@ async def get_current_volunteer(
     if volunteer is None:
         raise auth_exception
     return volunteer
+
+async def get_current_user_from_token(
+    token: str = Depends(oauth2_scheme),
+    volunteer_repo = Depends(get_volunteer_repository),
+    soldier_repo = Depends(get_soldier_repository),
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+    )
+
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except PyJWTError:
+        raise credentials_exception
+
+    volunteer = await volunteer_repo.find_by_email(email)
+    if volunteer:
+        return volunteer
+
+    soldier = await soldier_repo.find_by_email(email)
+    if soldier:
+        return soldier
+
+    raise credentials_exception

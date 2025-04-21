@@ -73,6 +73,14 @@ class SoldierService:
         if entity:
             await self.__repository.delete(entity)
 
+    async def get_by_id(self, id: int) -> Soldier | None:
+        result = await self.__repository.find_by_condition(Soldier.id == id)
+        return next(iter(result), None)
+
+    async def find_by_email(self, email: str) -> Soldier | None:
+        result = await self.__repository.find_by_condition(Soldier.email == email)
+        return result.scalar_one_or_none()
+
 
 async def get_soldier_service(
     soldier_repository: SoldierRepository = Depends(get_soldier_repository),

@@ -4,6 +4,8 @@ from app.services import SoldierService, VolunteerService, get_soldier_service, 
 from app.auth import get_password_hash, authenticate_soldier, create_access_token, verify_password
 from app.repository.volunteer_repository import get_volunteer_repository
 from app.models.volunteer import Volunteer
+from app.auth import get_current_volunteer, get_current_soldier, get_current_user_from_token
+from fastapi import Request
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -46,3 +48,8 @@ async def login_volunteer(
 
     token = await create_access_token({"sub": volunteer.email})
     return {"access_token": token, "token_type": "bearer"}
+
+@router.get("/me")
+async def get_current_user(user=Depends(get_current_user_from_token)):
+    role = "volunteer" if isinstance(user, Volunteer) else "soldier"
+    return {"id": user.id, "role": role}

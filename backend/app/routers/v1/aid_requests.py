@@ -8,7 +8,7 @@ from app.schemas.aid_request import (
 )
 from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
-from app.auth import get_current_soldier, get_current_volunteer
+from app.auth import get_current_soldier, get_current_volunteer, get_current_user_from_token
 from fastapi.encoders import jsonable_encoder
 import os, shutil, json
 
@@ -55,32 +55,36 @@ async def get_by_soldier(
 @router.get("/unassigned", response_model=list[AidRequestSchema])
 async def get_unassigned(
     service: AidRequestService = Depends(get_aid_request_service),
-    user=Depends(get_current_volunteer),
+    user=Depends(get_current_user_from_token),
 ):
     return await service.get_unassigned()
 
 @router.post("/", response_model=AidRequestSchema)
 async def create(
     json_data: str = Form(...),
-    image: UploadFile = File(...),
+    image: UploadFile | None = File(None),
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_soldier),
 ):
     data_dict = json.loads(json_data)
     schema = AidRequestCreateMultipart(**data_dict)
 
-    os.makedirs("uploads/aid_requests", exist_ok=True)
-    image_path = f"uploads/aid_requests/{image.filename}"
-    with open(image_path, "wb") as f:
-        shutil.copyfileobj(image.file, f)
+    image_name = ""
+    if image:
+        os.makedirs("uploads/aid_requests", exist_ok=True)
+        image_name = image.filename
+        image_path = f"uploads/aid_requests/{image.filename}"
+        with open(image_path, "wb") as f:
+            shutil.copyfileobj(image.file, f)
 
     final_data = AidRequestSchemaInWithoutVolId(
-        **schema.dict(exclude={"tags"}),
-        tags=schema.tags,
-        image=image.filename
+        **schema.dict(),
+        image=image_name
     )
 
     return await service.create(final_data, soldier_id=user.id)
+
+
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(

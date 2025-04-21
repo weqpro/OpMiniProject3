@@ -23,6 +23,13 @@ async def get_all(
         map(lambda s: SoldierSchema.model_validate(s), await soldier_service.get_all())
     )
 
+@router.get("/me", response_model=SoldierSchema)
+async def get_me(
+    service: SoldierService = Depends(get_soldier_service),
+    user=Depends(get_current_soldier),
+):
+    return await service.get_by_id(user.id)
+
 
 @router.post("/create")
 async def create(
