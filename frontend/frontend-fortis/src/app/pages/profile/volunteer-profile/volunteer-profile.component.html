@@ -63,15 +63,39 @@
           </div>
         </mat-expansion-panel>
 
-
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-icon>star</mat-icon> Мій рейтинг
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <p>00</p>
+
+          <div style="padding: 16px;">
+            <div class="stars" style="display: flex; align-items: center; gap: 4px;">
+              <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]">
+                {{ star <= profileData.rating ? 'star' : 'star_border' }}
+              </mat-icon>
+              <span style="margin-left: 8px;">{{ profileData.rating }} / 5</span>
+            </div>
+          </div>
         </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>chat</mat-icon> Відгук
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div style="padding: 16px;">
+            <p *ngIf="profileData.review; else noReview" style="font-style: italic; color: #555;">
+              "{{ profileData.review }}"
+            </p>
+            <ng-template #noReview>
+              <p style="color: #999;">Ще не залишено жодного відгуку.</p>
+            </ng-template>
+          </div>
+        </mat-expansion-panel>
+
 
       </div>
     </mat-tab>

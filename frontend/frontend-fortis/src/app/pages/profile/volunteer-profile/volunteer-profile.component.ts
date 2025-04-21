@@ -60,8 +60,10 @@ export class VolunteerProfileComponent {
     this.router.navigate(['app-volunteer-change-password']);
   }
   logout() {
-    console.log('Вихід з акаунта');
-}
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
+
 
   showSearch = false;
   searchQuery = '';
@@ -70,4 +72,6 @@ export class VolunteerProfileComponent {
   toggleSearch() {
     this.showSearch = !this.showSearch;
 }
+
+
 }

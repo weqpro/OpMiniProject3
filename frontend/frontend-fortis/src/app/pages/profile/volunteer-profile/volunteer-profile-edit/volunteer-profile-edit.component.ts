@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatTabsModule } from '@angular/material/tabs';
+import { RouterModule, Router } from '@angular/router';
+
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatChipsModule } from '@angular/material/chips';
-import { RouterModule } from '@angular/router';
 
+import { VolonteerService } from '../../../../services/volunteer.service';
 
 @Component({
   selector: 'app-volunteer-profile-edit',
@@ -19,33 +21,76 @@ import { RouterModule } from '@angular/router';
   templateUrl: './volunteer-profile-edit.component.html',
   styleUrls: ['./volunteer-profile-edit.component.css'],
   imports: [
-    MatChipsModule,
     CommonModule,
-    MatTabsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    FormsModule,
     MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
     MatExpansionModule,
+    MatTabsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    FormsModule,
-    MatMenuModule,
-    RouterModule,
-
+    MatListModule
   ]
 })
-export class VolunteerProfileEditComponent {
-  logout() {
-    console.log('Вихід з акаунта');
-  }
-
+export class VolunteerProfileEditComponent implements OnInit {
+  profileForm!: FormGroup;
   showSearch = false;
   searchQuery = '';
 
+  constructor(
+    private fb: FormBuilder,
+    private volunteerService: VolonteerService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.profileForm = this.fb.group({
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      phone_number: [''],
+      password: ['', Validators.required]
+    });
+
+    this.loadProfile();
+  }
+
+  loadProfile() {
+    this.volunteerService.getProfile().subscribe({
+      next: (data) => {
+        this.profileForm.patchValue(data);
+      },
+      error: (err) => {
+        console.error('Помилка завантаження профілю:', err);
+      }
+    });
+  }
+
+  onSubmit() {
+    if (this.profileForm.valid) {
+      const data = this.profileForm.value;
+
+      this.volunteerService.updateProfile(data).subscribe({
+        next: () => {
+          alert('Профіль волонтера оновлено');
+          this.router.navigate(['/profile/volunteer']);
+        },
+        error: (err) => {
+          console.error('Помилка оновлення профілю волонтера:', err);
+          alert('Неправильний пароль або інша помилка');
+        }
+      });
+    }
+  }
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
   }
 
-
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }

@@ -28,14 +28,25 @@
   <mat-tab-group>
     <mat-tab label="Про себе">
       <div class="profile-wrapper">
-        <div class="profile-header" style="display: flex; align-items: flex-start; gap: 16px;">
-          <button mat-icon-button disabled style="transform: scale(2); margin-top: 4px;">
-            <mat-icon>account_circle</mat-icon>
-          </button>
-          <div>
-            <h2>Ім’я Прізвище</h2>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>person</mat-icon> Ім’я та прізвище
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px;">
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Ім’я</mat-label>
+              <input matInput  name="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Прізвище</mat-label>
+              <input matInput name="surname" />
+            </mat-form-field>
           </div>
-        </div>
+        </mat-expansion-panel>
+
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -61,6 +72,20 @@
           </mat-form-field>
         </mat-expansion-panel>
 
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>lock</mat-icon> Підтвердження паролем
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Поточний пароль</mat-label>
+            <input matInput type="password"  name="password" required />
+          </mat-form-field>
+        </mat-expansion-panel>
+        <div style=" text-align: center; width: 100%">
+          <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
+        </div>
 
 
       </div>
@@ -88,16 +113,18 @@
           </div>
         </mat-expansion-panel>
 
+
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
+            <mat-panel-title>
+              <mat-icon>lock</mat-icon> Підтвердження паролем
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Електронна адреса</mat-label>
-            <input matInput placeholder="example@email.com" />
+            <mat-label>Поточний пароль</mat-label>
+            <input matInput type="password"  name="password" required />
           </mat-form-field>
         </mat-expansion-panel>
-
 
         <div style=" text-align: center; width: 100%">
           <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>

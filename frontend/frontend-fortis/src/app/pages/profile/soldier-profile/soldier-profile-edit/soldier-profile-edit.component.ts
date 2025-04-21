@@ -48,10 +48,10 @@ export class SoldierProfileEditComponent implements OnInit {
   ngOnInit(): void {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       phone: [''],
       unit: [''],
-      subunit: ['']
+      subunit: [''],
+      password: ['', Validators.required]
     });
 
     this.loadProfile();
@@ -69,16 +69,22 @@ export class SoldierProfileEditComponent implements OnInit {
   }
 
   onSubmit() {
+
     if (this.profileForm.valid) {
-      this.soldierService.updateProfile(this.profileForm.value).subscribe({
+      const data = this.profileForm.value;
+      this.soldierService.updateProfile(data).subscribe({
         next: () => alert('Профіль оновлено'),
         error: (err) => {
           console.error('Помилка оновлення:', err);
-          alert('Не вдалося оновити профіль');
+          alert('Неправильний пароль або інша помилка');
         }
       });
+    } else {
+      alert('Неправильно заповнена форма');
     }
+
   }
+
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
