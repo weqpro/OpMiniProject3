@@ -37,16 +37,17 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
   ]
 })
 export class SoldierProfileComponent implements OnInit {
-  profileData = {
-    name: 'Андрій',
-    surname: 'Шевченко',
-    email: 'andrii.shevchenko@army.ua',
-    phone_number: '+380671234567',
-    unit: '80-та окрема десантно-штурмова бригада',
-    subsubunit: '2-й взвод',
-    battalion: '3-й батальйон',
-
-  };
+  profileData: any = null;
+  // profileData = {
+  //   name: 'Андрій',
+  //   surname: 'Шевченко',
+  //   email: 'andrii.shevchenko@army.ua',
+  //   phone_number: '+380671234567',
+  //   unit: '80-та окрема десантно-штурмова бригада',
+  //   subsubunit: '2-й взвод',
+  //   battalion: '3-й батальйон',
+  //
+  // };
 
 
   profileForm!: FormGroup;

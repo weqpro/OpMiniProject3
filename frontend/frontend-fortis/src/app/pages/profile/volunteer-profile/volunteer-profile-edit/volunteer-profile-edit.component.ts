@@ -56,14 +56,14 @@ export class VolunteerProfileEditComponent implements OnInit {
 
     this.loadProfile();
   }
-
-  profileData = {
-    name: 'Андрій',
-    surname: 'Шевченко',
-    email: 'andrii.shevchenko@army.ua',
-    phone_number: '+380671234567',
-    description:'oaoa'
-  };
+  profileData: any = null;
+  // profileData = {
+  //   name: 'Андрій',
+  //   surname: 'Шевченко',
+  //   email: 'andrii.shevchenko@army.ua',
+  //   phone_number: '+380671234567',
+  //   description:'oaoa'
+  // };
   loadProfile() {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {

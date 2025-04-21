@@ -39,16 +39,16 @@ import {VolonteerService} from '../../../services/volunteer.service';
 export class VolunteerProfileComponent {
 
 
-  profileData = {
-    name: 'Андрій',
-    surname: 'Шевченко',
-    email: 'andrii.shevchenko@army.ua',
-    phone_number: '+380671234567',
-    rating:4,
-    review:'good',
-    description:'oaoa'
-  };
-  // profileData: any = null;
+  // profileData = {
+  //   name: 'Андрій',
+  //   surname: 'Шевченко',
+  //   email: 'andrii.shevchenko@army.ua',
+  //   phone_number: '+380671234567',
+  //   rating:4,
+  //   review:'good',
+  //   description:'oaoa'
+  // };
+  profileData: any = null;
   constructor(
     private router: Router,private volunteerService: VolonteerService
   ) {}
