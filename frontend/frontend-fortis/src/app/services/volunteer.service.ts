@@ -8,10 +8,10 @@ import { Observable, catchError, throwError } from 'rxjs';
 })
 export class VolonteerService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://your-api.com/volunteers';
+  private apiUrl = 'http://127.0.0.1:8000/api/v1/volunteers';
 
   create(volonteer: Volonteer): Observable<any> {
-    return this.http.post(this.apiUrl, volonteer).pipe(
+    return this.http.post('http://127.0.0.1:8000/api/v1/auth/register/volunteer', volonteer).pipe(
       catchError((error) => {
         console.error('Error creating volonteer:', error);
         return throwError(() => new Error('Could not create volonteer. Please try again.'));
@@ -33,5 +33,16 @@ export class VolonteerService {
         return throwError(() => new Error('Could not delete volonteer. Please try again.'));
       })
     );
+  }
+    getProfile(): Observable<any> {
+    return this.http.get(`https://your-api.com/volunteer/me`);
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`https://your-api.com/volunteer/me`, data);//тут  підставити ??????
+  }
+
+  changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.post('/api/v1/volunteers/change-password', payload);
   }
 }

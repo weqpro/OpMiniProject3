@@ -11,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AidRequestService {
   private http = inject(HttpClient);
-  private apiUrl = '#'
+  private apiUrl = 'http://127.0.0.1:8000/api/v1/aid_requests';
   constructor() { }
 
   private handleError(error: HttpErrorResponse) {
@@ -32,9 +32,15 @@ export class AidRequestService {
     return this.http.get(this.apiUrl);
   }
 
-  createRequest(data: AidRequest): Observable<any> {
-    return this.http.post(this.apiUrl, data);
+  createRequest(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData).pipe(
+      catchError((error) => {
+        console.error('Помилка при створенні запиту:', error);
+        return throwError(() => new Error('Не вдалося створити запит.'));
+      })
+    );
   }
+  
 
   deleteRequest(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);

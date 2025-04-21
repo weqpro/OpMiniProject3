@@ -8,10 +8,10 @@ import { Observable, catchError, throwError } from 'rxjs';
 })
 export class SoldierService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://your-api.com/soldiers';
+  private apiUrl = 'http://127.0.0.1:8000/api/v1/soldiers';
 
   create(soldier: Soldier): Observable<any> {
-    return this.http.post(this.apiUrl, soldier).pipe(
+    return this.http.post("http://127.0.0.1:8000/api/v1/auth/register/soldier", soldier).pipe(
       catchError((error) => {
         console.error('Error creating soldier:', error);
         return throwError(() => new Error('Could not create soldier. Please try again.'));
@@ -35,11 +35,14 @@ export class SoldierService {
     );
   }
   getProfile(): Observable<any> {
-    return this.http.get(`https://your-api.com/soldier/me`);
+    return this.http.get(`${this.apiUrl}/me`);
   }
   
   updateProfile(data: any): Observable<any> {
-    return this.http.put(`https://your-api.com/soldier/me`, data);
+    return this.http.put(`${this.apiUrl}/me`, data);
   }
 
+  changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.post('${this.apiUrl}/change-password', payload);
+  }
 }

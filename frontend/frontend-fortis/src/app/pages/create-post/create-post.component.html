@@ -30,8 +30,8 @@
       <textarea matInput placeholder="Опишіть всі необхідні деталі" [(ngModel)]="description" name="description"></textarea>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="imageInput.click()">Додати фото</button>
-    <input type="file" accept="image/*" hidden (change)="onImageSelected($event)" #imageInput />
+    <button mat-raised-button color="primary" (click)="triggerImageInput()">Додати фото</button>
+    <input type="file" id="imageInput" accept="image/*" hidden (change)="onImageSelected($event)" />
 
     <mat-form-field class="full-width" appearance="outline" color="primary">
       <mat-label>Локація</mat-label>

@@ -10,16 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
-import {Router, RouterModule} from '@angular/router';
-import {SoldierService} from '../../../services/soldier.service';
-import {VolonteerService} from '../../../services/volunteer.service';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
-  selector: 'app-volunteer-profile',
+  selector: 'app-volunteer-profile-edit',
   standalone: true,
-  templateUrl: './volunteer-profile.component.html',
-  styleUrls: ['./volunteer-profile.component.css'],
+  templateUrl: './volunteer-profile-edit.component.html',
+  styleUrls: ['./volunteer-profile-edit.component.css'],
   imports: [
     MatChipsModule,
     CommonModule,
@@ -36,32 +34,10 @@ import {VolonteerService} from '../../../services/volunteer.service';
 
   ]
 })
-export class VolunteerProfileComponent {
-
-  profileData: any = null;
-  constructor(
-    private router: Router,private volunteerService: VolonteerService
-  ) {}
-
-
-  ngOnInit(): void {
-    this.volunteerService.getProfile().subscribe({
-      next: data => this.profileData = data,
-      error: err => {
-        console.error('Не вдалося завантажити профіль волонтера:', err);
-      }
-    });
-  }
-  editProfile() {
-    this.router.navigate(['app-volunteer-profile-edit']);
-  }
-
-  changePassword() {
-    this.router.navigate(['app-volunteer-change-password']);
-  }
+export class VolunteerProfileEditComponent {
   logout() {
     console.log('Вихід з акаунта');
-}
+  }
 
   showSearch = false;
   searchQuery = '';
@@ -69,5 +45,7 @@ export class VolunteerProfileComponent {
 
   toggleSearch() {
     this.showSearch = !this.showSearch;
-}
+  }
+
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AidRequestService } from '../../services/aid-request.service';
-import { AidRequest } from '../../schemas/aid-request';
 import { AuthService } from '../../services/authentication.service';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -44,8 +43,9 @@ export class CreatePostComponent implements OnInit {
   endDate: Date | null = null;
   status = 'Опубліковано';
   soldier_id!: number;
-  volunteer_id = 1;
   category_id: number | null = null;
+
+  selectedFile: File | null = null;
 
   categories = [
     { id: 1, name: 'Автозапчастини' },
@@ -66,6 +66,7 @@ export class CreatePostComponent implements OnInit {
     { id: 16, name: 'Транспорт' },
     { id: 17, name: 'Звʼязок' }
   ];
+  
   cities: string[] = [
     'Київ', 'Львів', 'Харків', 'Одеса', 'Дніпро',
     'Запоріжжя', 'Івано-Франківськ', 'Чернівці',
@@ -74,7 +75,7 @@ export class CreatePostComponent implements OnInit {
     'Рівне', 'Житомир', 'Кропивницький', 'Черкаси',
     'Вінниця', 'Маріуполь', 'Краматорськ', ''
   ];
-  
+
   constructor(
     private router: Router,
     private aidRequestService: AidRequestService,
@@ -92,44 +93,51 @@ export class CreatePostComponent implements OnInit {
     });
   }
 
+  triggerImageInput(): void {
+    document.getElementById('imageInput')?.click();
+  }
+
   onImageSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
+      this.selectedFile = file;
       this.image = file.name;
-      console.log('Обране зображення:', file.name);
     }
   }
 
   publishRequest(): void {
-    if (!this.category_id) {
-      alert('Оберіть категорію');
-      return;
-    }
-
-    const newRequest: AidRequest = new AidRequest(
-      0,
-      this.name,
-      this.description,
-      this.image,
-      this.endDate || new Date(),
-      this.location,
-      this.status,
-      this.soldier_id,
-      this.volunteer_id,
-      this.category_id
-    );
-
-    this.aidRequestService.createRequest(newRequest).subscribe({
-      next: () => {
-        alert('Запит створено!');
-        this.router.navigate(['/profile/soldier']);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Помилка при створенні запиту');
-      }
-    });
+  if (!this.category_id) {
+    alert('Оберіть категорію');
+    return;
   }
+
+  const payload = {
+    name: this.name,
+    description: this.description,
+    location: this.location,
+    deadline: this.endDate || new Date(),
+    category_id: this.category_id
+  };
+
+  const formData = new FormData();
+  formData.append('json_data', JSON.stringify(payload));
+
+  if (this.selectedFile) {
+    formData.append('image', this.selectedFile);
+  }
+  
+  this.aidRequestService.createRequest(formData).subscribe({
+    next: () => {
+      alert('Запит створено!');
+      this.router.navigate(['/profile/soldier']);
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Помилка при створенні запиту');
+    }
+  });
+}
+
 
   logout(): void {
     this.authService.logout();

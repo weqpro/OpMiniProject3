@@ -11,30 +11,33 @@ interface AuthResponse {
 export type UserRole = 'soldier' | 'volunteer';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = 'api/auth/token';
+  private authUrl = 'http://127.0.0.1:8000/api/v1/auth/token';
   private accessToken: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if (typeof window !== 'undefined') {
+      this.accessToken = localStorage.getItem('access_token');
+    }
+  }
+  
 
-  login(username: string, password: string): Observable<AuthResponse> {
+  login(username: string, password: string, role: 'soldier' | 'volunteer'): Observable<AuthResponse> {
     const body = new URLSearchParams({
-      grant_type: 'password',
-      username: username,
-      password: password,
+      username,
+      password,
     });
-
+  
     const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
     });
-
-    return this.http.post<AuthResponse>(this.authUrl, body.toString(), { headers }).pipe(
+  
+    return this.http.post<AuthResponse>(`${this.authUrl}/${role}`, body.toString(), { headers }).pipe(
       tap(response => {
-        this.accessToken = response.access_token;
+        localStorage.setItem('access_token', response.access_token);
         this.isAuthenticatedSubject.next(true);
-      }),
-      catchError((error: HttpErrorResponse) => throwError(() => new Error(error.message)))
+      })
     );
   }
 
@@ -48,12 +51,12 @@ export class AuthService {
   }
 
   getUserRole(): Observable<UserRole> {
-    return this.http.get<{ role: UserRole }>('/api/me').pipe(
+    return this.http.get<{ role: UserRole }>('http://127.0.0.1:8000/api/v1/auth/me').pipe(
       map((response: { role: any; }) => response.role)
     );
   }
   getCurrentUser(): Observable<{ id: number, role: UserRole }> {
-    return this.http.get<{ id: number, role: UserRole }>('/api/me');
+    return this.http.get<{ id: number, role: UserRole }>('http://127.0.0.1:8000/api/v1/auth/me');
   }
   
 }
