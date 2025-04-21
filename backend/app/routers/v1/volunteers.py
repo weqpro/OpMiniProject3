@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.auth import get_current_volunteer, get_current_soldier
 from app.services import VolunteerService, get_volunteer_service
 from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut, ChangePasswordSchema
@@ -11,7 +11,12 @@ async def get_one(
     service: VolunteerService = Depends(get_volunteer_service),
     user=Depends(get_current_soldier),
 ):
-    return await service.get_by_id(volunteer_id)
+    # return await service.get_by_id(volunteer_id)
+    volunteer = await service.get_by_id(volunteer_id)
+    if volunteer is None:
+        raise HTTPException(status_code=404, detail="Volunteer not found")
+    return volunteer
+
 
 @router.get("/me", response_model=VolunteerSchemaOut)
 async def get_me(

@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
 class ReviewBase(BaseModel):
     """Base schema for a review."""
     review_text: str
+    rating: int = Field(..., ge=1, le=5)
     tags: List[str]
     soldier_id: int
     volunteer_id: int
