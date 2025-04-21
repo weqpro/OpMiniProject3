@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.auth import get_current_volunteer
 from app.services import VolunteerService, get_volunteer_service
 from app.schemas import VolunteerSchema, VolunteerSchemaIn
@@ -12,7 +12,12 @@ async def get_one(
     service: VolunteerService = Depends(get_volunteer_service),
     user=Depends(get_current_volunteer),
 ):
-    return await service.get_by_id(volunteer_id)
+    # return await service.get_by_id(volunteer_id)
+    volunteer = await service.get_by_id(volunteer_id)
+    if volunteer is None:
+        raise HTTPException(status_code=404, detail="Volunteer not found")
+    return volunteer
+
 
 @router.delete("/{volunteer_id}")
 async def delete(
