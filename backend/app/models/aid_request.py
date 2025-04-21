@@ -21,7 +21,7 @@ class AidRequest(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
     description: Mapped[str] = mapped_column(String(1000))
-    tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
+    #tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
     image: Mapped[str] = mapped_column(String(255))
     location: Mapped[str] = mapped_column(String(100))
     status: Mapped[str] = mapped_column(
@@ -44,7 +44,7 @@ class AidRequest(Base):
             image="shit",
             deadline=datetime.datetime.now(),
             location="somewhere",
-            tags=["josci", "duje"],
+            #tags=["josci", "duje"],
             status="not done",
             soldier_id=1234,
             category=None,
