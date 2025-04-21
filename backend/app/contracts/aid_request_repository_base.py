@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from app.models.aid_request import AidRequest
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.aid_request import AidRequest
+    from app.schemas import SearchOptionsSchema
 
 
 class AidRequestRepositoryBase(ABC):
-    ...
-    # @abstractmethod
-    # def get_aid_request_by_soldier(self, soldier_id: int) -> list[AidRequest]:
-    #     """Get all aid requests for a specific soldier"""
-    #     pass
-    #
-    # @abstractmethod
-    # def get_aid_request_by_category(self, category_id: int) -> list[AidRequest]:
-    #     """Get all aid requests for a specific category"""
-    #     pass
+    @abstractmethod
+    async def search(
+        self, search_options: SearchOptionsSchema
+    ) -> Sequence[AidRequest]: ...

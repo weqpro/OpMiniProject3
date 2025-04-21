@@ -2,7 +2,6 @@ from collections.abc import Sequence
 
 from fastapi import Depends
 from sqlalchemy.sql.expression import ColumnExpressionArgument
-from sqlalchemy import func, or_, select
 
 
 from app.models import Category
@@ -20,35 +19,16 @@ class AidRequestService:
     def __init__(
         self,
         aid_request_repository: AidRequestRepository,
-        session_maker,
     ) -> None:
         self.__repository: AidRequestRepository = aid_request_repository
-        
-        self.__session_maker = session_maker
 
-    async def search(self, search_options: SearchOptionsSchema | None = None) -> list[AidRequest]:
+    async def search(
+        self, search_options: SearchOptionsSchema | None = None
+    ) -> list[AidRequest]:
         if search_options is None:
             search_options = SearchOptionsSchema(text="", tags=[])
 
-        term = search_options.text or ""
-        tags = search_options.tags
-
-        search_column = func.coalesce(AidRequest.name, '').self_group()
-
-        async with self.__session_maker() as session:
-            stmt = (
-                select(AidRequest)
-                .where(
-                    or_(
-                        search_column.bool_op('%')(term),
-                        AidRequest.tags.overlap(tags),
-                    )
-                )
-                .order_by(func.similarity(search_column, term).desc())
-            )
-
-            result = await session.execute(stmt)
-            return list(result.scalars().all())
+        return list(await self.__repository.search(search_options=search_options))
 
     # async def search(
     #     self, search_options: SearchOptionsSchema | None = None

@@ -3,8 +3,8 @@
 import datetime
 from typing import List
 
-from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy import String, ForeignKey, DateTime
+from sqlalchemy.dialects.postgresql import ARRAY, TSVECTOR
+from sqlalchemy import Computed, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import mapped_column, Mapped
 
 from app.models.base import Base
@@ -34,6 +34,17 @@ class AidRequest(Base):
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"), nullable=False)
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"), nullable=True)
     category_id: Mapped[int] = mapped_column(ForeignKey("category.id"), nullable=True)
+
+    textsearch: Mapped[TSVECTOR] = mapped_column(
+        TSVECTOR,
+        computed=Computed(
+            func.setweight(func.plainto_tsvector("simple", name), "A").op("||")(
+                func.setweight(func.plainto_tsvector("simple", name), "B")
+            ),
+            persisted=True,
+        ),
+        nullable=False,
+    )
 
     @staticmethod
     def create_dummy() -> "AidRequest":
