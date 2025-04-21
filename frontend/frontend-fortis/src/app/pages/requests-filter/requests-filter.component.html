@@ -1,3 +1,31 @@
+<style>
+  .request-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 6px;
+  }
+
+  .request-item:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  .request-item h3 {
+    margin: 0;
+    color: #39736b;
+    transition: color 0.2s;
+  }
+
+  .request-item:hover h3 {
+    color: #2c5750;
+  }
+</style>
+
 <div class="page-container">
   <main class="content-wrap">
     <div class="top-bar">
@@ -28,7 +56,7 @@
           </button>
           <button
             mat-menu-item
-            [routerLink]="userRole === 'soldier' ? '/own-requests-soldier' : '/own-requests-volunteer'"
+            [routerLink]="userRole === 'soldier' ? '/my-requests-soldier' : '/my-requests-soldier'"
           >
             Мої запити
           </button>
@@ -64,7 +92,7 @@
 
     <div class="request-list">
       <div class="request-item" *ngFor="let r of requests" (click)="openDetails(r.id)">
-        <img [src]="r.image_path || 'assets/default.jpg'" />
+        <img [src]="r.image_path || 'assets/default.jpg'" class="request-img" />
         <div class="info">
           <h3>{{ r.name }}</h3>
           <span class="location">{{ r.location }}</span>

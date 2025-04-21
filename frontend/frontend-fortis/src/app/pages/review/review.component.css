@@ -115,6 +115,11 @@ html, body {
     cursor: pointer;
     text-transform: none;
   }
+  .active-chip {
+    background-color: #39736b;
+    color: white;
+  }
+  
   
   .footer {
     background-color: #2c2c2c;

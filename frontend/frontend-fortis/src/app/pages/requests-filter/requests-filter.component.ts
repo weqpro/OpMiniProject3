@@ -99,9 +99,14 @@ constructor(
     this.searchWithFilters();
   }
 
-  openDetails(id: number): void {
+  openDetails(id: number | undefined) {
+    if (!id) {
+      console.error('Invalid ID', id);
+      return;
+    }
     this.router.navigate(['/requests', id]);
   }
+  
   
   private searchWithFilters(): void {
     const options: SearchOptions = {

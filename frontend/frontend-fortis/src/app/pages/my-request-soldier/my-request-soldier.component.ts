@@ -50,6 +50,31 @@ export class MyRequestsComponent implements OnInit {
     });
   }
 
+  selectedSoldier: any = null;
+  popupVisible = false;
+  selectedVolunteer: any = null;
+  popupVolunteerVisible = false;
+
+  showVolunteerPopup(volunteerId: number): void {
+    this.selectedVolunteer = this.volunteerMap[volunteerId];
+    this.popupVolunteerVisible = true;
+  }
+  
+  closeVolunteerPopup(): void {
+    this.popupVolunteerVisible = false;
+  }
+  
+
+  showSoldierPopup(soldierId: number): void {
+    this.selectedSoldier = this.soldierMap[soldierId];
+    this.popupVisible = true;
+  }
+
+  closePopup(): void {
+    this.popupVisible = false;
+  }
+
+
   loadVolunteers(): void {
     const ids = [...new Set(this.requests.map(r => r.volunteer_id).filter(Boolean))];
     ids.forEach(id => {
@@ -63,7 +88,7 @@ export class MyRequestsComponent implements OnInit {
   loadSoldiers(): void {
     const ids = [...new Set(this.requests.map(r => r.soldier_id).filter(Boolean))];
     ids.forEach(id => {
-      this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/${id}`).subscribe({
+      this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/soldier-info/${id}`).subscribe({
         next: (soldier: any) => this.soldierMap[id] = soldier,
         error: err => console.error(`Не вдалося завантажити військового з ID ${id}`, err)
       });

@@ -116,6 +116,10 @@ export class CreatePostComponent implements OnInit {
     }
   }
 
+  openDetails(requestId: number): void {
+    this.router.navigate(['/request', requestId]);
+  }
+
   publishRequest(): void {
     if (!this.category_id) {
       alert('Оберіть категорію');

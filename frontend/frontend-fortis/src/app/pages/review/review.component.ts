@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,15 +19,16 @@ import { MatMenuModule } from '@angular/material/menu';
     MatChipsModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './review.component.html',
-  styleUrls: ['./review.component.css']
+  styleUrls: ['./review.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ReviewComponent {
   rating = 0;
   tags: string[] = [];
-  
+
   positiveTags = [
     'швидко',
     'якісно',
@@ -36,7 +37,7 @@ export class ReviewComponent {
     'приємне спілкування',
     'рекомендую'
   ];
-  
+
   negativeTags = [
     'повільно',
     'неякісно',
@@ -45,8 +46,9 @@ export class ReviewComponent {
     'не дотримався умов',
     'неорганізовано',
   ];
-  
-  
+
+  selectedTags: string[] = [];
+
   setRating(star: number): void {
     this.rating = star;
     if (star >= 4) {
@@ -55,6 +57,16 @@ export class ReviewComponent {
       this.tags = [...this.negativeTags];
     } else {
       this.tags = [];
+    }
+    this.selectedTags = [];
+  }
+
+  toggleTag(tag: string): void {
+    const index = this.selectedTags.indexOf(tag);
+    if (index >= 0) {
+      this.selectedTags.splice(index, 1);
+    } else {
+      this.selectedTags.push(tag);
     }
   }
 }
