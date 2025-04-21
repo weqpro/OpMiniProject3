@@ -1,18 +1,19 @@
 '''Volunteer schema module'''
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, constr
+
 
 class VolunteerSchemaIn(BaseModel):
     name: str
     surname: str
     email: EmailStr
     password: str
-    phone_number: str
+    phone_number: constr(pattern=r'^\+380\d{9}$')
 
 class VolunteerUpdateSchema(BaseModel):
     name: Optional[str] = None
     surname: Optional[str] = None
-    phone_number: Optional[str] = None
+    phone_number: Optional[constr(pattern=r'^\+380\d{9}$')] = None
     password: str
 
     class Config:
@@ -23,7 +24,7 @@ class VolunteerSchemaOut(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    phone_number: str
+    phone_number: constr(pattern=r'^\+380\d{9}$')
 
     class Config:
         from_attributes = True
