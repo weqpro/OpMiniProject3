@@ -6,29 +6,17 @@
       </a>
     </div>
     <div class="top-right">
-      <button
-        *ngIf="userRole === 'soldier'"
-        mat-raised-button
-        color="primary"
-        class="header-button"
-        routerLink="/create-post"
-      >
+      <button *ngIf="userRole === 'soldier'" mat-raised-button color="primary" class="header-button" routerLink="/create-post">
         Опублікувати оголошення
       </button>
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #profileMenu="matMenu">
-        <button
-          mat-menu-item
-          [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'"
-        >
+        <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
           Мій профіль
         </button>
-        <button
-          mat-menu-item
-          [routerLink]="userRole === 'soldier' ? '/own-requests-soldier' : '/own-requests-volunteer'"
-        >
+        <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/own-requests-soldier' : '/own-requests-volunteer'">
           Мої запити
         </button>
       </mat-menu>
@@ -41,30 +29,26 @@
       <hr class="divider" />
 
       <div class="request-card" *ngFor="let request of this.requests">
-        <img
-          [src]="request.image_path"
-          alt="Request image"
-          class="request-image"
-        />
+        <img [src]="request.image_path || 'assets/default.jpg'" alt="Request image" class="request-image" />
 
         <div class="request-content">
           <h3 class="request-title">{{ request.name }}</h3>
           <p><strong>Статус</strong> — {{ request.status }}</p>
 
+          <div *ngIf="request.status === 'accepted'">
+            <p *ngIf="userRole === 'soldier'"><strong>Волонтер:</strong> {{ request.volunteer?.name }} {{ request.volunteer?.surname }} — {{ request.volunteer?.phonenumber }}</p>
+            <p *ngIf="userRole === 'volunteer'"><strong>Військовий:</strong> {{ request.soldier?.name }} {{ request.soldier?.surname }} — {{ request.soldier?.phonenumber }}</p>
+          </div>
+
           <div class="request-actions">
-            <ng-container *ngIf="this.userRole === 'soldier'">
-              <button
-                mat-button
-                color="primary"
-                *ngIf="request.status === 'Опубліковано'"
-              >
-                Редагувати
-              </button>
-              <button mat-button color="accent" [routerLink]="['/review']">Залишити відгук</button>
+            <ng-container *ngIf="userRole === 'soldier'">
+              <button mat-button color="primary" *ngIf="request.status === 'Опубліковано'">Редагувати</button>
+              <button mat-button color="accent" [routerLink]="['/review']" *ngIf="request.status === 'Виконано'">Залишити відгук</button>
             </ng-container>
-            <ng-container *ngIf="this.userRole === 'volunteer'">
-              <a href="#" class="action-link">Деталі запиту</a>
-              <a href="#" class="action-link">Профіль військового</a>
+
+            <ng-container *ngIf="userRole === 'volunteer'">
+              <a class="action-link" [routerLink]="['/requests', request.id]">Деталі запиту</a>
+              <a class="action-link" [routerLink]="['/profile/soldier']">Профіль військового</a>
             </ng-container>
           </div>
         </div>
