@@ -4,7 +4,8 @@ from app.schemas.aid_request import (
     AidRequestSchemaIn,
     AidRequestSchemaInWithoutVolId,
     AidRequestSchemaUpdate,
-    AidRequestCreateMultipart
+    AidRequestCreateMultipart,
+    AidRequestAssignStatus
 )
 from app.utils import AidRequestStatus
 from app.schemas.search_options import SearchOptionsSchema
@@ -100,7 +101,7 @@ async def assign_request_to_volunteer(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_volunteer),
 ):
-    data = AidRequestSchemaUpdate(
+    data = AidRequestAssignStatus(
         volunteer_id=user.id,
         status=AidRequestStatus.IN_PROGRESS.value
     )

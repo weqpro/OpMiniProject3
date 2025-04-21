@@ -114,6 +114,9 @@ class AidRequestService:
             if hasattr(entity, key):
                 setattr(entity, key, value)
 
+        if "status" in update_data:
+            entity.status = update_data["status"]
+
         await self.__repository.update(condition=(AidRequest.id == entity.id), **update_data)
         return self._add_image_url(entity)
 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.auth import get_current_volunteer
+from app.auth import get_current_volunteer, get_current_soldier
 from app.services import VolunteerService, get_volunteer_service
 from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut, ChangePasswordSchema
 
@@ -9,7 +9,7 @@ router = APIRouter(prefix="/volunteers", tags=["volunteers"])
 async def get_one(
     volunteer_id: int,
     service: VolunteerService = Depends(get_volunteer_service),
-    user=Depends(get_current_volunteer),
+    user=Depends(get_current_soldier),
 ):
     return await service.get_by_id(volunteer_id)
 
