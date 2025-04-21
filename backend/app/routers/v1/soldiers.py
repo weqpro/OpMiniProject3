@@ -1,5 +1,4 @@
-from collections.abc import Sequence
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.models.soldier import Soldier
 
@@ -10,7 +9,7 @@ from app.services import (
     get_aid_request_service,
 )
 from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn, SoldierUpdateSchema, ChangePasswordSchema
-from app.auth import get_current_soldier, get_password_hash
+from app.auth import get_current_soldier, get_password_hash, get_current_volunteer
 
 router = APIRouter(prefix="/soldiers", tags=["soldiers"])
 
@@ -48,6 +47,22 @@ async def delete(
     await service.delete(user.id)
     return {"detail": "Soldier deleted"}
 
+@router.get("/soldier-info/{soldier_id}")
+async def get_soldier_info(
+    soldier_id: int,
+    user=Depends(get_current_volunteer),
+    service: SoldierService = Depends(get_soldier_service)
+):
+    soldier = await service.get_by_id(soldier_id)
+    if not soldier:
+        raise HTTPException(status_code=404, detail="Військового не знайдено")
+
+    return {
+        "name": soldier.name,
+        "surname": soldier.surname,
+        "phone_number": soldier.phone_number,
+        "email": soldier.email,
+    }
 
 @router.post("/create_request")
 async def create_aid_request(

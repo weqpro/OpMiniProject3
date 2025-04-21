@@ -24,6 +24,7 @@ async def search(
     search_options = SearchOptionsSchema(text=text, tags=tags)
     return await aid_request_service.search(search_options)
 
+
 @router.delete("/{request_id}")
 async def delete(
     request_id: int,
@@ -32,6 +33,14 @@ async def delete(
 ):
     await service.delete(request_id)
     return {"ok": True}
+
+@router.get("/by-volunteer/{volunteer_id}", response_model=list[AidRequestSchema])
+async def get_by_volunteer(
+    volunteer_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    return await service.get_by_volunteer(volunteer_id)
 
 @router.post("/{request_id}/publish", response_model=AidRequestSchema)
 async def publish(
@@ -84,7 +93,17 @@ async def create(
 
     return await service.create(final_data, soldier_id=user.id)
 
-
+@router.post("/{request_id}/assign", response_model=AidRequestSchema)
+async def assign_request_to_volunteer(
+    request_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    data = AidRequestSchemaUpdate(volunteer_id=user.id)
+    updated = await service.update(request_id, data)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Request not found")
+    return updated
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(

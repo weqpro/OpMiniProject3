@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr
 class VolunteerSchemaIn(BaseModel):
     name: str
     surname: str
-    email: str
+    email: EmailStr
     password: str
     phone_number: str
 
