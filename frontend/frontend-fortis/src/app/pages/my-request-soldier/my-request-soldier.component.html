@@ -28,22 +28,30 @@
       <h2 class="title">Мої запити</h2>
       <hr class="divider" />
 
-      <div class="request-card" *ngFor="let request of this.requests">
+      <div class="request-card" *ngFor="let request of requests">
         <img [src]="request.image_path || 'assets/default.jpg'" alt="Request image" class="request-image" />
 
         <div class="request-content">
           <h3 class="request-title">{{ request.name }}</h3>
           <p><strong>Статус</strong> — {{ request.status }}</p>
 
-          <div *ngIf="request.status === 'accepted'">
-            <p *ngIf="userRole === 'soldier'"><strong>Волонтер:</strong> {{ request.volunteer?.name }} {{ request.volunteer?.surname }} — {{ request.volunteer?.phonenumber }}</p>
-            <p *ngIf="userRole === 'volunteer'"><strong>Військовий:</strong> {{ request.soldier?.name }} {{ request.soldier?.surname }} — {{ request.soldier?.phonenumber }}</p>
+          <div *ngIf="request.status === 'in_progres'">
+            <p *ngIf="userRole === 'soldier' && volunteerMap[request.volunteer_id]">
+              <strong>Волонтер:</strong>
+              {{ volunteerMap[request.volunteer_id].name }} {{ volunteerMap[request.volunteer_id].surname }} —
+              {{ volunteerMap[request.volunteer_id].phonenumber }}
+            </p>
+            <p *ngIf="userRole === 'volunteer' && soldierMap[request.soldier_id]">
+              <strong>Військовий:</strong>
+              {{ soldierMap[request.soldier_id].name }} {{ soldierMap[request.soldier_id].surname }} —
+              {{ soldierMap[request.soldier_id].phonenumber }}
+            </p>
           </div>
 
           <div class="request-actions">
             <ng-container *ngIf="userRole === 'soldier'">
-              <button mat-button color="primary" *ngIf="request.status === 'Опубліковано'">Редагувати</button>
-              <button mat-button color="accent" [routerLink]="['/review']" *ngIf="request.status === 'Виконано'">Залишити відгук</button>
+              <button mat-button color="primary" *ngIf="request.status === 'pending'">Редагувати</button>
+              <button mat-button color="accent" [routerLink]="['/review']" *ngIf="request.status === 'completed'">Залишити відгук</button>
             </ng-container>
 
             <ng-container *ngIf="userRole === 'volunteer'">

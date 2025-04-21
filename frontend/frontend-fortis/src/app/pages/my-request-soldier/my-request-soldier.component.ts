@@ -7,20 +7,25 @@ import { AuthService, UserRole } from '../../services/authentication.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-my-requests',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule,  RouterModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, RouterModule],
   templateUrl: './my-request-soldier.component.html',
   styleUrls: ['./my-request-soldier.component.css']
 })
 export class MyRequestsComponent implements OnInit {
   requests: AidRequest[] = [];
   userRole: UserRole | null = null;
+  volunteerMap: { [key: number]: any } = {};
+  soldierMap: { [key: number]: any } = {};
 
   constructor(
     private aidRequestService: AidRequestService,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -28,21 +33,40 @@ export class MyRequestsComponent implements OnInit {
       next: (user) => {
         this.userRole = user.role;
 
-        if (user.role === 'soldier') {
-          this.aidRequestService.getRequestsBySoldier(user.id).subscribe({
-            next: data => this.requests = data,
-            error: err => console.error('Не вдалося завантажити запити військового', err)
-          });
-        } else if (user.role === 'volunteer') {
-          this.aidRequestService.getRequestsByVolunteer(user.id).subscribe({
-            next: data => this.requests = data,
-            error: err => console.error('Не вдалося завантажити запити волонтера', err)
-          });
-        }
+        const requestLoad = user.role === 'soldier'
+          ? this.aidRequestService.getRequestsBySoldier(user.id)
+          : this.aidRequestService.getRequestsByVolunteer(user.id);
+
+        requestLoad.subscribe({
+          next: data => {
+            this.requests = data;
+            if (user.role === 'soldier') this.loadVolunteers();
+            else this.loadSoldiers();
+          },
+          error: err => console.error('Не вдалося завантажити запити', err)
+        });
       },
-      error: err => {
-        console.error('Не вдалося отримати користувача', err);
-      }
+      error: err => console.error('Не вдалося отримати користувача', err)
+    });
+  }
+
+  loadVolunteers(): void {
+    const ids = [...new Set(this.requests.map(r => r.volunteer_id).filter(Boolean))];
+    ids.forEach(id => {
+      this.http.get(`http://127.0.0.1:8000/api/v1/volunteers/${id}`).subscribe({
+        next: (volunteer: any) => this.volunteerMap[id] = volunteer,
+        error: err => console.error(`Не вдалося завантажити волонтера з ID ${id}`, err)
+      });
+    });
+  }
+
+  loadSoldiers(): void {
+    const ids = [...new Set(this.requests.map(r => r.soldier_id).filter(Boolean))];
+    ids.forEach(id => {
+      this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/${id}`).subscribe({
+        next: (soldier: any) => this.soldierMap[id] = soldier,
+        error: err => console.error(`Не вдалося завантажити військового з ID ${id}`, err)
+      });
     });
   }
 }
