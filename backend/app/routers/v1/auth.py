@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from app.schemas import SoldierSchemaIn, VolunteerSchemaIn
 from app.services import SoldierService, VolunteerService, get_soldier_service, get_volunteer_service
-from app.auth import get_password_hash, authenticate_soldier, create_access_token, verify_password
+from app.auth import get_password_hash, authenticate_soldier, create_access_token, verify_password, authenticate_volunteer
 from app.repository.volunteer_repository import get_volunteer_repository
 from app.models.volunteer import Volunteer
 from app.auth import get_current_volunteer, get_current_soldier, get_current_user_from_token
@@ -40,10 +40,10 @@ async def login_soldier(
 async def login_volunteer(
     username: str = Form(...),
     password: str = Form(...),
-    volunteer_repo = Depends(get_volunteer_repository),
+    volunteer_service: VolunteerService = Depends(get_volunteer_service),
 ):
-    volunteer: Volunteer | None = await volunteer_repo.find_by_email(username)
-    if not volunteer or not await verify_password(password, volunteer.password):
+    volunteer = await authenticate_volunteer(username, password, volunteer_service)
+    if not volunteer:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
     token = await create_access_token({"sub": volunteer.email})

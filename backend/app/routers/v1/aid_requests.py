@@ -87,7 +87,10 @@ async def create(
     if image:
         os.makedirs("uploads/aid_requests", exist_ok=True)
         image_name = image.filename
-        image_path = f"static/aid_requests/{image.filename}"
+        image_dir = "static/aid_requests"
+        os.makedirs(image_dir, exist_ok=True)
+
+        image_path = os.path.join(image_dir, image.filename)
         with open(image_path, "wb") as f:
             shutil.copyfileobj(image.file, f)
 
@@ -149,6 +152,5 @@ async def get_by_id(
 async def get_image(filename: str):
     file_path = os.path.join("uploads", "aid_requests", filename)
     if not os.path.exists(file_path):
-        logging.log(file_path)
         raise HTTPException(status_code=404, detail="Image not found")
     return FileResponse(file_path)

@@ -12,6 +12,7 @@ from app.schemas.auth import TokenData
 from app.services import SoldierService
 
 from app.services.soldier_service import get_soldier_service
+from app.services.volunteer_service import VolunteerService, get_volunteer_service
 from app.utils import MissingEnviromentVariableError
 
 from app.models.volunteer import Volunteer
@@ -34,8 +35,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = 20
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
-
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 async def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
@@ -58,6 +58,18 @@ async def authenticate_soldier(
         return False
     return soldier
 
+
+async def authenticate_volunteer(
+    username: str,
+    password: str,
+    volunteer_service: VolunteerService,
+) -> Volunteer | Literal[False]:
+    volunteer: Volunteer | None = await volunteer_service.find_by_email(username)
+    if not volunteer:
+        return False
+    if not await verify_password(password, volunteer.password):
+        return False
+    return volunteer
 
 async def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -99,6 +111,7 @@ async def get_current_volunteer(
     token: str = Depends(oauth2_scheme),
     volunteer_repo: VolunteerRepository = Depends(get_volunteer_repository),
 ) -> Volunteer:
+    print(f"TOKEN: {token}")
     auth_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not verify credentials",

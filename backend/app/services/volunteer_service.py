@@ -17,7 +17,7 @@ class VolunteerService:
         data_dict = data.model_dump()
         data_dict["password"] = await get_password_hash(data_dict["password"])
         entity = Volunteer(**data_dict)
-        return await self.__repository.create(entity)
+        return await self.__repo.create(entity)
 
     async def get_by_id(self, volunteer_id: int) -> Volunteer | None:
         result = await self.__repo.find_by_condition(Volunteer.id == volunteer_id)
@@ -48,13 +48,13 @@ class VolunteerService:
             return result.scalar()
 
     async def delete(self, volunteer_id: int) -> None:
-        result = await self.__repository.find_by_condition(Volunteer.id == volunteer_id)
+        result = await self.__repo.find_by_condition(Volunteer.id == volunteer_id)
         entity = next(iter(result), None)
         if entity:
-            await self.__repository.delete(entity)
+            await self.__repo.delete(entity)
 
     async def update_me(self, volunteer_id: int, data: VolunteerUpdateSchema) -> VolunteerSchema:
-        volunteer_list = await self.__repository.find_by_condition(Volunteer.id == volunteer_id)
+        volunteer_list = await self.__repo.find_by_condition(Volunteer.id == volunteer_id)
         volunteer = next(iter(volunteer_list), None)
         if not volunteer:
             raise HTTPException(status_code=404, detail="Volunteer not found")
@@ -69,7 +69,7 @@ class VolunteerService:
             if hasattr(volunteer, key):
                 setattr(volunteer, key, value)
 
-        await self.__repository.update(
+        await self.__repo.update(
             condition=(Volunteer.id == volunteer.id),
             **update_data
         )
@@ -77,16 +77,21 @@ class VolunteerService:
         return VolunteerSchema.model_validate(volunteer)
 
     async def change_password(self, email: str, old_pass: str, new_pass: str):
-        result = await self.__repository.find_by_condition(Volunteer.email == email)
+        result = await self.__repo.find_by_condition(Volunteer.email == email)
         user = next(iter(result), None)
         if not user or not await verify_password(old_pass, user.password):
             raise HTTPException(status_code=403, detail="Incorrect password")
 
         user.password = await get_password_hash(new_pass)
-        await self.__repository.update(
+        await self.__repo.update(
             condition=(Volunteer.id == user.id),
             password=user.password
         )
+
+    async def find_by_email(self, email: str) -> Volunteer | None:
+        volunteers = await self.__repo.find_by_condition(Volunteer.email == email)
+        return volunteers[0] if volunteers else None
+
 
 async def get_volunteer_service(
     repo: VolunteerRepository = Depends(get_volunteer_repository),

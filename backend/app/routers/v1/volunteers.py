@@ -5,6 +5,13 @@ from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchem
 
 router = APIRouter(prefix="/volunteers", tags=["volunteers"])
 
+@router.get("/me", response_model=VolunteerSchemaOut)
+async def get_me(
+    service: VolunteerService = Depends(get_volunteer_service),
+    user=Depends(get_current_volunteer),
+):
+    return await service.get_by_id(user.id)
+
 @router.get("/{volunteer_id}")
 async def get_one(
     volunteer_id: int,
@@ -16,14 +23,6 @@ async def get_one(
     if volunteer is None:
         raise HTTPException(status_code=404, detail="Volunteer not found")
     return volunteer
-
-
-@router.get("/me", response_model=VolunteerSchemaOut)
-async def get_me(
-    service: VolunteerService = Depends(get_volunteer_service),
-    user=Depends(get_current_volunteer),
-):
-    return await service.get_by_id(user.id)
 
 @router.delete("/me")
 async def delete(
