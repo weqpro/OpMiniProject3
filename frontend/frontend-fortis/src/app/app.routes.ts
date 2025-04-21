@@ -23,6 +23,8 @@ import {
 import {
   VolunteerProfileEditComponent
 } from './pages/profile/volunteer-profile/volunteer-profile-edit/volunteer-profile-edit.component';
+import { RequestDetailsComponent } from './pages/request-details/request-details.component';
+
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'soldier-home', component: SoldierHomeComponent },
@@ -40,5 +42,6 @@ export const routes: Routes = [
   {path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
   {path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent},
   {path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
-  {path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent}
+  {path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent},
+  { path: 'requests/:id', component: RequestDetailsComponent },
 ];
