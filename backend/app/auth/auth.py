@@ -44,6 +44,8 @@ async def verify_password(plain_password: str, hashed_password: str) -> bool:
 async def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
+def is_password_valid(password: str) -> bool:
+    return len(password) >= 8
 
 async def authenticate_soldier(
     username: str,
@@ -51,6 +53,9 @@ async def authenticate_soldier(
     soldier_service: SoldierService,
 ) -> Soldier | Literal[False]:
     """In our case the username is email"""
+    if not is_password_valid(password):
+        return False
+
     soldier: Soldier | None = await soldier_service.get_with_email(username)
     if not soldier:
         return False
@@ -64,6 +69,9 @@ async def authenticate_volunteer(
     password: str,
     volunteer_service: VolunteerService,
 ) -> Volunteer | Literal[False]:
+    if not is_password_valid(password):
+        return False
+
     volunteer: Volunteer | None = await volunteer_service.find_by_email(username)
     if not volunteer:
         return False
