@@ -1,10 +1,11 @@
 from fastapi import HTTPException, Depends
-from app.models import Review, AidRequest
+from app.models import Review, AidRequest, Volunteer
 from app.utils import AidRequestStatus
 from app.schemas import ReviewCreate, ReviewOut
 from app.repository import ReviewRepository, get_review_repository, AidRequestRepository
 from app.repository import get_review_repository, get_aid_request_repository
 from app.repository.repository_context import get_repository_context
+from sqlalchemy import func
 
 class ReviewService:
     def __init__(self, repo: ReviewRepository, session_maker, requestRepo: AidRequestRepository) -> None:
@@ -35,7 +36,27 @@ class ReviewService:
             request_id=request.id
         )
         await self.__repo.create(review)
+
+        avg_rating = await self._get_average_rating(review.volunteer_id)
+        await self._update_volunteer_rating(review.volunteer_id, avg_rating)
+
         return review
+
+    async def _get_average_rating(self, volunteer_id: int) -> float:
+        async with self.__session_maker() as session:
+            result = await session.execute(
+                func.avg(Review.rating).select().where(Review.volunteer_id == volunteer_id)
+            )
+            return result.scalar() or 0.0
+
+    async def _update_volunteer_rating(self, volunteer_id: int, rating: float):
+        async with self.__session_maker() as session:
+            result = await session.execute(
+                Volunteer.__table__.update()
+                .where(Volunteer.id == volunteer_id)
+                .values(rating=rating)
+            )
+            await session.commit()
 
 async def get_review_service(
     review_repo: ReviewRepository = Depends(get_review_repository),
@@ -43,3 +64,5 @@ async def get_review_service(
     context = Depends(get_repository_context),
 ) -> ReviewService:
     return ReviewService(review_repo, context.session_maker, request_repo)
+
+
