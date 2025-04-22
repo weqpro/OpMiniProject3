@@ -6,7 +6,7 @@ class SoldierSchemaIn(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    password: str
+    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
     phone_number: constr(pattern=r'^\+380\d{9}$')
     unit: str
     subsubunit: str
@@ -26,12 +26,12 @@ class SoldierUpdateSchema(BaseModel):
     unit: Optional[str] = None
     subsubunit: Optional[str] = None
     battalion: Optional[str] = None
-    password: str
+    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
 
     class Config:
         arbitrary_types_allowed = True
         from_attributes = True
 
 class ChangePasswordSchema(BaseModel):
-    current_password: str
-    new_password: str
+    current_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+    new_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')

@@ -7,14 +7,14 @@ class VolunteerSchemaIn(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    password: str
+    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
     phone_number: constr(pattern=r'^\+380\d{9}$')
 
 class VolunteerUpdateSchema(BaseModel):
     name: Optional[str] = None
     surname: Optional[str] = None
     phone_number: Optional[constr(pattern=r'^\+380\d{9}$')] = None
-    password: str
+    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
 
     class Config:
         from_attributes = True
@@ -37,5 +37,5 @@ class VolunteerSchema(VolunteerSchemaIn):
         from_attributes = True
 
 class ChangePasswordSchema(BaseModel):
-    current_password: str
-    new_password: str
+    current_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+    new_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
