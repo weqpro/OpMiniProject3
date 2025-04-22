@@ -105,11 +105,11 @@ export class AidRequestService {
   }
 
   getById(id: number): Observable<AidRequest> {
-    return this.http.get<AidRequest>(`${this.apiUrl}/aid_requests/${id}`);
+    return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
   }
   
   assignToVolunteer(requestId: number, volunteerId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/aid_requests/${requestId}/assign`, {
+    return this.http.post<void>(`${this.apiUrl}/${requestId}/assign`, {
       volunteer_id: volunteerId
     });
   }

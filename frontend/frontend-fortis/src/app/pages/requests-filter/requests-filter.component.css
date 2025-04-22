@@ -232,3 +232,10 @@ html, body {
 .footer {
   box-sizing: border-box;
 }
+
+.request-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}

@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
-import {SoldierService} from '../../../../services/soldier.service';
+import { SoldierService } from '../../../../services/soldier.service';
 
 @Component({
   selector: 'app-soldier-profile-edit',
@@ -38,6 +38,7 @@ export class SoldierProfileEditComponent implements OnInit {
   profileForm!: FormGroup;
   showSearch = false;
   searchQuery = '';
+  originalData: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -47,20 +48,33 @@ export class SoldierProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: [''],
+      name: [''],
+      surname: [''],
+      phone_number: [''],
       unit: [''],
-      subunit: ['']
+      subsubunit: [''],
+      battalion: [''],
+      password: ['', Validators.required]  // current password for confirmation
     });
 
     this.loadProfile();
   }
+  profileData: any = null;
+  // profileData = {
+  //   name: 'Андрій',
+  //   surname: 'Шевченко',
+  //   email: 'andrii.shevchenko@army.ua',
+  //   phone_number: '+380671234567',
+  //   unit: '80-та окрема десантно-штурмова бригада',
+  //   subsubunit: '2-й взвод',
+  //   battalion: '3-й батальйон',
+  //   description:'oaoa'
+  // };
 
   loadProfile() {
     this.soldierService.getProfile().subscribe({
       next: (data) => {
-        this.profileForm.patchValue(data);
+        this.profileData = data;
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -68,16 +82,39 @@ export class SoldierProfileEditComponent implements OnInit {
     });
   }
 
+  // loadProfile() {
+  //   this.soldierService.getProfile().subscribe({
+  //     next: (data) => {
+  //       this.originalData = data;
+  //       this.profileForm.patchValue({
+  //         name: data.name,
+  //         surname: data.surname,
+  //         phone_number: data.phone_number,
+  //         unit: data.unit,
+  //         subsubunit: data.subsubunit,
+  //         battalion: data.battalion
+  //       });
+  //     },
+  //     error: (err) => {
+  //       console.error('Помилка завантаження профілю:', err);
+  //     }
+  //   });
+  // }
+
   onSubmit() {
-    if (this.profileForm.valid) {
-      this.soldierService.updateProfile(this.profileForm.value).subscribe({
-        next: () => alert('Профіль оновлено'),
-        error: (err) => {
-          console.error('Помилка оновлення:', err);
-          alert('Не вдалося оновити профіль');
-        }
-      });
-    }
+
+    const formData = this.profileForm.value;
+
+    this.soldierService.updateProfile(formData).subscribe({
+      next: () => {
+        alert('Профіль оновлено');
+        this.router.navigate(['/profile/soldier']);
+      },
+      error: (err) => {
+        console.error('Помилка оновлення:', err);
+        alert('Неправильний пароль або інша помилка');
+      }
+    });
   }
 
   toggleSearch() {
@@ -86,6 +123,6 @@ export class SoldierProfileEditComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
-    this.router.navigate(['/login']);
+    window.location.href = '/login';
   }
 }

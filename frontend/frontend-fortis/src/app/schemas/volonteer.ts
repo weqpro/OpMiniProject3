@@ -28,4 +28,3 @@ export class Volonteer{
     this.bio = bio;
   }
 }
-

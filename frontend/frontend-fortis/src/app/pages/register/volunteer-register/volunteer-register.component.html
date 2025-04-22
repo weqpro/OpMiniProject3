@@ -12,6 +12,7 @@
       <p class="subtitle">Я — волонтер</p>
 
       <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()">
+
         <mat-form-field appearance="fill" class="input-field">
           <mat-label>Ім’я</mat-label>
           <input matInput formControlName="name" />
@@ -25,8 +26,10 @@
         <mat-form-field appearance="fill" class="input-field">
           <mat-label>Номер телефону</mat-label>
           <input matInput formControlName="phone_number" />
+          <mat-error *ngIf="volunteerForm.get('phone_number')?.hasError('pattern')">
+            Введіть номер телефону у форматі +380XXXXXXXXX
+          </mat-error>
         </mat-form-field>
-        
 
         <mat-form-field appearance="fill" class="input-field">
           <mat-label>Електронна пошта</mat-label>
@@ -41,7 +44,7 @@
         <button class="submit-button" type="submit">
           Зареєструватися
         </button>
-        
+
       </form>
 
       <button mat-button class="login-link" (click)="goToLogin()">Увійти</button>
@@ -82,5 +85,4 @@
       </div>
     </div>
   </footer>
-
 </div>

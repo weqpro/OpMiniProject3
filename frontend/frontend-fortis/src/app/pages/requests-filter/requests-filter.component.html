@@ -92,7 +92,7 @@
 
     <div class="request-list">
       <div class="request-item" *ngFor="let r of requests" (click)="openDetails(r.id)">
-        <img [src]="r.image_path || 'assets/default.jpg'" class="request-img" />
+        <img [src]="'http://127.0.0.1:8000' + r.image" class="request-img" />
         <div class="info">
           <h3>{{ r.name }}</h3>
           <span class="location">{{ r.location }}</span>

@@ -29,8 +29,7 @@
       <hr class="divider" />
 
       <div class="request-card" *ngFor="let request of requests">
-        <img [src]="request.image_path || 'assets/default.jpg'" alt="Request image" class="request-image" />
-
+        <img class="request-img" [src]="'http://127.0.0.1:8000' + request.image" />
         <div class="request-content">
           <h3 class="request-title">{{ request.name }}</h3>
           <p><strong>Статус</strong> — {{ request.status }}</p>

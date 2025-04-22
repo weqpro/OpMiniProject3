@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,7 +36,7 @@ import {VolonteerService} from '../../../services/volunteer.service';
 
   ]
 })
-export class VolunteerProfileComponent {
+export class VolunteerProfileComponent implements OnInit {
 
 
   // profileData = {
@@ -56,12 +56,15 @@ export class VolunteerProfileComponent {
 
   ngOnInit(): void {
     this.volunteerService.getProfile().subscribe({
-      next: data => this.profileData = data,
-      error: err => {
-        console.error('Не вдалося завантажити профіль волонтера:', err);
+      next: (data) => {
+        this.profileData = data;
+      },
+      error: (error) => {
+        console.error('Помилка при завантаженні профілю волонтера:', error);
       }
     });
   }
+  
   editProfile() {
     this.router.navigate(['app-volunteer-profile-edit']);
   }

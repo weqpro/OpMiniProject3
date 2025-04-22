@@ -33,12 +33,12 @@ export class VolunteerRegisterComponent {
     private volunteerService: VolonteerService
   ) {
     this.volunteerForm = this.fb.group({
-      surname: ['', Validators.required],
       name: ['', Validators.required],
-      phone_number: ['', Validators.required],
+      surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });    
+      password: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
+    });
   }
 
   onSubmit() {

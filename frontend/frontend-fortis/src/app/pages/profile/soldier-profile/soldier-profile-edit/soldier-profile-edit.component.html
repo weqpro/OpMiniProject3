@@ -23,19 +23,28 @@
     </div>
   </div>
   
-  
   <div class="page-wrapper">
     <mat-tab-group>
       <mat-tab label="Про себе">
         <div class="profile-wrapper">
-          <div class="profile-header" style="display: flex; align-items: flex-start; gap: 16px;">
-            <button mat-icon-button disabled style="transform: scale(2); margin-top: 4px;">
-              <mat-icon>account_circle</mat-icon>
-            </button>
-            <div>
-              <h2>Ім’я Прізвище</h2>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>person</mat-icon> Ім’я та прізвище
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px;">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Ім’я</mat-label>
+                <input matInput name="name" [value]="profileData?.name" />
+              </mat-form-field>
+  
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Прізвище</mat-label>
+                <input matInput name="surname" [value]="profileData?.surname" />
+              </mat-form-field>
             </div>
-          </div>
+          </mat-expansion-panel>
   
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -45,7 +54,7 @@
             </mat-expansion-panel-header>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Номер телефону</mat-label>
-              <input matInput placeholder="+380 ___ ___ ___" />
+              <input matInput [value]="profileData?.phone_number" placeholder="+380 ___ ___ ___" />
             </mat-form-field>
           </mat-expansion-panel>
   
@@ -57,9 +66,25 @@
             </mat-expansion-panel-header>
             <mat-form-field appearance="fill" class="full-width">
               <mat-label>Ваш опис</mat-label>
-              <textarea matInput placeholder="Опишіть себе, досвід, обов’язки..."></textarea>
+              <textarea matInput placeholder="Опишіть себе" [value]="profileData?.description"></textarea>
             </mat-form-field>
           </mat-expansion-panel>
+  
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>lock</mat-icon> Підтвердження паролем
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Поточний пароль</mat-label>
+              <input matInput type="password" name="password" required />
+            </mat-form-field>
+          </mat-expansion-panel>
+  
+          <div style=" text-align: center; width: 100%">
+            <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
+          </div>
         </div>
       </mat-tab>
   
@@ -72,73 +97,36 @@
             <div class="confirmation-fields">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Підрозділ</mat-label>
-                <input matInput placeholder="Введіть підрозділ" />
+                <input matInput [value]="profileData?.unit" placeholder="Введіть підрозділ" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Військова частина</mat-label>
-                <input matInput placeholder="Введіть номер частини" />
+                <input matInput [value]="profileData?.subsubunit" placeholder="Введіть номер частини" />
               </mat-form-field>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Батальйон</mat-label>
-                <input matInput placeholder="Введіть батальйон" />
+                <input matInput [value]="profileData?.battalion" placeholder="Введіть батальйон" />
               </mat-form-field>
             </div>
           </mat-expansion-panel>
   
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
+              <mat-panel-title>
+                <mat-icon>lock</mat-icon> Підтвердження паролем
+              </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Електронна адреса</mat-label>
-              <input matInput placeholder="example@email.com" />
+              <mat-label>Поточний пароль</mat-label>
+              <input matInput type="password" name="password" required />
             </mat-form-field>
           </mat-expansion-panel>
-  
   
           <div style=" text-align: center; width: 100%">
             <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
           </div>
         </div>
-  
-  
       </mat-tab>
-  
     </mat-tab-group>
   </div>
-  
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-left">
-        <a routerLink="/requests-filter">
-          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
-        </a>
-      </div>
-  
-      <div class="footer-center">
-        <div class="footer-links">
-          <a routerLink="/contacts">Контакти</a>
-        </div>
-  
-        <div class="footer-contacts">
-          <div class="contact-item">
-            <mat-icon>location_on</mat-icon>
-            <span>Lviv, Ukraine</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>email</mat-icon>
-            <span>foris&#64;gmail.com</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>call</mat-icon>
-            <span>+380 567 239 175</span>
-          </div>
-        </div>
-      </div>
-  
-      <div class="footer-right">
-        <p>Fortis © 2025 All rights reserved</p>
-      </div>
-    </div>
-  </footer>
   

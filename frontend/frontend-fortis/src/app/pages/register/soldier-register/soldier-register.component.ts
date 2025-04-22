@@ -36,7 +36,7 @@ export class SoldierRegisterComponent {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      phone_number: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
       unit: ['', Validators.required],
       subsubunit: ['', Validators.required],
       battalion: ['', Validators.required],
