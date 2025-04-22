@@ -111,7 +111,6 @@ async def get_current_volunteer(
     token: str = Depends(oauth2_scheme),
     volunteer_repo: VolunteerRepository = Depends(get_volunteer_repository),
 ) -> Volunteer:
-    print(f"TOKEN: {token}")
     auth_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not verify credentials",

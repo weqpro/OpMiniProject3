@@ -122,10 +122,11 @@ async def complete_aid_request(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_volunteer),
 ):
-    updated = await service.complete(request_id)
+    updated = await service.complete(request_id, volunteer_id=user.id)
     if updated is None:
-        raise HTTPException(status_code=404, detail="Aid request not found")
+        raise HTTPException(status_code=404, detail="Aid request not found or not allowed")
     return updated
+
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(

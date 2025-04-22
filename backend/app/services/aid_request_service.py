@@ -145,12 +145,19 @@ class AidRequestService:
             entity.image = f"/api/v1/aid_requests/uploads/{entity.image}"
         return entity
 
-    async def complete(self, request_id: int) -> AidRequest | None:
-        request = await self.__repository.get_by_id(request_id)
+    async def complete(self, request_id: int, volunteer_id: int) -> AidRequest | None:
+        result = await self.__repository.find_by_condition(
+            (AidRequest.id == request_id) &
+            (AidRequest.volunteer_id == volunteer_id) &
+            (AidRequest.status == AidRequestStatus.IN_PROGRESS.value)
+        )
+        request = next(iter(result), None)
+
         if not request:
             return None
+
         request.status = AidRequestStatus.COMPLETED.value
-        await self.__repository.update(request_id, request)
+        await self.__repository.update(condition=(AidRequest.id == request.id), status=request.status)
         return request
 
 
