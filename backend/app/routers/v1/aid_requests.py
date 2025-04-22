@@ -1,6 +1,4 @@
-import logging
-
-from fastapi import APIRouter, Depends, Query, HTTPException, Form, UploadFile, File, Depends
+from fastapi import APIRouter, Query, HTTPException, Form, UploadFile, File, Depends
 from app.schemas.aid_request import (
     AidRequestSchema,
     AidRequestSchemaIn,
@@ -13,7 +11,6 @@ from app.utils import AidRequestStatus
 from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
 from app.auth import get_current_soldier, get_current_volunteer, get_current_user_from_token
-from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse
 import os, shutil, json
 
@@ -87,7 +84,7 @@ async def create(
     if image:
         os.makedirs("uploads/aid_requests", exist_ok=True)
         image_name = image.filename
-        image_dir = "static/aid_requests"
+        image_dir = "uploads/aid_requests"
         os.makedirs(image_dir, exist_ok=True)
 
         image_path = os.path.join(image_dir, image.filename)

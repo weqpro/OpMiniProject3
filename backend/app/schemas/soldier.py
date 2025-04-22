@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, constr, Field
 from typing import Optional
 
 
@@ -6,7 +6,7 @@ class SoldierSchemaIn(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+    password: str = Field(..., min_length=8)
     phone_number: constr(pattern=r'^\+380\d{9}$')
     unit: str
     subsubunit: str
@@ -26,12 +26,12 @@ class SoldierUpdateSchema(BaseModel):
     unit: Optional[str] = None
     subsubunit: Optional[str] = None
     battalion: Optional[str] = None
-    password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+    password: str = Field(..., min_length=8)
 
     class Config:
         arbitrary_types_allowed = True
         from_attributes = True
 
 class ChangePasswordSchema(BaseModel):
-    current_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
-    new_password: constr(pattern=r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+    current_password: str = Field(..., min_length=8)
+    new_password: str = Field(..., min_length=8)

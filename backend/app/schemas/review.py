@@ -6,8 +6,7 @@ class ReviewBase(BaseModel):
     review_text: str
     rating: int = Field(..., ge=1, le=5)
     tags: List[str]
-    soldier_id: int
-    volunteer_id: int
+    request_id: int
 
 class ReviewCreate(ReviewBase):
     """
@@ -21,6 +20,7 @@ class ReviewOut(ReviewBase):
     """Schema for returning a review from the API."""
     id: int
     reported: bool
+
 
     class Config:
         orm_mode = True

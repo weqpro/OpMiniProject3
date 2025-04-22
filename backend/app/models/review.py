@@ -24,6 +24,7 @@ class Review(Base):
     tags: Mapped[List[str]] = mapped_column(ARRAY(String), nullable=True)
     soldier_id: Mapped[int] = mapped_column(ForeignKey("soldier.id"))
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"))
+    request_id: Mapped[int] = mapped_column(ForeignKey("aid_request.id"), unique=True)
 
     __table_args__ = (
         CheckConstraint('rating BETWEEN 1 AND 5', name='rating_range_check'),

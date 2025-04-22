@@ -1,6 +1,5 @@
 from collections.abc import Sequence
 from fastapi import Depends, HTTPException
-from sqlalchemy.sql.expression import ColumnExpressionArgument
 
 from app.models import Category
 from app.schemas import SearchOptionsSchema
@@ -94,7 +93,6 @@ class AidRequestService:
     ) -> AidRequest:
         aid_request_data = aid_request.model_dump()
         new_aid_request: AidRequest = AidRequest(
-
         soldier_id=soldier_id,
             status=AidRequestStatus.PENDING.value,
             **aid_request_data,
