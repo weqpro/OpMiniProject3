@@ -145,6 +145,14 @@ class AidRequestService:
             entity.image = f"/api/v1/aid_requests/uploads/{entity.image}"
         return entity
 
+    async def complete(self, request_id: int) -> AidRequest | None:
+        request = await self.__repository.get_by_id(request_id)
+        if not request:
+            return None
+        request.status = AidRequestStatus.COMPLETED.value
+        await self.__repository.update(request_id, request)
+        return request
+
 
 async def get_aid_request_service(
     aid_request_repository: AidRequestRepository = Depends(get_aid_request_repository),

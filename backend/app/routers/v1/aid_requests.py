@@ -116,6 +116,16 @@ async def assign_request_to_volunteer(
         raise HTTPException(status_code=404, detail="Request not found")
     return updated
 
+@router.post("/{request_id}/complete", response_model=AidRequestSchema)
+async def complete_aid_request(
+    request_id: int,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_volunteer),
+):
+    updated = await service.complete(request_id)
+    if updated is None:
+        raise HTTPException(status_code=404, detail="Aid request not found")
+    return updated
 
 @router.get("/", response_model=list[AidRequestSchema])
 async def get_all(
