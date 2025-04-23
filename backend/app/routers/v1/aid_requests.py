@@ -111,7 +111,7 @@ async def assign_request_to_volunteer(
         volunteer_id=user.id,
         status=AidRequestStatus.IN_PROGRESS.value
     )
-    updated = await service.update(request_id, data)
+    updated = await service.update_volunteer_assignment(request_id, data)
     if not updated:
         raise HTTPException(status_code=404, detail="Request not found")
     return updated

@@ -121,6 +121,24 @@ class AidRequestService:
         await self.__repository.update(condition=(AidRequest.id == entity.id), **data)
         return self._add_image_url(entity)
 
+    async def update_volunteer_assignment(self, request_id: int, data: AidRequestStatus) -> AidRequest | None:
+        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
+        entity: AidRequest | None = next(iter(result), None)
+
+        if not entity:
+            return None
+
+        entity.volunteer_id = data.volunteer_id
+        entity.status = data.status
+
+        await self.__repository.update(
+            condition=(AidRequest.id == request_id),
+            volunteer_id=data.volunteer_id,
+            status=data.status
+        )
+
+        return self._add_image_url(entity)
+
     async def get_by_volunteer(self, volunteer_id: int) -> Sequence[AidRequest]:
         result = await self.__repository.find_by_condition(AidRequest.volunteer_id == volunteer_id)
         return [self._add_image_url(r) for r in result]
