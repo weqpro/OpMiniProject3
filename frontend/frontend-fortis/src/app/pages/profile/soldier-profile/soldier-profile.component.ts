@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {AidRequestService} from '../../../services/aid-request.service';
+import {AidRequest} from '../../../schemas/aid-request';
 
 @Component({
   selector: 'app-soldier-profile',
@@ -37,17 +39,18 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
   ]
 })
 export class SoldierProfileComponent implements OnInit {
-  profileData: any = null;
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   unit: '80-та окрема десантно-штурмова бригада',
-  //   subsubunit: '2-й взвод',
-  //   battalion: '3-й батальйон',
-  //
-  // };
+  // profileData: any = null;
+  profileData = {
+    name: 'Андрій',
+    surname: 'Шевченко',
+    email: 'andrii.shevchenko@army.ua',
+    phone_number: '+380671234567',
+    unit: '80-та окрема десантно-штурмова бригада',
+    subsubunit: '2-й взвод',
+    battalion: '3-й батальйон',
+    description:'oaoa'
+  };
+  requests: AidRequest[] = [];
 
 
   profileForm!: FormGroup;
@@ -57,12 +60,21 @@ export class SoldierProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private soldierService: SoldierService,
+    private aidRequestService: AidRequestService,
     private router: Router
   ) {
   }
 
   ngOnInit(): void {
     this.loadProfile();
+    this.loadMyRequests();
+  }
+
+  loadMyRequests(): void {
+    this.aidRequestService.getAllRequests().subscribe({
+      next: data => this.requests = data,
+      error: err => console.error('Не вдалося завантажити запити', err)
+    });
   }
 
   loadProfile() {

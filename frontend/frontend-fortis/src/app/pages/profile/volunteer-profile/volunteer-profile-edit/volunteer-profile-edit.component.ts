@@ -56,14 +56,13 @@ export class VolunteerProfileEditComponent implements OnInit {
 
     this.loadProfile();
   }
-  profileData: any = null;
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   description:'oaoa'
-  // };
+  // profileData: any = null;
+  profileData = {
+    name: 'Андрій',
+    surname: 'Шевченко',
+    email: 'andrii.shevchenko@army.ua',
+    phone_number: '+380671234567',
+  };
   loadProfile() {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
@@ -97,5 +96,8 @@ export class VolunteerProfileEditComponent implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+  cancel(){
+    this.router.navigate(['profile/volunteer']);
   }
 }

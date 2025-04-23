@@ -59,17 +59,17 @@ export class SoldierProfileEditComponent implements OnInit {
 
     this.loadProfile();
   }
-  profileData: any = null;
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   unit: '80-та окрема десантно-штурмова бригада',
-  //   subsubunit: '2-й взвод',
-  //   battalion: '3-й батальйон',
-  //   description:'oaoa'
-  // };
+  // profileData: any = null;
+  profileData = {
+    name: 'Андрій',
+    surname: 'Шевченко',
+    email: 'andrii.shevchenko@army.ua',
+    phone_number: '+380671234567',
+    unit: '80-та окрема десантно-штурмова бригада',
+    subsubunit: '2-й взвод',
+    battalion: '3-й батальйон',
+    description:'oaoa'
+  };
 
   loadProfile() {
     this.soldierService.getProfile().subscribe({
@@ -121,8 +121,7 @@ export class SoldierProfileEditComponent implements OnInit {
     this.showSearch = !this.showSearch;
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+  cancel(){
+    this.router.navigate(['profile/soldier']);
   }
 }

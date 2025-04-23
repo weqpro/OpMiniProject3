@@ -13,6 +13,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import {Router, RouterModule} from '@angular/router';
 import {SoldierService} from '../../../services/soldier.service';
 import {VolonteerService} from '../../../services/volunteer.service';
+import {AidRequestService} from '../../../services/aid-request.service';
+import {AidRequest} from '../../../schemas/aid-request';
 
 
 @Component({
@@ -39,18 +41,19 @@ import {VolonteerService} from '../../../services/volunteer.service';
 export class VolunteerProfileComponent {
 
 
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   rating:4,
-  //   review:'good',
-  //   description:'oaoa'
-  // };
-  profileData: any = null;
+  profileData = {
+    name: 'Андрій',
+    surname: 'Шевченко',
+    email: 'andrii.shevchenko@army.ua',
+    phone_number: '+380671234567',
+    rating:4,
+    review:'good',
+    description:'oaoa'
+  };
+  // profileData: any = null;
+  requests: AidRequest[] = [];
   constructor(
-    private router: Router,private volunteerService: VolonteerService
+    private router: Router,private aidRequestService: AidRequestService,private volunteerService: VolonteerService
   ) {}
 
 
@@ -60,6 +63,15 @@ export class VolunteerProfileComponent {
       error: err => {
         console.error('Не вдалося завантажити профіль волонтера:', err);
       }
+    });
+    this.loadMyRequests();
+
+  }
+
+  loadMyRequests(): void {
+    this.aidRequestService.getAllRequests().subscribe({
+      next: data => this.requests = data,
+      error: err => console.error('Не вдалося завантажити запити', err)
     });
   }
   editProfile() {

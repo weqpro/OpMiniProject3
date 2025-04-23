@@ -8,7 +8,6 @@
     <button mat-icon-button>
       <mat-icon>search</mat-icon>
     </button>
-
     <button mat-icon-button [matMenuTriggerFor]="profileMenu">
       <mat-icon>account_circle</mat-icon>
     </button>
@@ -19,87 +18,37 @@
   </div>
 </div>
 
-<div class="page-wrapper" style="font-family: 'Montserrat', sans-serif; padding-top: 32px;">
+<div class="page-wrapper" *ngIf="profileData" style="font-family: 'Montserrat', sans-serif;">
   <mat-tab-group>
-    <mat-tab label="Про себе">
-      <div class="profile-wrapper">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>person</mat-icon> Ім’я та прізвище
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px;">
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Ім’я</mat-label>
-              <input matInput name="name" [value]="profileData?.name" />
-            </mat-form-field>
+    <mat-tab label="Мій профіль">
+      <div class="profile-wrapper" style="padding-top: 24px;">
+        <h2>Редагування профілю</h2>
 
-            <mat-form-field appearance="fill" class="full-width">
-              <mat-label>Прізвище</mat-label>
-              <input matInput name="surname" [value]="profileData?.surname" />
-            </mat-form-field>
-          </div>
-        </mat-expansion-panel>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Ім’я</mat-label>
+          <input matInput name="name" [value]="profileData?.name" />
+        </mat-form-field>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>phone</mat-icon> Номер телефону
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Номер телефону</mat-label>
-            <input matInput [value]="profileData?.phone_number" placeholder="+380 ___ ___ ___"  />
-          </mat-form-field>
-        </mat-expansion-panel>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Прізвище</mat-label>
+          <input matInput name="surname" [value]="profileData?.surname" />
+        </mat-form-field>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>info</mat-icon> Про себе
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Ваш опис</mat-label>
-            <textarea matInput placeholder="Опишіть себе" [value]="profileData?.description"></textarea>
-          </mat-form-field>
-        </mat-expansion-panel>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Номер телефону</mat-label>
+          <input matInput [readonly]="true" [value]="profileData.phone_number"/>
+        </mat-form-field>
+        <h3>Підтвердження паролю</h3>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Поточний пароль</mat-label>
+          <input matInput type="password" name="password" required />
+        </mat-form-field>
 
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>lock</mat-icon> Підтвердження паролем
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Поточний пароль*</mat-label>
-            <input matInput type="password" name="password" [value]="profileForm.get('password')?.value" />
-          </mat-form-field>
-        </mat-expansion-panel>
 
-        <div style="text-align: center; width: 100%;">
-          <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
-        </div>
-      </div>
-    </mat-tab>
 
-    <mat-tab label="Налаштування">
-      <div class="profile-wrapper">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <mat-icon>lock</mat-icon> Підтвердження паролем
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Поточний пароль*</mat-label>
-            <input matInput type="password" name="password" [value]="profileForm.get('password')?.value" />
-          </mat-form-field>
-        </mat-expansion-panel>
-
-        <div style="text-align: center; width: 100%;">
-          <button mat-raised-button color="primary" (click)="onSubmit()" style="width: 95%">Зберегти зміни</button>
+        <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
+          <button mat-raised-button style="width: 100%; background-color: #3A7571; color: white" (click)="onSubmit()">Зберегти зміни</button>
+          <button mat-stroked-button style="width: 100%;  color: #3A7571" (click)="cancel()">Скасувати</button>
         </div>
       </div>
     </mat-tab>
@@ -113,12 +62,10 @@
         <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
       </a>
     </div>
-
     <div class="footer-center">
       <div class="footer-links">
         <a routerLink="/contacts">Контакти</a>
       </div>
-
       <div class="footer-contacts">
         <div class="contact-item">
           <mat-icon>location_on</mat-icon>
@@ -134,7 +81,6 @@
         </div>
       </div>
     </div>
-
     <div class="footer-right">
       <p>Fortis © 2025 All rights reserved</p>
     </div>
