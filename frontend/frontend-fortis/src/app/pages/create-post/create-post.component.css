@@ -18,7 +18,7 @@ mat-form-field {
 }
 
 .full-logo {
-  height: 48px;
+  height: 40px;
 }
 
 .header-button {
@@ -81,6 +81,7 @@ button[mat-raised-button] {
   font-size: 16px;
   border-radius: 6px;
   transition: background-color 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .publish-button:hover {
@@ -154,4 +155,63 @@ button[mat-raised-button] {
   white-space: nowrap;
   align-self: flex-end;
   margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+  }
+
+  .top-right {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-button {
+    margin: 6px 0;
+    font-size: 16px;
+  }
+
+  .form-wrapper {
+    padding: 20px;
+    margin: 20px 10px;
+    width: 90%;
+  }
+
+  .publish-button {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .image-preview img {
+    max-height: 150px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-left,
+  .footer-center {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-right {
+    margin-top: 20px;
+    align-self: center;
+  }
 }

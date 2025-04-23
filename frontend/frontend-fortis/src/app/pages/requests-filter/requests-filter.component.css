@@ -269,3 +269,70 @@ html, body {
   align-self: flex-end;
   margin-top: 16px;
 }
+
+@media (max-width: 768px) {
+  .top-bar {
+    padding: 8px 12px;
+    height: 40px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+  }
+
+  .full-logo {
+    height: 36px;
+  }
+
+  .top-right {
+    gap: 12px;
+  }
+
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .request-img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .popup-window {
+    padding: 16px;
+    min-width: auto;
+    width: 90%;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-logo {
+    width: 70px;
+  }
+}

@@ -8,7 +8,7 @@
 }
 
 .full-logo {
-  height: 32px;
+  height: 48px;
 }
 
 .top-bar {
@@ -74,6 +74,7 @@
   box-shadow: none;
   cursor: pointer;
   text-transform: none;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .login-link {
@@ -160,6 +161,10 @@
 @media (max-width: 480px) {
   .title {
     font-size: 24px;
+  }
+
+  .full-logo {
+    height: 36px;
   }
 
   .subtitle {
