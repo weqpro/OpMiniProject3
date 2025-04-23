@@ -35,9 +35,9 @@ export class VolunteerRegisterComponent {
     this.volunteerForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -46,7 +46,7 @@ export class VolunteerRegisterComponent {
       console.log(this.volunteerForm.value);
       this.volunteerService.create(this.volunteerForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/requests-filter']);
+          this.router.navigate(['/login']);
         },
         error: (err: any) => {
           console.error(err);

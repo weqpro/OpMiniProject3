@@ -32,15 +32,16 @@ export class SoldierRegisterComponent {
     private soldierService: SoldierService
   ) {
     this.soldierForm = this.fb.group({
-      surname: ['', Validators.required],
       name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      surname: ['', Validators.required],
       phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
-      unit: ['', Validators.required],
-      subsubunit: ['', Validators.required],
-      battalion: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      unit: [''],
+      subsubunit: [''],
+      battalion: ['']
     });
+    
   }
 
   onSubmit() {
@@ -48,7 +49,7 @@ export class SoldierRegisterComponent {
       console.log(this.soldierForm.value);
       this.soldierService.create(this.soldierForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/requests-filter']);
+          this.router.navigate(['/login']);
         },
         error: (err: any) => {
           console.error(err);

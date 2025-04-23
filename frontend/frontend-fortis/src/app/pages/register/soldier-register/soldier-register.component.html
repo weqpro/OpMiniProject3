@@ -32,16 +32,22 @@
       <mat-form-field appearance="fill" class="input-field">
         <mat-label>Електронна пошта</mat-label>
         <input matInput formControlName="email" />
+        <mat-error *ngIf="soldierForm.get('email')?.hasError('email')">
+          Введіть електронну адресу у форматі email&#64;domain.xx
+        </mat-error>        
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="input-field">
         <mat-label>Пароль</mat-label>
         <input matInput type="password" formControlName="password" />
+        <mat-error *ngIf="soldierForm.get('password')?.hasError('minlength')">
+          Пароль повинен містити щонайменше 8 символів
+        </mat-error>
       </mat-form-field>
 
       <div class="dual-inputs">
         <mat-form-field appearance="fill" class="input-half">
-          <mat-label>Частина</mat-label>
+          <mat-label>Військова частина</mat-label>
           <input matInput formControlName="unit" />
         </mat-form-field>
 
