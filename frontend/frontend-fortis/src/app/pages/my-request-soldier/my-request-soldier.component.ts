@@ -22,6 +22,15 @@ export class MyRequestsComponent implements OnInit {
   volunteerMap: { [key: number]: any } = {};
   soldierMap: { [key: number]: any } = {};
 
+  selectedSoldier: any = null;
+  popupVisible = false;
+
+  selectedVolunteer: any = null;
+  popupVolunteerVisible = false;
+
+  selectedRequest: any = null;
+  popupRequestVisible = false;
+
   constructor(
     private aidRequestService: AidRequestService,
     private authService: AuthService,
@@ -32,7 +41,6 @@ export class MyRequestsComponent implements OnInit {
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
         this.userRole = user.role;
-
         const requestLoad = user.role === 'soldier'
           ? this.aidRequestService.getRequestsBySoldier(user.id)
           : this.aidRequestService.getRequestsByVolunteer(user.id);
@@ -50,20 +58,23 @@ export class MyRequestsComponent implements OnInit {
     });
   }
 
-  selectedSoldier: any = null;
-  popupVisible = false;
-  selectedVolunteer: any = null;
-  popupVolunteerVisible = false;
+  showRequestPopup(request: any): void {
+    this.selectedRequest = request;
+    this.popupRequestVisible = true;
+  }
+
+  closeRequestPopup(): void {
+    this.popupRequestVisible = false;
+  }
 
   showVolunteerPopup(volunteerId: number): void {
     this.selectedVolunteer = this.volunteerMap[volunteerId];
     this.popupVolunteerVisible = true;
   }
-  
+
   closeVolunteerPopup(): void {
     this.popupVolunteerVisible = false;
   }
-  
 
   showSoldierPopup(soldierId: number): void {
     this.selectedSoldier = this.soldierMap[soldierId];
@@ -74,6 +85,35 @@ export class MyRequestsComponent implements OnInit {
     this.popupVisible = false;
   }
 
+  closePopupIfOutside(event: MouseEvent): void {
+    if (this.popupVisible) this.popupVisible = false;
+    if (this.popupVolunteerVisible) this.popupVolunteerVisible = false;
+    if (this.popupRequestVisible) this.popupRequestVisible = false;
+  }
+
+  markAsCompleted(requestId: number): void {
+    this.aidRequestService.completeRequest(requestId).subscribe({
+      next: () => {
+        this.authService.getCurrentUser().subscribe({
+          next: (user) => {
+            const reload$ = user.role === 'soldier'
+              ? this.aidRequestService.getRequestsBySoldier(user.id)
+              : this.aidRequestService.getRequestsByVolunteer(user.id);
+
+            reload$.subscribe({
+              next: (data) => {
+                this.requests = data;
+                if (user.role === 'soldier') this.loadVolunteers();
+                else this.loadSoldiers();
+              },
+              error: (err) => console.error('Помилка при оновленні запитів', err)
+            });
+          }
+        });
+      },
+      error: err => console.error('Помилка при завершенні запиту', err)
+    });
+  }
 
   loadVolunteers(): void {
     const ids = [...new Set(this.requests.map(r => r.volunteer_id).filter(Boolean))];
@@ -84,6 +124,23 @@ export class MyRequestsComponent implements OnInit {
       });
     });
   }
+
+  deleteRequest(requestId: number): void {
+    if (!confirm('Ви впевнені, що хочете видалити цей запит?')) {
+      return;
+    }
+  
+    this.aidRequestService.deleteRequest(requestId).subscribe({
+      next: () => {
+        this.requests = this.requests.filter(r => r.id !== requestId);
+      },
+      error: err => {
+        console.error('Помилка при видаленні запиту', err);
+        alert('Не вдалося видалити запит');
+      }
+    });
+  }
+  
 
   loadSoldiers(): void {
     const ids = [...new Set(this.requests.map(r => r.soldier_id).filter(Boolean))];

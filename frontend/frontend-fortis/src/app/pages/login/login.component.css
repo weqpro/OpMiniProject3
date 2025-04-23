@@ -6,7 +6,6 @@ html, body {
 }
 
 .page-container {
-  width: 100vw;
   overflow-x: hidden;
 }
 
@@ -15,7 +14,7 @@ html, body {
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat';
   margin: 0;
 }
 

@@ -113,5 +113,9 @@ export class AidRequestService {
       volunteer_id: volunteerId
     });
   }
+
+  completeRequest(id: number) {
+    return this.http.post(`${this.apiUrl}/${id}/complete`, null);
+  }
   
 }

@@ -34,35 +34,41 @@
           <h3 class="request-title">{{ request.name }}</h3>
           <p><strong>Статус</strong> — {{ request.status }}</p>
 
-          <div *ngIf="request.status === 'in_progress'">
-            <p *ngIf="userRole === 'soldier' && volunteerMap[request.volunteer_id]">
-              <strong>Волонтер:</strong>
-              <a class="action-link" (click)="showVolunteerPopup(request.volunteer_id)">Контактні дані</a>
-            </p>
-            
+          <ng-container *ngIf="request.status === 'in_progress' || request.status === 'completed'">
             <p *ngIf="userRole === 'volunteer' && soldierMap[request.soldier_id]">
-              <strong>Військовий: </strong>
-              <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані</a>
+              <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані військового</a>
             </p>
+            <p *ngIf="userRole === 'soldier' && volunteerMap[request.volunteer_id]">
+              <a class="action-link" (click)="showVolunteerPopup(request.volunteer_id)">Контактні дані волонтера</a>
+            </p>
+          </ng-container>
+
+          <div class="request-actions" *ngIf="userRole === 'soldier'">
+            <a class="action-link" *ngIf="request.status === 'pending'">Редагувати</a>
+            <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
+            <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review']">Залишити відгук</a>
           </div>
 
-          <div class="request-actions">
-            <ng-container *ngIf="userRole === 'soldier'">
-              <a class="action-link" *ngIf="userRole === 'soldier' && request.status === 'pending'">Редагувати</a>
-              <button mat-button color="accent" [routerLink]="['/review']" *ngIf="request.status === 'completed'">Залишити відгук</button>
-            </ng-container>
-
-            <ng-container *ngIf="userRole === 'volunteer'">
-              <a class="action-link" [routerLink]="['/requests', request.id]">Деталі запиту</a>
-            </ng-container>
+          <div class="request-actions" *ngIf="userRole === 'volunteer'">
+            <a class="action-link" (click)="showRequestPopup(request)">Деталі запиту</a>
           </div>
+
+          <button
+            *ngIf="userRole === 'volunteer' && request.status === 'in_progress'"
+            mat-raised-button
+            class="complete-button"
+            (click)="markAsCompleted(request.id)"
+          >
+            Позначити як виконано
+          </button>
         </div>
       </div>
     </div>
   </main>
 
-  <div class="popup-backdrop" *ngIf="popupVolunteerVisible">
-    <div class="popup-window">
+  <div class="popup-backdrop" *ngIf="popupVolunteerVisible" (click)="closePopupIfOutside($event)">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeVolunteerPopup()">×</button>
       <h3>Контактні дані волонтера</h3>
       <div *ngIf="selectedVolunteer">
         <p><strong>Ім’я:</strong> {{ selectedVolunteer.name }}</p>
@@ -70,13 +76,12 @@
         <p><strong>Телефон:</strong> {{ selectedVolunteer.phone_number }}</p>
         <p><strong>Email:</strong> {{ selectedVolunteer.email }}</p>
       </div>
-      <a class="action-link" (click)="closeVolunteerPopup()">Закрити</a>
     </div>
   </div>
-  
 
-  <div class="popup-backdrop" *ngIf="popupVisible">
-    <div class="popup-window">
+  <div class="popup-backdrop" *ngIf="popupVisible" (click)="closePopupIfOutside($event)">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closePopup()">×</button>
       <h3>Контактні дані військового</h3>
       <div *ngIf="selectedSoldier">
         <p><strong>Ім’я:</strong> {{ selectedSoldier.name }}</p>
@@ -84,10 +89,23 @@
         <p><strong>Телефон:</strong> {{ selectedSoldier.phone_number }}</p>
         <p><strong>Email:</strong> {{ selectedSoldier.email }}</p>
       </div>
-      <a class="action-link" (click)="closePopup()">Закрити</a>
     </div>
   </div>
-  
+
+  <div class="popup-backdrop" *ngIf="popupRequestVisible" (click)="closePopupIfOutside($event)">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeRequestPopup()">×</button>
+      <h3>Деталі запиту</h3>
+      <div *ngIf="selectedRequest">
+        <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" 
+             alt="Зображення запиту" class="popup-image" />
+        <p><strong>Назва:</strong> {{ selectedRequest.name }}</p>
+        <p><strong>Опис:</strong> {{ selectedRequest.description || '—' }}</p>
+        <p><strong>Локація:</strong> {{ selectedRequest.location || '—' }}</p>
+        <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
+      </div>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="footer-content">

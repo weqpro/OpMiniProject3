@@ -121,4 +121,38 @@ constructor(
       error: err => console.error('Помилка фільтрації', err)
     });
   }
+
+
+  selectedRequest: any = null;
+
+openRequestPopup(request: any): void {
+  this.selectedRequest = request;
+}
+
+closeRequestPopup(): void {
+  this.selectedRequest = null;
+}
+
+acceptRequest(): void {
+  if (!this.selectedRequest?.id) {
+    console.error('ID запиту не знайдено');
+    return;
+  }
+
+  this.authService.getCurrentUser().subscribe({
+    next: user => {
+      const volunteerId = user.id;
+      this.aidRequestService.assignToVolunteer(this.selectedRequest.id, volunteerId).subscribe({
+        next: () => {
+          alert('Ви погодились допомогти!');
+          this.closeRequestPopup(); // Закриває popup
+          this.loadUnassignedRequests(); // Оновлює список запитів
+        },
+        error: err => console.error('Помилка при підтвердженні', err)
+      });
+    },
+    error: err => console.error('Помилка автентифікації', err)
+  });
+}
+
 }

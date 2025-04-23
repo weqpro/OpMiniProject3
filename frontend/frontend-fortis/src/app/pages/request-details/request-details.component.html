@@ -2,8 +2,7 @@
     <h2>{{ request.name }}</h2>
     <p><strong>Опис:</strong> {{ request.description }}</p>
     <p><strong>Локація:</strong> {{ request.location }}</p>
-    <p><strong>Термін:</strong> {{ request.deadline | date }}</p>
-    <p><strong>Категорія:</strong> {{ request.category_id }}</p>
+    <p><strong>Крайній термін:</strong> {{ request.deadline | date: 'dd.MM.yyyy' }}</p>
   
     <button mat-raised-button color="primary" (click)="acceptRequest()">
       Погодитись допомогти

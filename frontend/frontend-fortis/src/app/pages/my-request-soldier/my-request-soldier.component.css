@@ -1,4 +1,3 @@
-
 html, body {
   height: 100%;
   margin: 0;
@@ -25,9 +24,10 @@ html, body {
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  height: 48px;
 }
 
-.top-left img.full-logo {
+.full-logo {
   height: 40px;
 }
 
@@ -67,9 +67,10 @@ html, body {
   border-radius: 8px;
   background-color: #fafafa;
   align-items: flex-start;
+  position: relative;
 }
 
-.request-image {
+.request-img {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -78,6 +79,7 @@ html, body {
 
 .request-content {
   flex: 1;
+  position: relative;
 }
 
 .request-title {
@@ -90,10 +92,70 @@ html, body {
   gap: 12px;
 }
 
+.popup-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.popup-window {
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  z-index: 1001;
+}
+
+.close-btn:hover {
+  color: black;
+}
+
+.top-bar {
+  background-color: transparent;
+}
+
+.complete-button {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background-color: #4d8076 !important;
+  color: white !important;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 18px;
+  text-transform: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.complete-button:hover {
+  background-color: #417267 !important;
+}
+
 .action-link {
+  cursor: pointer;
   color: #39736b;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s;
+}
+
+.action-link:hover {
+  text-decoration: underline;
 }
 
 .footer {
@@ -137,7 +199,6 @@ html, body {
   color: white;
   text-decoration: none;
   transition: color 0.3s;
-  cursor: pointer;
 }
 
 .footer-links a:hover {
@@ -165,7 +226,6 @@ html, body {
   margin-top: 16px;
 }
 
-
 .popup-backdrop {
   position: fixed;
   top: 0;
@@ -185,31 +245,5 @@ html, body {
   border-radius: 8px;
   width: 300px;
   max-width: 90%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-
-.action-link {
-  cursor: pointer;
-  color: #39736b;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.action-link:hover {
-  text-decoration: underline;
-  color: #39736b;
-}
-
-.green-button {
-  background-color: #39736b !important;
-  color: white !important;
-}
-
-.request-img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-

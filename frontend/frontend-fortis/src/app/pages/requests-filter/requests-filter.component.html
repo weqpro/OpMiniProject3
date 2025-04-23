@@ -1,31 +1,3 @@
-<style>
-  .request-item {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    border-radius: 6px;
-  }
-
-  .request-item:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  }
-
-  .request-item h3 {
-    margin: 0;
-    color: #39736b;
-    transition: color 0.2s;
-  }
-
-  .request-item:hover h3 {
-    color: #2c5750;
-  }
-</style>
-
 <div class="page-container">
   <main class="content-wrap">
     <div class="top-bar">
@@ -35,29 +7,17 @@
         </a>
       </div>
       <div class="top-right">
-        <button
-          *ngIf="userRole === 'soldier'"
-          mat-raised-button
-          color="primary"
-          class="header-button"
-          routerLink="/create"
-        >
+        <button *ngIf="userRole === 'soldier'" mat-raised-button color="primary" class="header-button" routerLink="/create">
           Опублікувати оголошення
         </button>
         <button mat-icon-button [matMenuTriggerFor]="profileMenu">
           <mat-icon>account_circle</mat-icon>
         </button>
         <mat-menu #profileMenu="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'"
-          >
+          <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
             Мій профіль
           </button>
-          <button
-            mat-menu-item
-            [routerLink]="userRole === 'soldier' ? '/my-requests-soldier' : '/my-requests-soldier'"
-          >
+          <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/my-requests-soldier' : '/my-requests-soldier'">
             Мої запити
           </button>
         </mat-menu>
@@ -91,7 +51,7 @@
     <hr />
 
     <div class="request-list">
-      <div class="request-item" *ngFor="let r of requests" (click)="openDetails(r.id)">
+      <div class="request-item" *ngFor="let r of requests" (click)="openRequestPopup(r)">
         <img [src]="'http://127.0.0.1:8000' + r.image" class="request-img" />
         <div class="info">
           <h3>{{ r.name }}</h3>
@@ -100,6 +60,21 @@
       </div>
     </div>
   </main>
+
+  <div class="popup-backdrop" *ngIf="selectedRequest" (click)="closeRequestPopup()">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeRequestPopup()">&times;</button>
+      <h2>{{ selectedRequest.name }}</h2>
+      <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" 
+      alt="Зображення запиту" class="popup-image" />
+      <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
+      <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
+      <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
+      <button mat-raised-button class="complete-button" (click)="acceptRequest()">
+        Погодитись допомогти
+      </button>
+    </div>
+  </div>
 
   <footer class="footer">
     <div class="footer-content">
