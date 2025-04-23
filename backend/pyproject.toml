@@ -8,6 +8,7 @@ dependencies = [
   "sqlalchemy[asyncio]",
   "pyjwt",
   "passlib[bcrypt]",
+  "pydantic[email]",
   "python-multipart",
 ]
 requires-python = ">=3.12"
