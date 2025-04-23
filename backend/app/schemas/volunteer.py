@@ -1,4 +1,3 @@
-'''Volunteer schema module'''
 from typing import Optional
 from pydantic import BaseModel, EmailStr, constr, Field
 
@@ -25,7 +24,7 @@ class VolunteerSchemaOut(BaseModel):
     surname: str
     email: EmailStr
     phone_number: constr(pattern=r'^\+380\d{9}$')
-    rating: float = 0.0  # якщо хочеш
+    rating: float = 0.0
 
     class Config:
         from_attributes = True
