@@ -20,10 +20,12 @@ class VolunteerUpdateSchema(BaseModel):
         from_attributes = True
 
 class VolunteerSchemaOut(BaseModel):
-    name: Optional[str]
-    surname: Optional[str]
-    phone_number: Optional[constr(pattern=r'^\+380\d{9}$')]
+    id: int
+    name: str
+    surname: str
+    email: EmailStr
     phone_number: constr(pattern=r'^\+380\d{9}$')
+    rating: float = 0.0  # якщо хочеш
 
     class Config:
         from_attributes = True
