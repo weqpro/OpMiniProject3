@@ -123,10 +123,14 @@ class AidRequestService:
         return [self._add_image_url(r) for r in result]
 
     async def delete(self, request_id: int) -> None:
-        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
+        result = await self.__repository.find_by_condition(
+            (AidRequest.id == request_id) & (AidRequest.status == AidRequestStatus.PENDING.value)
+        )
         entity = next(iter(result), None)
-        if entity:
-            await self.__repository.delete(entity)
+        if not entity:
+            raise HTTPException(status_code=404, detail="Pending request not found")
+
+        await self.__repository.delete(entity)
 
     async def publish(self, request_id: int) -> AidRequest | None:
         result = await self.__repository.find_by_condition(AidRequest.id == request_id)
