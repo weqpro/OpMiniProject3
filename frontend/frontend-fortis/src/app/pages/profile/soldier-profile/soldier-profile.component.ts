@@ -51,6 +51,45 @@ export class SoldierProfileComponent implements OnInit {
   //   subsubunit: '2-й взвод',
   //   battalion: '3-й батальйон',
   // };
+  // requests: AidRequest[] = [
+  //   {
+  //     id: 1,
+  //     name: 'Бронежилети для взводу',
+  //     description: 'Потрібні 10 бронежилетів 4 класу захисту для щоденних бойових чергувань.',
+  //     image_path: '/static/images/armor.jpg',
+  //     endDate: new Date('2025-05-10'),
+  //     location: 'Бахмут',
+  //     status: 'in_progress',
+  //     soldier_id: 101,
+  //     volunteer_id: 201,
+  //     category_id: 1
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Тепловізори для нічного спостереження',
+  //     description: '2 тепловізори для нічних патрулів, бажано Pulsar або аналогічні.',
+  //     image_path: '/static/images/thermal.jpg',
+  //     endDate: new Date('2025-05-20'),
+  //     location: 'Краматорськ',
+  //     status: 'pending',
+  //     soldier_id: 101,
+  //     volunteer_id: 0,
+  //     category_id: 2
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Рації Motorola',
+  //     description: '5 комплектів Motorola DP1400 з зарядками.',
+  //     image_path: '/static/images/radios.jpg',
+  //     endDate: new Date('2025-06-01'),
+  //     location: 'Харків',
+  //     status: 'completed',
+  //     soldier_id: 101,
+  //     volunteer_id: 202,
+  //     category_id: 3
+  //   }
+  // ];
+
   requests: AidRequest[] = [];
   userRole: UserRole | null = null;
   volunteerMap: { [key: number]: any } = {};
