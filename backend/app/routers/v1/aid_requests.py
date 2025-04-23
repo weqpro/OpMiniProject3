@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException, Form, UploadFile, File, Depends
+from fastapi import APIRouter, Query, Depends
 from app.schemas.aid_request import (
     AidRequestSchema,
     AidRequestSchemaIn,
@@ -12,7 +12,10 @@ from app.schemas.search_options import SearchOptionsSchema
 from app.services.aid_request_service import AidRequestService, get_aid_request_service
 from app.auth import get_current_soldier, get_current_volunteer, get_current_user_from_token
 from fastapi.responses import FileResponse
-import os, shutil, json
+import os, shutil
+from fastapi import UploadFile, File, Form, HTTPException
+import json
+
 
 
 router = APIRouter(prefix="/aid_requests", tags=["aid_requests"])
@@ -139,16 +142,41 @@ async def update_request(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_soldier),
 ):
-    updated = await service.update(request_id, data)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Request not found")
-    return updated
+    return await service.update(request_id, soldier_id=user.id, data=data.model_dump(exclude_unset=True))
+
+@router.put("/{request_id}/with-image", response_model=AidRequestSchema)
+async def update_with_image(
+    request_id: int,
+    json_data: str = Form(...),
+    image: UploadFile | None = File(None),
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    try:
+        data_dict = json.loads(json_data)
+    except Exception:
+        raise HTTPException(422, detail="Invalid JSON string in form-data")
+
+    image_name = None
+    if image:
+        os.makedirs("uploads/aid_requests", exist_ok=True)
+        image_name = image.filename
+        path = os.path.join("uploads", "aid_requests", image_name)
+        with open(path, "wb") as f:
+            shutil.copyfileobj(image.file, f)
+
+    return await service.update(
+        request_id=request_id,
+        soldier_id=user.id,
+        data=data_dict,
+        image=image_name
+    )
 
 @router.get("/{request_id}", response_model=AidRequestSchema)
 async def get_by_id(
     request_id: int,
     service: AidRequestService = Depends(get_aid_request_service),
-    user=Depends(get_current_volunteer),
+    user=Depends(get_current_user_from_token),
 ):
     result = await service.get_by_id(request_id)
     if not result:

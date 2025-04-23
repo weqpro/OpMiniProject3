@@ -99,23 +99,26 @@ class AidRequestService:
         )
         return await self.__repository.create(new_aid_request)
 
-    async def update(self, request_id: int, data: AidRequestSchemaUpdate) -> AidRequest:
-        result = await self.__repository.find_by_condition(AidRequest.id == request_id)
+    async def update(self, request_id: int, soldier_id: int, data: dict, image: str | None = None) -> AidRequest:
+        result = await self.__repository.find_by_condition(
+            (AidRequest.id == request_id) & (AidRequest.soldier_id == soldier_id)
+        )
         entity: AidRequest | None = next(iter(result), None)
 
         if not entity:
             raise HTTPException(status_code=404, detail="Request not found")
 
-        update_data = data.model_dump(exclude_unset=True)
+        if not data and not image:
+            raise HTTPException(status_code=422, detail="Nothing to update")
 
-        for key, value in update_data.items():
+        if image:
+            data["image"] = image
+
+        for key, value in data.items():
             if hasattr(entity, key):
                 setattr(entity, key, value)
 
-        if "status" in update_data:
-            entity.status = update_data["status"]
-
-        await self.__repository.update(condition=(AidRequest.id == entity.id), **update_data)
+        await self.__repository.update(condition=(AidRequest.id == entity.id), **data)
         return self._add_image_url(entity)
 
     async def get_by_volunteer(self, volunteer_id: int) -> Sequence[AidRequest]:
