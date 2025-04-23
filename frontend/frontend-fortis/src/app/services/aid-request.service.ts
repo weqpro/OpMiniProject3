@@ -97,5 +97,7 @@ export class AidRequestService {
     }
     return this.http.get<AidRequest[]>(this.apiUrl, { params });
   }
-
+  completeRequest(id: number) {
+    return this.http.post(`${this.apiUrl}/${id}/complete`, null);
+  }
 }

@@ -72,33 +72,89 @@
     </mat-tab>
 
     <mat-tab label="Мої запити">
-      <div class="profile-wrapper">
-        <div class="container">
-          <h2 class="title">Мої запити</h2>
-          <hr class="divider" />
+      <div class="profile-wrapper" style="padding-top: 24px;">
+        <h2 class="title">Мої запити</h2>
+        <hr class="divider" />
 
-          <div class="request-card" *ngFor="let request of this.requests">
-            <img [src]="request.image_path" alt="Request image" class="request-image" />
+        <div class="request-card" *ngFor="let request of requests">
+          <img class="request-img" alt="request_img" [src]="'http://127.0.0.1:8000' + request.image_path" />
+          <div class="request-content">
+            <h3 class="request-title">{{ request.name }}</h3>
+            <p><strong>Статус</strong> — {{ request.status }}</p>
 
-            <div class="request-content">
-              <h3 class="request-title">{{ request.name }}</h3>
-              <p><strong>Статус</strong> — {{ request.status }}</p>
+            <ng-container *ngIf="request.status === 'in_progress' || request.status === 'completed'">
+              <p *ngIf="userRole === 'volunteer' && soldierMap[request.soldier_id]">
+                <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані військового</a>
+              </p>
+              <p *ngIf="userRole === 'soldier' && volunteerMap[request.volunteer_id]">
+                <a class="action-link" (click)="showVolunteerPopup(request.volunteer_id)">Контактні дані волонтера</a>
+              </p>
+            </ng-container>
 
-              <div class="request-actions">
-                  <button
-                    mat-button
-                    color="primary"
-                    *ngIf="request.status === 'Опубліковано'"
-                  >
-                    Редагувати
-                  </button>
-                  <button mat-button color="accent">Залишити відгук</button>
-              </div>
+            <div class="request-actions" *ngIf="userRole === 'soldier'">
+              <a class="action-link" *ngIf="request.status === 'pending'">Редагувати</a>
+              <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
+              <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review']">Залишити відгук</a>
             </div>
+
+            <div class="request-actions" *ngIf="userRole === 'volunteer'">
+              <a class="action-link" (click)="showRequestPopup(request)">Деталі запиту</a>
+            </div>
+
+            <button
+              *ngIf="userRole === 'volunteer' && request.status === 'in_progress'"
+              mat-raised-button
+              class="complete-button"
+              (click)="markAsCompleted(request.id)"
+            >
+              Позначити як виконано
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-backdrop" *ngIf="popupVolunteerVisible" (click)="closePopupIfOutside($event)">
+        <div class="popup-window" (click)="$event.stopPropagation()">
+          <button class="close-btn" (click)="closeVolunteerPopup()">×</button>
+          <h3>Контактні дані волонтера</h3>
+          <div *ngIf="selectedVolunteer">
+            <p><strong>Ім’я:</strong> {{ selectedVolunteer.name }}</p>
+            <p><strong>Прізвище:</strong> {{ selectedVolunteer.surname }}</p>
+            <p><strong>Телефон:</strong> {{ selectedVolunteer.phone_number }}</p>
+            <p><strong>Email:</strong> {{ selectedVolunteer.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-backdrop" *ngIf="popupVisible" (click)="closePopupIfOutside($event)">
+        <div class="popup-window" (click)="$event.stopPropagation()">
+          <button class="close-btn" (click)="closePopup()">×</button>
+          <h3>Контактні дані військового</h3>
+          <div *ngIf="selectedSoldier">
+            <p><strong>Ім’я:</strong> {{ selectedSoldier.name }}</p>
+            <p><strong>Прізвище:</strong> {{ selectedSoldier.surname }}</p>
+            <p><strong>Телефон:</strong> {{ selectedSoldier.phone_number }}</p>
+            <p><strong>Email:</strong> {{ selectedSoldier.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-backdrop" *ngIf="popupRequestVisible" (click)="closePopupIfOutside($event)">
+        <div class="popup-window" (click)="$event.stopPropagation()">
+          <button class="close-btn" (click)="closeRequestPopup()">×</button>
+          <h3>Деталі запиту</h3>
+          <div *ngIf="selectedRequest">
+            <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image"
+                 alt="Зображення запиту" class="popup-image" />
+            <p><strong>Назва:</strong> {{ selectedRequest.name }}</p>
+            <p><strong>Опис:</strong> {{ selectedRequest.description || '—' }}</p>
+            <p><strong>Локація:</strong> {{ selectedRequest.location || '—' }}</p>
+            <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
           </div>
         </div>
       </div>
     </mat-tab>
+
   </mat-tab-group>
 </div>
 

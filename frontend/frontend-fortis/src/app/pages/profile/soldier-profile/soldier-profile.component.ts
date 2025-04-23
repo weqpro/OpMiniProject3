@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {AidRequestService} from '../../../services/aid-request.service';
 import {AidRequest} from '../../../schemas/aid-request';
+import {AuthService, UserRole} from '../../../services/authentication.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-soldier-profile',
@@ -39,36 +41,69 @@ import {AidRequest} from '../../../schemas/aid-request';
   ]
 })
 export class SoldierProfileComponent implements OnInit {
-  // profileData: any = null;
-  profileData = {
-    name: 'Андрій',
-    surname: 'Шевченко',
-    email: 'andrii.shevchenko@army.ua',
-    phone_number: '+380671234567',
-    unit: '80-та окрема десантно-штурмова бригада',
-    subsubunit: '2-й взвод',
-    battalion: '3-й батальйон',
-    description:'oaoa'
-  };
+  profileData: any = null;
+  // profileData = {
+  //   name: 'Андрій',
+  //   surname: 'Шевченко',
+  //   email: 'andrii.shevchenko@army.ua',
+  //   phone_number: '+380671234567',
+  //   unit: '80-та окрема десантно-штурмова бригада',
+  //   subsubunit: '2-й взвод',
+  //   battalion: '3-й батальйон',
+  // };
   requests: AidRequest[] = [];
+  userRole: UserRole | null = null;
+  volunteerMap: { [key: number]: any } = {};
+  soldierMap: { [key: number]: any } = {};
 
+  selectedSoldier: any = null;
+  popupVisible = false;
+
+  selectedVolunteer: any = null;
+  popupVolunteerVisible = false;
+
+  selectedRequest: any = null;
+  popupRequestVisible = false;
 
   profileForm!: FormGroup;
   showSearch = false;
-  searchQuery = '';
 
   constructor(
     private fb: FormBuilder,
     private soldierService: SoldierService,
     private aidRequestService: AidRequestService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private http: HttpClient
   ) {
   }
+  //
+  // ngOnInit(): void {
+  //   this.loadProfile();
+  //   this.loadMyRequests();
+  // }
 
   ngOnInit(): void {
-    this.loadProfile();
-    this.loadMyRequests();
+    this.soldierService.getProfile().subscribe({
+      next: (profile) => {
+        this.profileData = profile;
+
+        this.aidRequestService.getRequestsBySoldier(profile.id).subscribe({
+          next: (requests) => {
+            this.requests = requests;
+            this.loadVolunteers();
+          },
+          error: (err) => {
+            console.error('Не вдалося завантажити запити солдата:', err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Не вдалося завантажити профіль солдата:', err);
+      }
+    });
   }
+
 
   loadMyRequests(): void {
     this.aidRequestService.getAllRequests().subscribe({
@@ -116,5 +151,99 @@ export class SoldierProfileComponent implements OnInit {
 
   changePassword() {
     this.router.navigate(['app-soldier-change-password']);
+  }
+
+  showRequestPopup(request: any): void {
+    this.selectedRequest = request;
+    this.popupRequestVisible = true;
+  }
+
+  closeRequestPopup(): void {
+    this.popupRequestVisible = false;
+  }
+
+  showVolunteerPopup(volunteerId: number): void {
+    this.selectedVolunteer = this.volunteerMap[volunteerId];
+    this.popupVolunteerVisible = true;
+  }
+
+  closeVolunteerPopup(): void {
+    this.popupVolunteerVisible = false;
+  }
+
+  showSoldierPopup(soldierId: number): void {
+    this.selectedSoldier = this.soldierMap[soldierId];
+    this.popupVisible = true;
+  }
+
+  closePopup(): void {
+    this.popupVisible = false;
+  }
+
+  closePopupIfOutside(event: MouseEvent): void {
+    if (this.popupVisible) this.popupVisible = false;
+    if (this.popupVolunteerVisible) this.popupVolunteerVisible = false;
+    if (this.popupRequestVisible) this.popupRequestVisible = false;
+  }
+
+  markAsCompleted(requestId: number): void {
+    this.aidRequestService.completeRequest(requestId).subscribe({
+      next: () => {
+        this.authService.getCurrentUser().subscribe({
+          next: (user) => {
+            const reload$ = user.role === 'soldier'
+              ? this.aidRequestService.getRequestsBySoldier(user.id)
+              : this.aidRequestService.getRequestsByVolunteer(user.id);
+
+            reload$.subscribe({
+              next: (data) => {
+                this.requests = data;
+                if (user.role === 'soldier') this.loadVolunteers();
+                else this.loadSoldiers();
+              },
+              error: (err) => console.error('Помилка при оновленні запитів', err)
+            });
+          }
+        });
+      },
+      error: err => console.error('Помилка при завершенні запиту', err)
+    });
+  }
+
+  loadVolunteers(): void {
+    const ids = [...new Set(this.requests.map(r => r.volunteer_id).filter(Boolean))];
+    ids.forEach(id => {
+      this.http.get(`http://127.0.0.1:8000/api/v1/volunteers/${id}`).subscribe({
+        next: (volunteer: any) => this.volunteerMap[id] = volunteer,
+        error: err => console.error(`Не вдалося завантажити волонтера з ID ${id}`, err)
+      });
+    });
+  }
+
+  deleteRequest(requestId: number): void {
+    if (!confirm('Ви впевнені, що хочете видалити цей запит?')) {
+      return;
+    }
+
+    this.aidRequestService.deleteRequest(requestId).subscribe({
+      next: () => {
+        this.requests = this.requests.filter(r => r.id !== requestId);
+      },
+      error: err => {
+        console.error('Помилка при видаленні запиту', err);
+        alert('Не вдалося видалити запит');
+      }
+    });
+  }
+
+
+  loadSoldiers(): void {
+    const ids = [...new Set(this.requests.map(r => r.soldier_id).filter(Boolean))];
+    ids.forEach(id => {
+      this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/soldier-info/${id}`).subscribe({
+        next: (soldier: any) => this.soldierMap[id] = soldier,
+        error: err => console.error(`Не вдалося завантажити військового з ID ${id}`, err)
+      });
+    });
   }
 }
