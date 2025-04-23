@@ -70,7 +70,7 @@
       <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
       <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
       <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
-      <button mat-raised-button class="complete-button" (click)="acceptRequest()">
+      <button *ngIf="userRole === 'volunteer'" mat-raised-button class="complete-button" (click)="acceptRequest()">
         Погодитись допомогти
       </button>
     </div>

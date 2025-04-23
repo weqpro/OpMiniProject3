@@ -24,6 +24,7 @@ import {
   VolunteerProfileEditComponent
 } from './pages/profile/volunteer-profile/volunteer-profile-edit/volunteer-profile-edit.component';
 import { RequestDetailsComponent } from './pages/request-details/request-details.component';
+import { EditRequestComponent } from './pages/edit-request/edit-request.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -44,4 +45,6 @@ export const routes: Routes = [
   {path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
   {path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent},
   { path: 'requests/:id', component: RequestDetailsComponent },
+  { path: 'edit-request/:id', component: EditRequestComponent }
+
 ];

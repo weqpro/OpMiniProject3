@@ -1,0 +1,68 @@
+<div class="top-bar">
+    <div class="top-left">
+      <a routerLink="/requests-filter">
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+      </a>
+    </div>
+    <div class="top-right">
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
+        <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+      </mat-menu>
+    </div>
+  </div>
+  
+  <main class="content-wrap">
+    <div class="form-wrapper">
+      <h2>Редагувати запит</h2>
+  
+      <form (ngSubmit)="saveChanges()">
+        <mat-form-field class="full-width">
+          <mat-label>Ваш запит</mat-label>
+          <input matInput [(ngModel)]="name" name="name" />
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-label>Опис</mat-label>
+          <textarea matInput [(ngModel)]="description" name="description"></textarea>
+        </mat-form-field>
+  
+        <div class="image-upload">
+            <button class="upload-button" type="button" (click)="triggerImageInput()">Змінити фото</button>
+            <input type="file" id="imageInput" accept="image/*" hidden (change)="onImageSelected($event)" />
+            <div class="image-preview" *ngIf="imagePreview">
+              <img [src]="imagePreview" alt="Прев'ю зображення" />
+            </div>
+          </div>
+          
+  
+        <mat-form-field class="full-width">
+          <mat-label>Локація</mat-label>
+          <mat-select [(ngModel)]="location" name="location">
+            <mat-option *ngFor="let city of cities" [value]="city">{{ city }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-label>Крайній термін</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="deadline" name="deadline" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-label>Категорія</mat-label>
+          <mat-select [(ngModel)]="category_id" name="category">
+            <mat-option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit">Зберегти зміни</button>
+        </div>
+      </form>
+    </div>
+  </main>
