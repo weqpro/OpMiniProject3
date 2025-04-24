@@ -54,17 +54,17 @@ class RepositoryBase[T]:
         """Gets objects with the specified ordering, and filtering."""
         async with self._session_maker() as session:
             stmt = (
-                select(self._model)
-                .where(condition)
-                .order_by(*order_by)
+                select(self._model).where(condition).order_by(*order_by)
                 #       .filter_by(**filter_by)
             )
             result = await session.execute(stmt)
             return result.scalars().all()
 
-    async def update(self, condition: ColumnExpressionArgument[bool], **values) -> None:
+    async def update(
+        self, condition: ColumnExpressionArgument[bool], **values
+    ) -> Sequence[T]:
         async with self._session_maker() as session:
             stmt = update(self._model).where(condition).values(**values)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
             await session.commit()
-            return
+            return result.scalars().all()

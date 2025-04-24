@@ -1,13 +1,18 @@
 from collections.abc import Callable
 from typing import override
 from contextlib import AbstractAsyncContextManager
+import asyncio
 
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.contracts.repository_base import RepositoryBase
-from app.models.category import Category
-from app.repository.repository_context import RepositoryContext, get_repository_context
+from app.contracts import RepositoryBase
+from app.models import Category
+from app.repository import RepositoryContext, get_repository_context
+from app.schemas import CategorySchema
+
+
+__CONFIGURATION: list[str] = ["Автозапчастини"]
 
 
 class CategoryRepository(RepositoryBase[Category]):

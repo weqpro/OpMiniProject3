@@ -18,5 +18,5 @@ class MissingEnviromentVariableError(Exception):
 
 class AidRequestStatus(Enum):
     PENDING = "pending"
-    IN_PROGRESS = "in_progres"
+    IN_PROGRESS = "in_progress"
     COMPLETED = "completed"

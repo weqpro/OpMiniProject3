@@ -14,5 +14,5 @@ class Category(Base):
     __tablename__ = "category"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
-    name: Mapped[str] = mapped_column(String(255))
+    name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     requests: Mapped[list[AidRequest]] = relationship(AidRequest)

@@ -3,4 +3,8 @@ backend/.venv/
 backend/build/
 backend/op_miniproject.egg-info/
 .idea/
+<<<<<<< HEAD
+=======
+**/.DS_Store
+>>>>>>> merging-search
 *.DS_Store

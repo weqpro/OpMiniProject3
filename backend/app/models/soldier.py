@@ -29,9 +29,9 @@ class Soldier(Base):
     unit: Mapped[str] = mapped_column(String(100), nullable=False)
     subsubunit: Mapped[str] = mapped_column(String(100), nullable=False)
     verified_until: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
+        DateTime(timezone=True), nullable=True
     )
-    # battalion: Mapped[str] = mapped_column(String(255))
+    battalion: Mapped[str] = mapped_column(String(255))
 
     requests: Mapped[list[AidRequest]] = relationship(
         AidRequest, cascade="all, delete-orphan"
