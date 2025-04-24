@@ -1,9 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.auth import get_current_volunteer, get_current_soldier
 from app.services import VolunteerService, get_volunteer_service
-from app.schemas import VolunteerSchema, VolunteerSchemaIn, VolunteerUpdateSchema, VolunteerSchemaOut, ChangePasswordSchema
+from app.schemas import (
+    VolunteerSchema,
+    VolunteerSchemaIn,
+    VolunteerUpdateSchema,
+    VolunteerSchemaOut,
+    ChangePasswordSchema,
+)
 
 router = APIRouter(prefix="/volunteers", tags=["volunteers"])
+
 
 @router.get("/me", response_model=VolunteerSchemaOut)
 async def get_me(
@@ -11,6 +18,7 @@ async def get_me(
     user=Depends(get_current_volunteer),
 ):
     return await service.get_by_id(user.id)
+
 
 @router.get("/{volunteer_id}")
 async def get_one(
@@ -23,6 +31,7 @@ async def get_one(
     if volunteer is None:
         raise HTTPException(status_code=404, detail="Volunteer not found")
     return volunteer
+
 
 @router.delete("/me")
 async def delete(
@@ -40,6 +49,7 @@ async def update_me(
     user=Depends(get_current_volunteer),
 ):
     return await service.update_me(user.id, data)
+
 
 @router.post("/change-password")
 async def change_password(

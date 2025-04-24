@@ -7,7 +7,7 @@ class SoldierSchemaIn(BaseModel):
     surname: str
     email: EmailStr
     password: str = Field(..., min_length=8)
-    phone_number: constr(pattern=r'^\+380\d{9}$')
+    phone_number: constr(pattern=r"^\+380\d{9}$")
     unit: str
     subsubunit: str
     battalion: str
@@ -19,10 +19,11 @@ class SoldierSchema(SoldierSchemaIn):
     class Config:
         from_attributes = True
 
+
 class SoldierUpdateSchema(BaseModel):
     name: Optional[str] = None
     surname: Optional[str] = None
-    phone_number: Optional[constr(pattern=r'^\+380\d{9}$')] = None
+    phone_number: Optional[constr(pattern=r"^\+380\d{9}$")] = None
     unit: Optional[str] = None
     subsubunit: Optional[str] = None
     battalion: Optional[str] = None
@@ -31,6 +32,7 @@ class SoldierUpdateSchema(BaseModel):
     class Config:
         arbitrary_types_allowed = True
         from_attributes = True
+
 
 class ChangePasswordSchema(BaseModel):
     current_password: str = Field(..., min_length=8)

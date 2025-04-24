@@ -32,8 +32,12 @@ class SoldierService:
         )
         return next(iter(result), None)
 
-    async def update_me(self, soldier_id: int, data: SoldierUpdateSchema) -> SoldierSchema:
-        soldier_list = await self.__repository.find_by_condition(Soldier.id == soldier_id)
+    async def update_me(
+        self, soldier_id: int, data: SoldierUpdateSchema
+    ) -> SoldierSchema:
+        soldier_list = await self.__repository.find_by_condition(
+            Soldier.id == soldier_id
+        )
         soldier = next(iter(soldier_list), None)
         if not soldier:
             raise HTTPException(status_code=404, detail="Soldier not found")
@@ -49,12 +53,10 @@ class SoldierService:
                 setattr(soldier, key, value)
 
         await self.__repository.update(
-            condition=(Soldier.id == soldier.id),
-            **update_data
+            condition=(Soldier.id == soldier.id), **update_data
         )
 
         return SoldierSchema.model_validate(soldier)
-
 
     async def change_password(self, email: str, old_pass: str, new_pass: str):
         user = await self.get_with_email(email)
@@ -63,8 +65,7 @@ class SoldierService:
 
         user.password = await get_password_hash(new_pass)
         await self.__repository.update(
-            condition=(Soldier.id == user.id),
-            password=user.password
+            condition=(Soldier.id == user.id), password=user.password
         )
 
     async def delete(self, soldier_id: int):
