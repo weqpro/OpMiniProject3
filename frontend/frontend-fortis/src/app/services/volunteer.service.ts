@@ -43,6 +43,6 @@ export class VolonteerService {
   }
 
   changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
-    return this.http.post('/api/v1/volunteers/change-password', payload);
+    return this.http.post(`${this.apiUrl}/change-password`, payload);
   }
 }

@@ -10,10 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
-import {Router, RouterModule} from '@angular/router';
-import {SoldierService} from '../../../services/soldier.service';
-import {VolonteerService} from '../../../services/volunteer.service';
+import { Router, RouterModule } from '@angular/router';
 
+import { VolonteerService } from '../../../services/volunteer.service';
+import { AidRequestService } from '../../../services/aid-request.service';
+import { ReviewService } from '../../../services/review.service';
+import { AidRequest } from '../../../schemas/aid-request';
+import { Review } from '../../../schemas/review';
 
 @Component({
   selector: 'app-volunteer-profile',
@@ -32,59 +35,63 @@ import {VolonteerService} from '../../../services/volunteer.service';
     MatButtonModule,
     FormsModule,
     MatMenuModule,
-    RouterModule,
-
+    RouterModule
   ]
 })
 export class VolunteerProfileComponent implements OnInit {
-
-
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   rating:4,
-  //   review:'good',
-  //   description:'oaoa'
-  // };
   profileData: any = null;
-  constructor(
-    private router: Router,private volunteerService: VolonteerService
-  ) {}
+  requests: AidRequest[] = [];
+  reviews: Review[] = [];
 
+  constructor(
+    private router: Router,
+    private aidRequestService: AidRequestService,
+    private volunteerService: VolonteerService,
+    private reviewService: ReviewService
+  ) {}
 
   ngOnInit(): void {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
         this.profileData = data;
+
+        if (data?.id) {
+          this.loadMyRequests(data.id);
+          this.loadReviews(data.id);
+        } else {
+          console.error('ID волонтера не знайдено. Неможливо завантажити дані.');
+        }
       },
-      error: (error) => {
-        console.error('Помилка при завантаженні профілю волонтера:', error);
-      }
+      error: (err) => console.error('Помилка завантаження профілю:', err)
     });
   }
-  
-  editProfile() {
+
+  loadMyRequests(volunteerId: number): void {
+    this.aidRequestService.getRequestsByVolunteer(volunteerId).subscribe({
+      next: (data) => this.requests = data,
+      error: (err) => console.error('Помилка завантаження запитів', err)
+    });
+  }
+
+  loadReviews(volunteerId: number): void {
+    this.reviewService.getReviewsByVolunteer(volunteerId).subscribe({
+      next: (data) => this.reviews = data,
+      error: (err) => console.error('Помилка завантаження відгуків', err)
+    });
+  }
+
+  editProfile(): void {
     this.router.navigate(['app-volunteer-profile-edit']);
   }
 
-  changePassword() {
+  changePassword(): void {
     this.router.navigate(['app-volunteer-change-password']);
   }
-  logout() {
-    localStorage.removeItem('token');
+
+  logout(): void {
+    localStorage.removeItem('access_token');
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
-
-  showSearch = false;
-  searchQuery = '';
-
-
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
-}
-
-
+  toggleSearch(): void {}
 }
