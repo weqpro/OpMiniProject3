@@ -13,7 +13,7 @@
 }
 
 .full-logo {
-  height: 40px;
+  height: 32px;
 }
 
 .register-container {
@@ -60,7 +60,6 @@
   box-shadow: none;
   text-transform: none;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .submit-button:hover {
@@ -156,10 +155,6 @@
 @media (max-width: 480px) {
   .title {
     font-size: 24px;
-  }
-
-  .full-logo {
-    height: 36px;
   }
 
   .subtitle {

@@ -29,7 +29,6 @@ body {
 
 .top-left img {
   width: 130px;
-  background-color: transparent !important;
 }
 
 .top-right {
@@ -102,7 +101,6 @@ body {
   font-size: 18px;
   height: 56px;
   border-radius: 6px;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .register-link {
@@ -188,7 +186,6 @@ body {
 @media (max-width: 768px) {
   .top-left img {
     width: 100px;
-    background-color: transparent !important;
   }
 
   .header-button {
