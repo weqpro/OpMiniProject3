@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="top-right">
-      <button mat-raised-button color="accent" class="header-button" routerLink="/create">
+      <button mat-button class="text-link-button" routerLink="/create">
         Опублікувати оголошення
       </button>
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
@@ -19,12 +19,13 @@
     </div>
   </div>
 
-
-  
-
   <div class="content-wrap" *ngIf="profileData">
-    <mat-tab-group class="montserrat-tabs">
-      <mat-tab label="Мій профіль">
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="label-text-font">Мій профіль</span>
+        </ng-template>
+
         <div class="profile-wrapper">
           <div class="profile-header">
             <button mat-icon-button disabled class="profile-icon">
@@ -79,10 +80,13 @@
         </div>
       </mat-tab>
 
-      <mat-tab label="Мої запити">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="label-text-font">Мої запити</span>
+        </ng-template>
+
         <div class="container">
           <hr class="divider" />
-
           <div class="request-card" *ngFor="let request of requests">
             <img [src]="'http://127.0.0.1:8000' + request.image" alt="Request image" class="request-img" />
             <div class="request-content">
@@ -94,12 +98,9 @@
               </p>
 
               <div class="request-actions">
-                <div class="request-actions">
-                  <a class="action-link" *ngIf="request.status === 'pending'" [routerLink]="['/edit-request', request.id]">Редагувати</a>
-                  <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
-                  <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review']">Залишити відгук</a>
-                </div>
-                
+                <a class="action-link" *ngIf="request.status === 'pending'" [routerLink]="['/edit-request', request.id]">Редагувати</a>
+                <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
+                <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review', request.id]">Залишити відгук</a>
               </div>
             </div>
           </div>
@@ -107,6 +108,7 @@
       </mat-tab>
     </mat-tab-group>
   </div>
+
   <div class="popup-backdrop" *ngIf="popupVolunteerVisible" (click)="closeVolunteerPopup()">
     <div class="popup-window" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeVolunteerPopup()">×</button>
@@ -120,7 +122,7 @@
       </div>
     </div>
   </div>
-  
+
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-left">

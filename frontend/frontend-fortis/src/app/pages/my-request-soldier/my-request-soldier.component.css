@@ -4,6 +4,24 @@ html, body {
   font-family: 'Montserrat', sans-serif;
 }
 
+.text-link-button {
+  background: none;
+  border: none;
+  color: #3A7571 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: none;
+  padding: 0;
+  min-width: unset;
+}
+
+.text-link-button:hover {
+  text-decoration: underline;
+}
+
+
 .page-container {
   display: flex;
   flex-direction: column;

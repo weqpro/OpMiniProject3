@@ -7,6 +7,23 @@
   background-color: #fafafa;
 }
 
+.login-link {
+  color: #39736b !important;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  background: none;
+  border: none;
+  text-transform: none;
+  cursor: pointer;
+  margin-top: 16px;
+  display: inline-block;
+}
+
+.login-link.mat-button {
+  color: #39736b !important;
+}
+
 .full-logo {
   height: 32px;
 }
@@ -76,12 +93,6 @@
   text-transform: none;
 }
 
-.login-link {
-  margin-top: 16px;
-  color: #2f6d64;
-  text-align: center;
-  font-size: 14px;
-}
 
   
 .footer {

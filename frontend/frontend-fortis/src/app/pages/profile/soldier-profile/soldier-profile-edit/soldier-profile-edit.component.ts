@@ -45,14 +45,15 @@ export class SoldierProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: [''],
-      surname: [''],
-      phone_number: [''],
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
       unit: [''],
       subsubunit: [''],
       battalion: [''],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    
 
     this.loadProfile();
   }

@@ -6,9 +6,40 @@ body {
 .top-bar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #f4f4f4;
-  padding: 8px 16px;
+  padding: 4px 16px;
+  height: 48px;
   border-bottom: 1px solid #ccc;
+}
+
+.auth-button {
+  font-size: 25px;
+  padding: 10px 24px;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+
+.text-link-button {
+  background: none;
+  border: none;
+  color: #3A7571 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: none;
+  padding: 0;
+  min-width: unset;
+}
+
+.text-link-button:hover {
+  text-decoration: underline;
+}
+.auth-button:hover {
+  background-color: #e0e0e0;
+  border-radius: 5px;
 }
 
 .icon {
@@ -47,14 +78,14 @@ body {
 }
 
 .green-button {
-  background-color: #39736b !important;
+  background-color: #3A7571 !important;
   color: white !important;
   width: fit-content;
 }
 
 .publish-button {
   align-self: center;
-  background-color: #39736b !important;
+  background-color: #3A7571 !important;
   color: white !important;
   padding: 10px 24px;
   font-size: 16px;
@@ -155,7 +186,8 @@ textarea[matInput] {
 
 .footer-links {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 8px;
   font-size: 16px;
 }
 
@@ -192,23 +224,23 @@ textarea[matInput] {
 }
 
 @media (max-width: 768px) {
+  .profile-wrapper {
+    padding: 20px;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    height: auto;
+    padding: 8px;
+  }
+
   .top-left img {
     width: 100px;
   }
 
-  .top-bar {
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-  }
-
   .top-right {
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .profile-wrapper {
-    padding: 24px 16px;
+    justify-content: center;
+    gap: 12px;
   }
 
   .footer-content {
@@ -217,18 +249,33 @@ textarea[matInput] {
     text-align: center;
   }
 
-  .footer-links {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
   .footer-center {
     padding: 0;
   }
 
   .footer-right {
     align-self: center;
-    margin-top: 12px;
+    margin-top: 10px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .publish-button {
+    width: 100%;
+  }
+
+  mat-tab-group {
+    font-size: 14px;
+  }
+
+  mat-expansion-panel-header mat-icon {
+    font-size: 20px;
   }
 }

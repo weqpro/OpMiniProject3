@@ -1,15 +1,14 @@
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SoldierService } from '../../../../services/soldier.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { SoldierService } from '../../../../services/soldier.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-
 @Component({
   selector: 'app-soldier-change-password',
   templateUrl: './soldier-change-password.component.html',
@@ -18,12 +17,12 @@ import { MatMenuModule } from '@angular/material/menu';
   imports: [
     CommonModule,
     FormsModule,
+    MatIconModule,
+    MatMenuModule,
     RouterLink,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
-    MatMenuModule,
-    MatButtonModule,
+    MatButtonModule
   ]
 })
 export class SoldierChangePasswordComponent {
@@ -37,11 +36,17 @@ export class SoldierChangePasswordComponent {
 
   submit(): void {
     const { current_password, new_password, new_password_repeat } = this.passwordData;
-
+  
     if (!current_password || !new_password || !new_password_repeat) {
       alert('Усі поля обов’язкові!');
       return;
     }
+
+
+    if (new_password.length < 8) {
+      alert('Пароль має бути не менше 8 символів!');
+      return;
+    }    
 
     if (new_password !== new_password_repeat) {
       alert('Нові паролі не збігаються!');
@@ -52,19 +57,17 @@ export class SoldierChangePasswordComponent {
       alert('Новий пароль не може бути таким самим, як старий!');
       return;
     }
-
-    this.soldierService.changePassword({
-      current_password,
-      new_password
-    }).subscribe({
+  
+    this.soldierService.changePassword({ current_password, new_password }).subscribe({
       next: () => {
-        alert('Пароль успішно змінено!');
+        alert('Пароль змінено успішно!');
         this.router.navigate(['/profile/soldier']);
       },
       error: err => {
-        console.error('Помилка зміни пароля:', err);
+        console.error('Помилка зміни паролю:', err);
         alert('Не вдалося змінити пароль.');
       }
     });
   }
+  
 }

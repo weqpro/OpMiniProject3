@@ -49,11 +49,13 @@ export class VolunteerProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: [''],
-      surname: [''],
-      phone_number: [''],
-      password: ['', Validators.required]
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    
 
     this.loadProfile();
   }
@@ -66,8 +68,10 @@ export class VolunteerProfileEditComponent implements OnInit {
         this.profileForm.patchValue({
           name: data.name,
           surname: data.surname,
-          phone_number: data.phone_number
+          phone_number: data.phone_number,
+          email: data.email
         });
+        
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -78,25 +82,30 @@ export class VolunteerProfileEditComponent implements OnInit {
   onSubmit(): void {
     const formValue = this.profileForm.value;
     const payload: any = {};
-
-    if (formValue.name && formValue.name.trim() !== this.profileData.name) {
+  
+    if (formValue.name.trim() !== this.profileData.name) {
       payload.name = formValue.name.trim();
     }
-
-    if (formValue.surname && formValue.surname.trim() !== this.profileData.surname) {
+  
+    if (formValue.surname.trim() !== this.profileData.surname) {
       payload.surname = formValue.surname.trim();
     }
-
-    if (formValue.phone_number && formValue.phone_number !== this.profileData.phone_number) {
+  
+    if (formValue.phone_number !== this.profileData.phone_number) {
       payload.phone_number = formValue.phone_number;
     }
-
+  
     if (!formValue.password) {
       alert('Введіть поточний пароль');
       return;
     }
     payload.password = formValue.password;
 
+    if (Object.keys(payload).length === 1 && payload.password) {
+      this.router.navigate(['/profile/volunteer']);
+      return;
+    }
+  
     this.volunteerService.updateProfile(payload).subscribe({
       next: () => {
         alert('Профіль оновлено');
@@ -108,6 +117,7 @@ export class VolunteerProfileEditComponent implements OnInit {
       }
     });
   }
+  
 
   toggleSearch(): void {
     this.showSearch = !this.showSearch;

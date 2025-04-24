@@ -9,9 +9,12 @@
       <mat-icon>search</mat-icon>
     </button>
 
-    <button mat-raised-button color="accent" class="header-button" routerLink="/create">
-      Опублікувати оголошення
-    </button>
+    <button
+    mat-button
+    class="text-link-button"
+    routerLink="/create">
+    Опублікувати оголошення
+  </button>
 
     <button mat-icon-button [matMenuTriggerFor]="profileMenu">
       <mat-icon>account_circle</mat-icon>
@@ -21,46 +24,53 @@
       <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
     </mat-menu>
   </div>
-</div>
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-wrapper">
+</div><form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-wrapper">
 
-    <h2>Редагування профілю</h2>
+  <h2>Редагування профілю</h2>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Ім’я</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Прізвище</mat-label>
+    <input matInput formControlName="surname" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Номер телефону</mat-label>
+    <input matInput formControlName="phone_number" placeholder="+380 ___ ___ ___" />
+    <mat-error *ngIf="profileForm.get('phone_number')?.hasError('pattern')">
+      Введіть номер у форматі +380XXXXXXXXX
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Підрозділ</mat-label>
+    <input matInput formControlName="unit" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Військова частина</mat-label>
+    <input matInput formControlName="subsubunit" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Батальйон</mat-label>
+    <input matInput formControlName="battalion" />
+  </mat-form-field>
+
+  <h3>Підтвердження паролю</h3>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Поточний пароль</mat-label>
+    <input matInput type="password" formControlName="password" />
+    <mat-error *ngIf="profileForm.get('password')?.hasError('minlength')">
+      Пароль має бути не менше 6 символів
+    </mat-error>
+  </mat-form-field>
   
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Ім’я</mat-label>
-      <input matInput formControlName="name" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Прізвище</mat-label>
-      <input matInput formControlName="surname" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Номер телефону</mat-label>
-      <input matInput formControlName="phone_number" placeholder="+380 ___ ___ ___" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Підрозділ</mat-label>
-      <input matInput formControlName="unit" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Військова частина</mat-label>
-      <input matInput formControlName="subsubunit" />
-    </mat-form-field>
-  
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Батальйон</mat-label>
-      <input matInput formControlName="battalion" />
-    </mat-form-field>
-  
-    <h3>Підтвердження паролю</h3>
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Поточний пароль</mat-label>
-      <input matInput type="password" formControlName="password" required />
-    </mat-form-field>
+
 
         <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
             <button 

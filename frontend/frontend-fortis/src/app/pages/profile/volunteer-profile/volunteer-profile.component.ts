@@ -15,6 +15,7 @@ import { Router, RouterModule } from '@angular/router';
 import { VolonteerService } from '../../../services/volunteer.service';
 import { AidRequestService } from '../../../services/aid-request.service';
 import { ReviewService } from '../../../services/review.service';
+
 import { AidRequest } from '../../../schemas/aid-request';
 import { Review } from '../../../schemas/review';
 
@@ -43,6 +44,15 @@ export class VolunteerProfileComponent implements OnInit {
   requests: AidRequest[] = [];
   reviews: Review[] = [];
 
+  selectedSoldier: any = null;
+  selectedRequest: any = null;
+
+  popupSoldierVisible = false;
+  popupRequestVisible = false;
+
+  soldierMap: { [id: number]: any } = {};
+  userRole = 'volunteer';
+
   constructor(
     private router: Router,
     private aidRequestService: AidRequestService,
@@ -54,12 +64,9 @@ export class VolunteerProfileComponent implements OnInit {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
         this.profileData = data;
-
         if (data?.id) {
           this.loadMyRequests(data.id);
           this.loadReviews(data.id);
-        } else {
-          console.error('ID волонтера не знайдено. Неможливо завантажити дані.');
         }
       },
       error: (err) => console.error('Помилка завантаження профілю:', err)
@@ -68,7 +75,10 @@ export class VolunteerProfileComponent implements OnInit {
 
   loadMyRequests(volunteerId: number): void {
     this.aidRequestService.getRequestsByVolunteer(volunteerId).subscribe({
-      next: (data) => this.requests = data,
+      next: (data) => {
+        this.requests = data;
+        this.loadSoldiers();
+      },
       error: (err) => console.error('Помилка завантаження запитів', err)
     });
   }
@@ -80,12 +90,40 @@ export class VolunteerProfileComponent implements OnInit {
     });
   }
 
+  loadSoldiers(): void {
+    const ids = [...new Set(this.requests.map(r => r.soldier_id).filter(Boolean))];
+    ids.forEach(id => {
+      this.volunteerService.getSoldierById(id).subscribe({
+        next: soldier => this.soldierMap[id] = soldier,
+        error: err => console.error(`Не вдалося завантажити військового з ID ${id}`, err)
+      });
+    });
+  }
+
+  showSoldierPopup(id: number): void {
+    this.selectedSoldier = this.soldierMap[id];
+    this.popupSoldierVisible = true;
+  }
+
+  closeSoldierPopup(): void {
+    this.popupSoldierVisible = false;
+  }
+
+  showRequestPopup(request: any): void {
+    this.selectedRequest = request;
+    this.popupRequestVisible = true;
+  }
+
+  closeRequestPopup(): void {
+    this.popupRequestVisible = false;
+  }
+
   editProfile(): void {
-    this.router.navigate(['app-volunteer-profile-edit']);
+    this.router.navigate(['/app-volunteer-profile-edit']);
   }
 
   changePassword(): void {
-    this.router.navigate(['app-volunteer-change-password']);
+    this.router.navigate(['/app-volunteer-change-password']);
   }
 
   logout(): void {
@@ -93,5 +131,31 @@ export class VolunteerProfileComponent implements OnInit {
     this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
-  toggleSearch(): void {}
+  deleteAccount(): void {
+    const confirmed = confirm('Ви впевнені, що хочете видалити обліковий запис?');
+    if (confirmed) {
+      this.volunteerService.deleteAccount().subscribe({
+        next: () => {
+          alert('Акаунт видалено');
+          localStorage.removeItem('access_token');
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Не вдалося видалити акаунт', err);
+          alert('Помилка при видаленні акаунту');
+        }
+      });
+    }
+  }
+
+  markAsCompleted(requestId: number): void {
+    this.aidRequestService.completeRequest(requestId).subscribe({
+      next: () => {
+        this.loadMyRequests(this.profileData.id);
+      },
+      error: (err) => {
+        console.error('Помилка при завершенні запиту', err);
+      }
+    });
+  }
 }

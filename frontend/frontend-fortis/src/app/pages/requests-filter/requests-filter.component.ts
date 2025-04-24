@@ -145,8 +145,8 @@ acceptRequest(): void {
       this.aidRequestService.assignToVolunteer(this.selectedRequest.id, volunteerId).subscribe({
         next: () => {
           alert('Ви погодились допомогти!');
-          this.closeRequestPopup(); // Закриває popup
-          this.loadUnassignedRequests(); // Оновлює список запитів
+          this.closeRequestPopup();
+          this.loadUnassignedRequests();
         },
         error: err => console.error('Помилка при підтвердженні', err)
       });

@@ -7,9 +7,6 @@
     </div>
 
     <div class="top-right">
-      <button mat-icon-button>
-        <mat-icon>search</mat-icon>
-      </button>
 
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
         <mat-icon>account_circle</mat-icon>
@@ -26,10 +23,10 @@
     <h1 class="title">Ваш відгук</h1>
     <p class="subtitle">Опишіть вашу взаємодію з волонтером</p>
 
-    <form class="form-box">
+    <form class="form-box" (ngSubmit)="submit()" #reviewForm="ngForm">
       <mat-form-field appearance="fill" class="input-field">
         <mat-label>Відгук</mat-label>
-        <textarea matInput rows="5"></textarea>
+        <textarea matInput rows="5" required [(ngModel)]="review_text" name="review_text"></textarea>
       </mat-form-field>
 
       <div class="rating-section">
@@ -42,19 +39,17 @@
       </div>
 
       <div class="tags-list" *ngIf="tags.length > 0">
-        <mat-chip-list aria-label="Теги до відгуку">
-          <mat-chip *ngFor="let tag of tags"
-                    [ngClass]="{ 'active-chip': selectedTags.includes(tag) }"
-                    (click)="toggleTag(tag)">
+        <mat-chip-listbox multiple (change)="updateSelectedTags($event)">
+          <mat-chip-option *ngFor="let tag of tags" [value]="tag">
             {{ tag }}
-          </mat-chip>
-        </mat-chip-list>
+          </mat-chip-option>
+        </mat-chip-listbox>
       </div>
+      
 
-      <button mat-raised-button routerLink="/requests-filter" color="primary" type="submit">
-        Опублікувати
-      </button>
+      <button type="submit" mat-raised-button color="primary">Опублікувати</button>
     </form>
+
   </main>
 
   <footer class="footer">

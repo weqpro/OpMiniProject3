@@ -14,4 +14,9 @@ export class ReviewService {
   getReviewsByVolunteer(volunteerId: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.apiUrl}/by-volunteer/${volunteerId}`);
   }
+
+  createReview(review: Omit<Review, 'id' | 'reported'>): Observable<Review> {
+    return this.http.post<Review>(this.apiUrl, review);
+  }
+  
 }
