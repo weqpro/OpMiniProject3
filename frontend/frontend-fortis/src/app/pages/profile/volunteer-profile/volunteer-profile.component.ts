@@ -10,15 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
-import { Router, RouterModule } from '@angular/router';
-
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { VolonteerService } from '../../../services/volunteer.service';
 import { AidRequestService } from '../../../services/aid-request.service';
 import { ReviewService } from '../../../services/review.service';
-
 import { AidRequest } from '../../../schemas/aid-request';
 import { Review } from '../../../schemas/review';
-
 @Component({
   selector: 'app-volunteer-profile',
   standalone: true,
@@ -53,13 +50,15 @@ export class VolunteerProfileComponent implements OnInit {
   soldierMap: { [id: number]: any } = {};
   userRole = 'volunteer';
 
+  selectedTabIndex = 0;
+
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private aidRequestService: AidRequestService,
     private volunteerService: VolonteerService,
     private reviewService: ReviewService
   ) {}
-
   ngOnInit(): void {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
@@ -68,11 +67,17 @@ export class VolunteerProfileComponent implements OnInit {
           this.loadMyRequests(data.id);
           this.loadReviews(data.id);
         }
+  
+        this.route.queryParams.subscribe(params => {
+          if (params['tab'] === 'requests') {
+            this.selectedTabIndex = 1;
+          }
+        });
       },
       error: (err) => console.error('Помилка завантаження профілю:', err)
     });
   }
-
+  
   loadMyRequests(volunteerId: number): void {
     this.aidRequestService.getRequestsByVolunteer(volunteerId).subscribe({
       next: (data) => {
@@ -99,7 +104,7 @@ export class VolunteerProfileComponent implements OnInit {
       });
     });
   }
-
+  
   showSoldierPopup(id: number): void {
     this.selectedSoldier = this.soldierMap[id];
     this.popupSoldierVisible = true;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SoldierService } from '../../../services/soldier.service';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,15 +40,24 @@ export class SoldierProfileComponent implements OnInit {
   volunteerMap: { [key: number]: any } = {};
   selectedVolunteer: any = null;
   popupVolunteerVisible: boolean = false;
+  selectedTabIndex = 0;
+
   constructor(
     private fb: FormBuilder,
     private soldierService: SoldierService,
     private aidRequestService: AidRequestService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'requests') {
+        this.selectedTabIndex = 1;
+      }
+    });
+
     this.loadProfile();
     this.loadMyRequests();
   }
@@ -94,7 +103,7 @@ export class SoldierProfileComponent implements OnInit {
     this.popupVolunteerVisible = true;
   }
 
-  closePopup(): void {
+  closeVolunteerPopup(): void {
     this.popupVolunteerVisible = false;
   }
 
@@ -148,9 +157,4 @@ export class SoldierProfileComponent implements OnInit {
       });
     }
   }
-
-closeVolunteerPopup(): void {
-  this.popupVolunteerVisible = false;
-}
-
 }

@@ -22,9 +22,14 @@
           <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
             Мій профіль
           </button>
-          <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/my-requests-soldier' : '/my-requests-soldier'">
-            Мої запити
-          </button>
+          <button
+          mat-menu-item
+          [routerLink]="userRole === 'volunteer' ? '/profile/volunteer' : '/profile/soldier'"
+          [queryParams]="{ tab: 'requests' }"
+        >
+          Мої запити
+        </button>
+          
         </mat-menu>
       </div>
     </div>

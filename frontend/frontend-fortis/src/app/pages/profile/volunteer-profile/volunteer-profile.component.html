@@ -9,14 +9,14 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/profile/volunteer">Мій профіль</button>
-      <button mat-menu-item routerLink="/my-requests-volunteer">Мої запити</button>
+      <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
+      <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
     </mat-menu>
   </div>
 </div>
 
 <div class="page-wrapper" *ngIf="profileData">
-  <mat-tab-group>
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
     <mat-tab>
       <ng-template mat-tab-label>
         <span class="label-text-font">Мій профіль</span>

@@ -13,8 +13,8 @@
       </button>
 
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
-        <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
       </mat-menu>
     </div>
   </div>

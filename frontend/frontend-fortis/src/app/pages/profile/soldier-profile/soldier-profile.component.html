@@ -13,14 +13,14 @@
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
-        <button mat-menu-item routerLink="/my-requests-soldier">Мої запити</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
       </mat-menu>
     </div>
   </div>
 
   <div class="content-wrap" *ngIf="profileData">
-    <mat-tab-group>
+    <mat-tab-group [selectedIndex]="selectedTabIndex">
       <mat-tab>
         <ng-template mat-tab-label>
           <span class="label-text-font">Мій профіль</span>
@@ -62,20 +62,8 @@
           <div class="settings-actions">
             <button mat-flat-button class="green-button" (click)="editProfile()">Редагувати профіль</button>
             <button mat-flat-button class="green-button" (click)="changePassword()">Змінити пароль</button>
-            <button
-              mat-stroked-button
-              style="border: 2px solid red; color: red !important; font-family: 'Montserrat', sans-serif; font-weight: 500;"
-              (click)="logout()"
-            >
-              Вийти
-            </button>
-            <button
-              mat-stroked-button
-              style="border: 2px solid red; color: red !important; font-family: 'Montserrat', sans-serif; font-weight: 500;"
-              (click)="deleteAccount()"
-            >
-              Видалити обліковий запис
-            </button>
+            <button mat-stroked-button class="delete-button" (click)="logout()">Вийти</button>
+            <button mat-stroked-button class="delete-button" (click)="deleteAccount()">Видалити обліковий запис</button>
           </div>
         </div>
       </mat-tab>
