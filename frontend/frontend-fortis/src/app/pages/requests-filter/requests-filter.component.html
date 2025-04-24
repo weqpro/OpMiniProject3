@@ -7,9 +7,14 @@
         </a>
       </div>
       <div class="top-right">
-        <button *ngIf="userRole === 'soldier'" mat-raised-button color="primary" class="header-button" routerLink="/create">
-          Опублікувати оголошення
-        </button>
+        <button
+        *ngIf="userRole === 'soldier'"
+        mat-button
+        class="text-link-button"
+        routerLink="/create">
+        Опублікувати оголошення
+      </button>
+
         <button mat-icon-button [matMenuTriggerFor]="profileMenu">
           <mat-icon>account_circle</mat-icon>
         </button>
@@ -17,9 +22,14 @@
           <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
             Мій профіль
           </button>
-          <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/my-requests-soldier' : '/my-requests-soldier'">
-            Мої запити
-          </button>
+          <button
+          mat-menu-item
+          [routerLink]="userRole === 'volunteer' ? '/profile/volunteer' : '/profile/soldier'"
+          [queryParams]="{ tab: 'requests' }"
+        >
+          Мої запити
+        </button>
+          
         </mat-menu>
       </div>
     </div>
@@ -70,7 +80,7 @@
       <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
       <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
       <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
-      <button mat-raised-button class="complete-button" (click)="acceptRequest()">
+      <button *ngIf="userRole === 'volunteer'" mat-raised-button class="complete-button" (click)="acceptRequest()">
         Погодитись допомогти
       </button>
     </div>

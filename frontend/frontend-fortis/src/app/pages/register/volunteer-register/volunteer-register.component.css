@@ -13,7 +13,7 @@
 }
 
 .full-logo {
-  height: 40px;
+  height: 32px;
 }
 
 .register-container {
@@ -60,7 +60,6 @@
   box-shadow: none;
   text-transform: none;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .submit-button:hover {
@@ -71,15 +70,22 @@
   width: 100%;
   margin-bottom: 20px;
 }
-
 .login-link {
-  margin-top: 16px;
-  color: #2f6d64;
+  color: #39736b !important;
   font-weight: 500;
-  text-align: center;
-  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  background: none;
+  border: none;
+  text-transform: none;
+  cursor: pointer;
+  margin-top: 16px;
+  display: inline-block;
 }
 
+.login-link.mat-button {
+  color: #39736b !important;
+}
   
 .footer {
   background-color: #2c2c2c;
@@ -156,10 +162,6 @@
 @media (max-width: 480px) {
   .title {
     font-size: 24px;
-  }
-
-  .full-logo {
-    height: 36px;
   }
 
   .subtitle {

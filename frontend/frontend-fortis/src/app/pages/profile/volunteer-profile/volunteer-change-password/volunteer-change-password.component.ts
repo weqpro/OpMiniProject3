@@ -34,8 +34,18 @@ export class VolunteerChangePasswordComponent {
   submit(): void {
     const { current_password, new_password, new_password_repeat } = this.passwordData;
 
+    if (!current_password || !new_password || !new_password_repeat) {
+      alert('Усі поля обов’язкові!');
+      return;
+    }
+
     if (new_password !== new_password_repeat) {
       alert('Нові паролі не збігаються!');
+      return;
+    }
+
+    if (new_password === current_password) {
+      alert('Новий пароль не може бути таким самим, як старий!');
       return;
     }
 

@@ -37,6 +37,7 @@ import { VolonteerService } from '../../../../services/volunteer.service';
 })
 export class VolunteerProfileEditComponent implements OnInit {
   profileForm!: FormGroup;
+  profileData: any = null;
   showSearch = false;
   searchQuery = '';
 
@@ -48,26 +49,29 @@ export class VolunteerProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: [''],
-      surname: [''],
-      phone_number: [''],
-      password: ['', Validators.required]
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    
 
     this.loadProfile();
   }
-  profileData: any = null;
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   description:'oaoa'
-  // };
-  loadProfile() {
+
+  loadProfile(): void {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
         this.profileData = data;
+
+        this.profileForm.patchValue({
+          name: data.name,
+          surname: data.surname,
+          phone_number: data.phone_number,
+          email: data.email
+        });
+        
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -75,13 +79,37 @@ export class VolunteerProfileEditComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    const formData = this.profileForm.value;
+  onSubmit(): void {
+    const formValue = this.profileForm.value;
+    const payload: any = {};
+  
+    if (formValue.name.trim() !== this.profileData.name) {
+      payload.name = formValue.name.trim();
+    }
+  
+    if (formValue.surname.trim() !== this.profileData.surname) {
+      payload.surname = formValue.surname.trim();
+    }
+  
+    if (formValue.phone_number !== this.profileData.phone_number) {
+      payload.phone_number = formValue.phone_number;
+    }
+  
+    if (!formValue.password) {
+      alert('Введіть поточний пароль');
+      return;
+    }
+    payload.password = formValue.password;
 
-    this.volunteerService.updateProfile(formData).subscribe({
+    if (Object.keys(payload).length === 1 && payload.password) {
+      this.router.navigate(['/profile/volunteer']);
+      return;
+    }
+  
+    this.volunteerService.updateProfile(payload).subscribe({
       next: () => {
         alert('Профіль оновлено');
-        this.router.navigate(['/profile/soldier']);
+        this.router.navigate(['/profile/volunteer']);
       },
       error: (err) => {
         console.error('Помилка оновлення:', err);
@@ -89,13 +117,18 @@ export class VolunteerProfileEditComponent implements OnInit {
       }
     });
   }
+  
 
-  toggleSearch() {
+  toggleSearch(): void {
     this.showSearch = !this.showSearch;
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  cancel(): void {
+    this.router.navigate(['/profile/volunteer']);
   }
 }

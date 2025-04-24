@@ -43,6 +43,14 @@ export class VolonteerService {
   }
 
   changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
-    return this.http.post('/api/v1/volunteers/change-password', payload);
+    return this.http.post(`${this.apiUrl}/change-password`, payload);
   }
+
+  deleteAccount(): Observable<any> {
+    return this.http.delete('http://127.0.0.1:8000/api/v1/volunteers/me');
+  }
+  getSoldierById(id: number): Observable<any> {
+    return this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/${id}`);
+  }
+
 }

@@ -6,9 +6,14 @@
       </a>
     </div>
     <div class="top-right">
-      <button *ngIf="userRole === 'soldier'" mat-raised-button color="primary" class="header-button" routerLink="/create-post">
-        Опублікувати оголошення
-      </button>
+      <button
+      *ngIf="userRole === 'soldier'"
+      mat-button
+      class="text-link-button"
+      routerLink="/create">
+      Опублікувати оголошення
+    </button>
+    
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
@@ -44,7 +49,14 @@
           </ng-container>
 
           <div class="request-actions" *ngIf="userRole === 'soldier'">
-            <a class="action-link" *ngIf="request.status === 'pending'">Редагувати</a>
+            <a
+  class="action-link"
+  *ngIf="request.status === 'pending'"
+  [routerLink]="['/edit-request', request.id]"
+>
+  Редагувати
+</a>
+
             <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
             <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review']">Залишити відгук</a>
           </div>
@@ -75,6 +87,7 @@
         <p><strong>Прізвище:</strong> {{ selectedVolunteer.surname }}</p>
         <p><strong>Телефон:</strong> {{ selectedVolunteer.phone_number }}</p>
         <p><strong>Email:</strong> {{ selectedVolunteer.email }}</p>
+        <p><strong>Рейтинг:</strong> {{ selectedVolunteer.rating || 'Немає оцінок' }}</p>
       </div>
     </div>
   </div>

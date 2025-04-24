@@ -45,7 +45,7 @@ export class LoginComponent {
           this.router.navigate(['/requests-filter']);
         },
         error: () => {
-          alert('Невірний email або пароль');
+          alert('Неправильна електронна адреса або пароль.\nНе маєте акаунту? Зареєструйтесь!');
         }
       });
 

@@ -36,9 +36,6 @@ import { SoldierService } from '../../../../services/soldier.service';
 })
 export class SoldierProfileEditComponent implements OnInit {
   profileForm!: FormGroup;
-  showSearch = false;
-  searchQuery = '';
-  originalData: any = {};
 
   constructor(
     private fb: FormBuilder,
@@ -48,33 +45,30 @@ export class SoldierProfileEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
-      name: [''],
-      surname: [''],
-      phone_number: [''],
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\+380\d{9}$/)]],
       unit: [''],
       subsubunit: [''],
       battalion: [''],
-      password: ['', Validators.required]  // current password for confirmation
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
+    
 
     this.loadProfile();
   }
-  profileData: any = null;
-  // profileData = {
-  //   name: 'Андрій',
-  //   surname: 'Шевченко',
-  //   email: 'andrii.shevchenko@army.ua',
-  //   phone_number: '+380671234567',
-  //   unit: '80-та окрема десантно-штурмова бригада',
-  //   subsubunit: '2-й взвод',
-  //   battalion: '3-й батальйон',
-  //   description:'oaoa'
-  // };
 
   loadProfile() {
     this.soldierService.getProfile().subscribe({
       next: (data) => {
-        this.profileData = data;
+        this.profileForm.patchValue({
+          name: data.name,
+          surname: data.surname,
+          phone_number: data.phone_number,
+          unit: data.unit,
+          subsubunit: data.subsubunit,
+          battalion: data.battalion
+        });
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
@@ -82,26 +76,8 @@ export class SoldierProfileEditComponent implements OnInit {
     });
   }
 
-  // loadProfile() {
-  //   this.soldierService.getProfile().subscribe({
-  //     next: (data) => {
-  //       this.originalData = data;
-  //       this.profileForm.patchValue({
-  //         name: data.name,
-  //         surname: data.surname,
-  //         phone_number: data.phone_number,
-  //         unit: data.unit,
-  //         subsubunit: data.subsubunit,
-  //         battalion: data.battalion
-  //       });
-  //     },
-  //     error: (err) => {
-  //       console.error('Помилка завантаження профілю:', err);
-  //     }
-  //   });
-  // }
-
   onSubmit() {
+    if (this.profileForm.invalid) return;
 
     const formData = this.profileForm.value;
 
@@ -117,12 +93,7 @@ export class SoldierProfileEditComponent implements OnInit {
     });
   }
 
-  toggleSearch() {
-    this.showSearch = !this.showSearch;
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+  cancel() {
+    this.router.navigate(['profile/soldier']);
   }
 }

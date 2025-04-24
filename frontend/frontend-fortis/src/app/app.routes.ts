@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { SoldierHomeComponent } from './pages/soldier-home/soldier-home.component';
 import { CreatePostComponent } from './pages/create-post/create-post.component';
 import { SoldierProfileComponent } from './pages/profile/soldier-profile/soldier-profile.component';
 import { VolunteerProfileComponent } from './pages/profile/volunteer-profile/volunteer-profile.component';
@@ -23,11 +22,9 @@ import {
 import {
   VolunteerProfileEditComponent
 } from './pages/profile/volunteer-profile/volunteer-profile-edit/volunteer-profile-edit.component';
-import { RequestDetailsComponent } from './pages/request-details/request-details.component';
-
+import { EditRequestComponent } from './pages/edit-request/edit-request.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'soldier-home', component: SoldierHomeComponent },
   { path: 'create', component: CreatePostComponent },
   { path: 'profile/soldier', component: SoldierProfileComponent },
   { path: 'profile/volunteer', component: VolunteerProfileComponent },
@@ -38,10 +35,10 @@ export const routes: Routes = [
   { path: 'my-requests-soldier', component: MyRequestsComponent },
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
-  {path: 'review', component: ReviewComponent },
-  {path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
-  {path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent},
-  {path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
-  {path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent},
-  { path: 'requests/:id', component: RequestDetailsComponent },
+  { path: 'review/:id', component: ReviewComponent },
+  { path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
+  { path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent},
+  { path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
+  { path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent},
+  { path: 'edit-request/:id', component: EditRequestComponent }
 ];

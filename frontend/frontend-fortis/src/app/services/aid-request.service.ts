@@ -48,11 +48,16 @@ export class AidRequestService {
 
   publishRequest(id: number): Observable<AidRequest> {
     return this.http.post<AidRequest>(`${this.apiUrl}/${id}/publish`, {});
-  }
+  } 
+
   updateRequest(id: number, data: Partial<AidRequest>): Observable<AidRequest> {
     return this.http.put<AidRequest>(`${this.apiUrl}/${id}`, data);
   }
-
+  
+  updateWithImage(id: number, formData: FormData): Observable<AidRequest> {
+    return this.http.put<AidRequest>(`${this.apiUrl}/${id}/with-image`, formData);
+  }
+  
   getRequestById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
   }
@@ -103,6 +108,7 @@ export class AidRequestService {
     }
     return this.http.get<AidRequest[]>(this.apiUrl, { params });
   }
+  
 
   getById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);

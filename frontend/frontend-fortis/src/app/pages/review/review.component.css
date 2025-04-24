@@ -27,8 +27,7 @@ html, body {
   }
   
   .full-logo {
-    height: 40px;
-    background-color: transparent !important;
+    height: 32px;
   }
   
   .top-right {
@@ -115,7 +114,6 @@ html, body {
     box-shadow: none;
     cursor: pointer;
     text-transform: none;
-    font-family: 'Montserrat', sans-serif;
   }
   .active-chip {
     background-color: #39736b;
