@@ -126,7 +126,7 @@ export class VolunteerProfileComponent implements OnInit {
       case 'in_progress':
         return 'в процесі';
       case 'completed':
-        return 'завершено';
+        return 'виконано';
       default:
         return status;
     }
