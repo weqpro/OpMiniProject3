@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { AidRequestService } from '../../../services/aid-request.service';
 import { AidRequest } from '../../../schemas/aid-request';
 import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-soldier-profile',
@@ -69,6 +70,13 @@ export class SoldierProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося завантажити дані профілю.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
@@ -125,7 +133,6 @@ export class SoldierProfileComponent implements OnInit {
         return status;
     }
   }
-  
 
   logout(): void {
     localStorage.removeItem('access_token');
@@ -141,34 +148,79 @@ export class SoldierProfileComponent implements OnInit {
   }
 
   deleteRequest(requestId: number): void {
-    if (!confirm('Ви впевнені, що хочете видалити цей запит?')) {
-      return;
-    }
-    this.aidRequestService.deleteRequest(requestId).subscribe({
-      next: () => {
-        this.requests = this.requests.filter(r => r.id !== requestId);
-      },
-      error: err => {
-        console.error('Помилка при видаленні запиту', err);
-        alert('Не вдалося видалити запит');
+    Swal.fire({
+      title: 'Ви впевнені?',
+      text: 'Цей запит буде видалено безповоротно.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#39736b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Так, видалити',
+      cancelButtonText: 'Скасувати'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.aidRequestService.deleteRequest(requestId).subscribe({
+          next: () => {
+            this.requests = this.requests.filter(r => r.id !== requestId);
+            Swal.fire({
+              icon: 'success',
+              title: 'Успішно!',
+              text: 'Запит видалено.',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            });
+          },
+          error: (err) => {
+            console.error('Помилка при видаленні запиту', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Помилка',
+              text: 'Не вдалося видалити запит.',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            });
+          }
+        });
       }
     });
   }
 
   deleteAccount(): void {
-    const confirmed = confirm('Ви впевнені, що хочете видалити обліковий запис? Цю дію неможливо скасувати.');
-    if (confirmed) {
-      this.soldierService.deleteAccount().subscribe({
-        next: () => {
-          alert('Акаунт видалено');
-          localStorage.removeItem('token');
-          this.router.navigate(['/login'], { replaceUrl: true });
-        },
-        error: (err) => {
-          console.error('Не вдалося видалити акаунт', err);
-          alert('Помилка при видаленні акаунту');
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Ви впевнені?',
+      text: 'Ваш акаунт буде видалено без можливості відновлення!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#39736b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Так, видалити акаунт',
+      cancelButtonText: 'Скасувати'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.soldierService.deleteAccount().subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Акаунт видалено',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            }).then(() => {
+              localStorage.removeItem('token');
+              this.router.navigate(['/login'], { replaceUrl: true });
+            });
+          },
+          error: (err) => {
+            console.error('Не вдалося видалити акаунт', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Помилка',
+              text: 'Не вдалося видалити акаунт.',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            });
+          }
+        });
+      }
+    });
   }
 }

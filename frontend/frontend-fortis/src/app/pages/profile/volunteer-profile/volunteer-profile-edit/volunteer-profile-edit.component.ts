@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
 
 import { VolonteerService } from '../../../../services/volunteer.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-volunteer-profile-edit',
@@ -55,7 +56,6 @@ export class VolunteerProfileEditComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-    
 
     this.loadProfile();
   }
@@ -71,10 +71,16 @@ export class VolunteerProfileEditComponent implements OnInit {
           phone_number: data.phone_number,
           email: data.email
         });
-        
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося завантажити дані профілю.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
@@ -82,21 +88,27 @@ export class VolunteerProfileEditComponent implements OnInit {
   onSubmit(): void {
     const formValue = this.profileForm.value;
     const payload: any = {};
-  
+
     if (formValue.name.trim() !== this.profileData.name) {
       payload.name = formValue.name.trim();
     }
-  
+
     if (formValue.surname.trim() !== this.profileData.surname) {
       payload.surname = formValue.surname.trim();
     }
-  
+
     if (formValue.phone_number !== this.profileData.phone_number) {
       payload.phone_number = formValue.phone_number;
     }
-  
+
     if (!formValue.password) {
-      alert('Введіть поточний пароль');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Увага',
+        text: 'Введіть поточний пароль для збереження змін.',
+        confirmButtonColor: '#39736b',
+        confirmButtonText: 'Окей'
+      });
       return;
     }
     payload.password = formValue.password;
@@ -105,19 +117,31 @@ export class VolunteerProfileEditComponent implements OnInit {
       this.router.navigate(['/profile/volunteer']);
       return;
     }
-  
+
     this.volunteerService.updateProfile(payload).subscribe({
       next: () => {
-        alert('Профіль оновлено');
-        this.router.navigate(['/profile/volunteer']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Успішно!',
+          text: 'Профіль оновлено!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        }).then(() => {
+          this.router.navigate(['/profile/volunteer']);
+        });
       },
       error: (err) => {
         console.error('Помилка оновлення:', err);
-        alert('Неправильний пароль або інша помилка');
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Неправильний пароль або інша помилка при оновленні профілю.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
-  
 
   toggleSearch(): void {
     this.showSearch = !this.showSearch;

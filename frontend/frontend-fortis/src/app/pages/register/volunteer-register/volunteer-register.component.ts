@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { VolonteerService } from '../../../services/volunteer.service';
 import { MatMenuModule } from '@angular/material/menu';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-volunteer-register',
@@ -41,22 +42,35 @@ export class VolunteerRegisterComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.volunteerForm.valid) {
-      console.log(this.volunteerForm.value);
       this.volunteerService.create(this.volunteerForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/login']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Реєстрація успішна!',
+            text: 'Тепер увійдіть у систему.',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Увійти'
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
         },
         error: (err: any) => {
           console.error(err);
-          alert('Помилка реєстрації');
+          Swal.fire({
+            icon: 'error',
+            title: 'Помилка реєстрації',
+            text: 'Перевірте дані або спробуйте ще раз.',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          });
         }
       });
     }
   }
 
-  goToLogin() {
+  goToLogin(): void {
     this.router.navigate(['/login']);
   }
 }

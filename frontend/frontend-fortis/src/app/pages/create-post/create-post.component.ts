@@ -13,6 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AidRequestService } from '../../services/aid-request.service';
 import { AuthService } from '../../services/authentication.service';
 import { MatMenuModule } from '@angular/material/menu';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-post',
@@ -46,7 +47,6 @@ export class CreatePostComponent implements OnInit {
   category_id: number | null = null;
 
   selectedFile: File | null = null;
-
   imagePreview: string | null = null;
   imageSelected: boolean = false;
 
@@ -71,13 +71,68 @@ export class CreatePostComponent implements OnInit {
   ];
 
   cities: string[] = [
-    'Київ', 'Львів', 'Харків', 'Одеса', 'Дніпро',
-    'Запоріжжя', 'Івано-Франківськ', 'Чернівці',
-    'Ужгород', 'Тернопіль', 'Хмельницький',
-    'Миколаїв', 'Полтава', 'Чернігів', 'Суми',
-    'Рівне', 'Житомир', 'Кропивницький', 'Черкаси',
-    'Вінниця', 'Маріуполь', 'Краматорськ', ''
+    'Авдіївка',
+    'Балаклія',
+    'Бахмут',
+    'Баштанка',
+    'Білгород-Дністровський',
+    'Богодухів',
+    'Вознесенськ',
+    'Василівка',
+    'Вінниця',
+    'Вовчанськ',
+    'Горлівка',
+    'Дебальцеве',
+    'Дніпро',
+    'Донецьк',
+    'Енергодар',
+    'Запоріжжя',
+    'Золоте',
+    'Івано-Франківськ',
+    'Ізмаїл',
+    'Ізюм',
+    'Київ',
+    'Краматорськ',
+    'Кремінна',
+    'Кривий Ріг',
+    'Кропивницький',
+    'Куп’янськ',
+    'Лиман',
+    'Лозова',
+    'Луцьк',
+    'Львів',
+    'Маріуполь',
+    'Мар’їнка',
+    'Мелітополь',
+    'Миколаїв',
+    'Новоайдар',
+    'Одеса',
+    'Очаків',
+    'Первомайськ',
+    'Південноукраїнськ',
+    'Подільськ',
+    'Покровськ',
+    'Полтава',
+    'Попасна',
+    'Рівне',
+    'Рубіжне',
+    'Світлодарськ',
+    'Сєвєродонецьк',
+    'Слов’янськ',
+    'Соледар',
+    'Суми',
+    'Тернопіль',
+    'Токмак',
+    'Ужгород',
+    'Черкаси',
+    'Чернівці',
+    'Чернігів',
+    'Часів Яр',
+    'Чорноморськ',
+    'Чугуїв',
+    'Южне',
   ];
+  
 
   constructor(
     private router: Router,
@@ -105,7 +160,6 @@ export class CreatePostComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       this.image = file.name;
-
       this.imageSelected = true;
 
       const reader = new FileReader();
@@ -122,7 +176,13 @@ export class CreatePostComponent implements OnInit {
 
   publishRequest(): void {
     if (!this.category_id) {
-      alert('Оберіть категорію');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Увага',
+        text: 'Оберіть категорію!',
+        confirmButtonColor: '#39736b',
+        confirmButtonText: 'Окей'
+      });
       return;
     }
 
@@ -143,12 +203,23 @@ export class CreatePostComponent implements OnInit {
 
     this.aidRequestService.createRequest(formData).subscribe({
       next: () => {
-        alert('Запит створено!');
-        this.router.navigate(['/profile/soldier']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Успішно!',
+          text: 'Запит створено!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        }).then(() => this.router.navigate(['/profile/soldier']));
       },
       error: (err) => {
         console.error(err);
-        alert('Помилка при створенні запиту');
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося створити запит.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
