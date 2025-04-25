@@ -50,9 +50,8 @@ export class SoldierService {
     return this.http.delete('http://127.0.0.1:8000/api/v1/soldiers/me');
   }
 
-
   getSoldierById(id: number): Observable<any> {
-    return this.http.get('http://127.0.0.1:8000/api/v1/soldiers/${id}');
+    return this.http.get(`http://127.0.0.1:8000/api/v1/soldiers/soldier-info/${id}`);
   }
-  
+
 }

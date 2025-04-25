@@ -7,14 +7,9 @@
         </a>
       </div>
       <div class="top-right">
-        <button
-        *ngIf="userRole === 'soldier'"
-        mat-button
-        class="text-link-button"
-        routerLink="/create">
-        Опублікувати оголошення
-      </button>
-
+        <button *ngIf="userRole === 'soldier'" mat-button class="text-link-button" routerLink="/create">
+          Опублікувати оголошення
+        </button>
         <button mat-icon-button [matMenuTriggerFor]="profileMenu">
           <mat-icon>account_circle</mat-icon>
         </button>
@@ -22,39 +17,28 @@
           <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
             Мій профіль
           </button>
-          <button
-          mat-menu-item
-          [routerLink]="userRole === 'volunteer' ? '/profile/volunteer' : '/profile/soldier'"
-          [queryParams]="{ tab: 'requests' }"
-        >
-          Мої запити
-        </button>
-          
+          <button mat-menu-item [routerLink]="userRole === 'volunteer' ? '/profile/volunteer' : '/profile/soldier'" [queryParams]="{ tab: 'requests' }">
+            Мої запити
+          </button>
         </mat-menu>
       </div>
     </div>
 
     <div class="search-bar">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Пошук..." />
-      <button (click)="onSearch()">
-        <i class="fas fa-search"></i> Пошук
-      </button>
+      <input type="text" [(ngModel)]="searchCity" placeholder="Введіть зручну вам локацію" class="search-input" />
+      <button (click)="onCitySearch()" class="search-button">Пошук</button>
+
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Пошук за назвою..." class="search-input" />
+      <button (click)="onSearch()" class="search-button">Пошук</button>
     </div>
 
     <div class="filters">
       <div class="filter">
         <label>Категорія</label>
-        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-          <option value="">Будь-яка категорія</option>
-          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-        </select>
-      </div>
-
-      <div class="sort">
-        <label>Сортування за:</label>
-        <select [(ngModel)]="sortOption">
-          <option *ngFor="let opt of sortOptions" [value]="opt">{{ opt }}</option>
-        </select>
+        <select [(ngModel)]="selectedCategoryId" (change)="onCategoryChange()" class="category-select">
+          <option [ngValue]="null">Будь-яка категорія</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>        
       </div>
     </div>
 
@@ -75,8 +59,7 @@
     <div class="popup-window" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeRequestPopup()">&times;</button>
       <h2>{{ selectedRequest.name }}</h2>
-      <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" 
-      alt="Зображення запиту" class="popup-image" />
+      <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" alt="Зображення запиту" class="popup-image" />
       <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
       <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
       <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>

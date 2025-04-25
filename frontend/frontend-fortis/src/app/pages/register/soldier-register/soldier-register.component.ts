@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SoldierService } from '../../../services/soldier.service'
-
+import { SoldierService } from '../../../services/soldier.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-soldier-register',
@@ -41,26 +41,37 @@ export class SoldierRegisterComponent {
       subsubunit: [''],
       battalion: ['']
     });
-    
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.soldierForm.valid) {
-      console.log(this.soldierForm.value);
       this.soldierService.create(this.soldierForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/login']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Успішна реєстрація!',
+            text: 'Тепер ви можете увійти.',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Увійти'
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
         },
         error: (err: any) => {
           console.error(err);
-          alert('Помилка реєстрації');
-  
+          Swal.fire({
+            icon: 'error',
+            title: 'Помилка реєстрації',
+            text: 'Спробуйте ще раз або перевірте дані.',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          });
         }
       });
     }
   }
 
-  goToLogin() {
+  goToLogin(): void {
     this.router.navigate(['/login']);
   }
 }

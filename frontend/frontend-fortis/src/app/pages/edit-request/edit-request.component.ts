@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-request',
@@ -42,12 +43,70 @@ export class EditRequestComponent implements OnInit {
 
   originalData: any = {};
 
+  
   cities: string[] = [
-    'Київ', 'Львів', 'Харків', 'Одеса', 'Дніпро', 'Запоріжжя', 'Івано-Франківськ',
-    'Чернівці', 'Ужгород', 'Тернопіль', 'Хмельницький', 'Миколаїв', 'Полтава',
-    'Чернігів', 'Суми', 'Рівне', 'Житомир', 'Кропивницький', 'Черкаси', 'Вінниця'
+    'Авдіївка',
+    'Балаклія',
+    'Бахмут',
+    'Баштанка',
+    'Білгород-Дністровський',
+    'Богодухів',
+    'Вознесенськ',
+    'Василівка',
+    'Вінниця',
+    'Вовчанськ',
+    'Горлівка',
+    'Дебальцеве',
+    'Дніпро',
+    'Донецьк',
+    'Енергодар',
+    'Запоріжжя',
+    'Золоте',
+    'Івано-Франківськ',
+    'Ізмаїл',
+    'Ізюм',
+    'Київ',
+    'Краматорськ',
+    'Кремінна',
+    'Кривий Ріг',
+    'Кропивницький',
+    'Куп’янськ',
+    'Лиман',
+    'Лозова',
+    'Луцьк',
+    'Львів',
+    'Маріуполь',
+    'Мар’їнка',
+    'Мелітополь',
+    'Миколаїв',
+    'Новоайдар',
+    'Одеса',
+    'Очаків',
+    'Первомайськ',
+    'Південноукраїнськ',
+    'Подільськ',
+    'Покровськ',
+    'Полтава',
+    'Попасна',
+    'Рівне',
+    'Рубіжне',
+    'Світлодарськ',
+    'Сєвєродонецьк',
+    'Слов’янськ',
+    'Соледар',
+    'Суми',
+    'Тернопіль',
+    'Токмак',
+    'Ужгород',
+    'Черкаси',
+    'Чернівці',
+    'Чернігів',
+    'Часів Яр',
+    'Чорноморськ',
+    'Чугуїв',
+    'Южне',
   ];
-
+  
   categories = [
     { id: 1, name: 'Автозапчастини' },
     { id: 2, name: 'Енергозабезпечення' },
@@ -82,7 +141,6 @@ export class EditRequestComponent implements OnInit {
     this.aidRequestService.getById(this.requestId).subscribe({
       next: (data) => {
         this.originalData = data;
-
         this.name = data.name;
         this.description = data.description || '';
         this.location = data.location;
@@ -92,6 +150,13 @@ export class EditRequestComponent implements OnInit {
       },
       error: (err) => {
         console.error('Не вдалося завантажити запит', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося завантажити запит!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
@@ -111,11 +176,10 @@ export class EditRequestComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-  
 
   saveChanges(): void {
     const payload: any = {};
-  
+
     if (this.name.trim() !== '' && this.name.trim() !== this.originalData.name) {
       payload.name = this.name.trim();
     }
@@ -131,20 +195,62 @@ export class EditRequestComponent implements OnInit {
     if (this.category_id !== null && this.category_id !== this.originalData.category_id) {
       payload.category_id = this.category_id;
     }
-  
+
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('json_data', JSON.stringify(payload));
       formData.append('image', this.selectedFile);
-  
+
       this.aidRequestService.updateWithImage(this.requestId, formData).subscribe({
-        next: () => this.router.navigate(['/my-requests-soldier']),
-        error: (err) => console.error('Помилка при збереженні змін', err)
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Успіх',
+            text: 'Запит успішно оновлено!',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          }).then(() => this.router.navigate(
+            ['/profile/soldier'],
+            { queryParams: { tab: 'requests' } }
+          )
+        );
+        },
+        error: (err) => {
+          console.error('Помилка при збереженні змін', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Помилка',
+            text: 'Не вдалося оновити запит!',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          });
+        }
       });
     } else {
       this.aidRequestService.updateRequest(this.requestId, payload).subscribe({
-        next: () => this.router.navigate(['/my-requests-soldier']),
-        error: (err) => console.error('Помилка при збереженні змін', err)
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Успіх',
+            text: 'Запит успішно оновлено!',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          }).then(() => this.router.navigate(
+            ['/profile/soldier'],
+            { queryParams: { tab: 'requests' } }
+          )
+        );
+        },
+        error: (err) => {
+          console.error('Помилка при збереженні змін', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Помилка',
+            text: 'Не вдалося оновити запит!',
+            confirmButtonColor: '#39736b',
+            confirmButtonText: 'Окей'
+          });
+        }
       });
     }
   }

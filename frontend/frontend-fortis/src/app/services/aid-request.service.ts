@@ -123,5 +123,10 @@ export class AidRequestService {
   completeRequest(id: number) {
     return this.http.post(`${this.apiUrl}/${id}/complete`, null);
   }
+
+  getRequestsByCity(cityName: string): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`http://127.0.0.1:8000/api/v1/aid_requests/getClosest/${encodeURIComponent(cityName)}`);
+  }
+  
   
 }

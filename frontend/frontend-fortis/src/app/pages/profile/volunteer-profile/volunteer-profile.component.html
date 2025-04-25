@@ -46,7 +46,7 @@
             <mat-icon *ngFor="let star of [1,2,3,4,5]">
               {{ star <= profileData.rating ? 'star' : 'star_border' }}
             </mat-icon>
-            <span>{{ profileData.rating }} / 5</span>
+            <span>{{ profileData.rating | number:'1.1-1' }} / 5</span>
           </div>
         </div>
 
@@ -54,7 +54,7 @@
         <div class="reviews-box">
           <div *ngIf="reviews.length === 0" class="no-reviews">У вас наразі немає відгуків</div>
           <div class="review-item" *ngFor="let review of reviews">
-            <p><strong>Оцінка:</strong> {{ review.rating }} / 5</p>
+            <p><strong>Оцінка:</strong> {{ review.rating | number:'1.1-1' }} / 5</p>
             <p *ngIf="review.review_text"><strong>Текст:</strong> "{{ review.review_text }}"</p>
             <p *ngIf="review.tags?.length"><strong>Теги:</strong> {{ review.tags.join(', ') }}</p>
           </div>
@@ -82,7 +82,7 @@
           <img class="request-img" [src]="'http://127.0.0.1:8000' + request.image" alt="Зображення запиту" />
           <div class="request-content">
             <h3 class="request-title">{{ request.name }}</h3>
-            <p><strong>Статус:</strong> {{ request.status }}</p>
+            <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>
 
             <div *ngIf="userRole === 'volunteer' && request.status !== 'pending'">
               <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані військового</a>
@@ -106,7 +106,7 @@
             <p><strong>Ім’я:</strong> {{ selectedSoldier.name }}</p>
             <p><strong>Прізвище:</strong> {{ selectedSoldier.surname }}</p>
             <p><strong>Телефон:</strong> {{ selectedSoldier.phone_number }}</p>
-            <p><strong>Email:</strong> {{ selectedSoldier.email }}</p>
+            <p><strong>Електронна пошта:</strong> {{ selectedSoldier.email }}</p>
           </div>
         </div>
       </div>

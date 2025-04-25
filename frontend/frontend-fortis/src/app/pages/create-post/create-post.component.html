@@ -28,7 +28,7 @@
     </mat-form-field>
 
     <div style="margin-bottom: 16px;">
-      <button mat-raised-button color="primary" (click)="triggerImageInput()">Додати фото</button>
+      <button mat-raised-button class="publish-button" (click)="triggerImageInput()">Додати фото</button>
       <input type="file" id="imageInput" accept="image/*" hidden (change)="onImageSelected($event)" />
 
       <div class="image-preview" *ngIf="imageSelected" style="margin-top: 10px;">
@@ -60,7 +60,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" class="publish-button" (click)="publishRequest()">Опублікувати</button>
+    <button mat-raised-button class="publish-button" (click)="publishRequest()">Опублікувати</button>
   </form>
 </div>
 

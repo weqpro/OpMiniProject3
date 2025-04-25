@@ -7,6 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-volunteer-change-password',
@@ -19,7 +22,9 @@ import { RouterLink } from '@angular/router';
     RouterLink,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule
   ]
 })
 export class VolunteerChangePasswordComponent {
@@ -35,17 +40,35 @@ export class VolunteerChangePasswordComponent {
     const { current_password, new_password, new_password_repeat } = this.passwordData;
 
     if (!current_password || !new_password || !new_password_repeat) {
-      alert('Усі поля обов’язкові!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Увага',
+        text: 'Усі поля обов’язкові!',
+        confirmButtonColor: '#39736b',
+        confirmButtonText: 'Окей'
+      });
       return;
     }
 
     if (new_password !== new_password_repeat) {
-      alert('Нові паролі не збігаються!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Увага',
+        text: 'Нові паролі не збігаються!',
+        confirmButtonColor: '#39736b',
+        confirmButtonText: 'Окей'
+      });
       return;
     }
 
     if (new_password === current_password) {
-      alert('Новий пароль не може бути таким самим, як старий!');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Увага',
+        text: 'Новий пароль не може бути таким самим, як старий!',
+        confirmButtonColor: '#39736b',
+        confirmButtonText: 'Окей'
+      });
       return;
     }
 
@@ -54,12 +77,25 @@ export class VolunteerChangePasswordComponent {
       new_password
     }).subscribe({
       next: () => {
-        alert('Пароль успішно змінено!');
-        this.router.navigate(['/profile/volunteer']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Успішно!',
+          text: 'Пароль змінено!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        }).then(() => {
+          this.router.navigate(['/profile/volunteer']);
+        });
       },
       error: err => {
         console.error('Помилка зміни пароля:', err);
-        alert('Не вдалося змінити пароль.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося змінити пароль.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }

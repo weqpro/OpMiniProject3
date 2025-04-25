@@ -23,22 +23,23 @@ import {
   VolunteerProfileEditComponent
 } from './pages/profile/volunteer-profile/volunteer-profile-edit/volunteer-profile-edit.component';
 import { EditRequestComponent } from './pages/edit-request/edit-request.component';
+import { AuthGuard } from './guards/auth.guard';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'create', component: CreatePostComponent },
-  { path: 'profile/soldier', component: SoldierProfileComponent },
-  { path: 'profile/volunteer', component: VolunteerProfileComponent },
+  { path: 'create', component: CreatePostComponent,  canActivate: [AuthGuard]},
+  { path: 'profile/soldier', component: SoldierProfileComponent,  canActivate: [AuthGuard] },
+  { path: 'profile/volunteer', component: VolunteerProfileComponent,  canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'role-selection', component: RoleSelectionComponent },
   { path: 'register', component: RoleSelectionComponent },
-  { path: 'requests-filter', component: RequestsFilterComponent },
-  { path: 'my-requests-soldier', component: MyRequestsComponent },
+  { path: 'requests-filter', component: RequestsFilterComponent,  canActivate: [AuthGuard] },
+  { path: 'my-requests-soldier', component: MyRequestsComponent,  canActivate: [AuthGuard] },
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
-  { path: 'review/:id', component: ReviewComponent },
-  { path: 'app-soldier-change-password', component: SoldierChangePasswordComponent },
-  { path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent},
-  { path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent},
-  { path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent},
-  { path: 'edit-request/:id', component: EditRequestComponent }
+  { path: 'review/:id', component: ReviewComponent,  canActivate: [AuthGuard] },
+  { path: 'app-soldier-change-password', component: SoldierChangePasswordComponent,  canActivate: [AuthGuard] },
+  { path: 'app-soldier-profile-edit', component: SoldierProfileEditComponent,  canActivate: [AuthGuard]},
+  { path: 'app-volunteer-change-password', component: VolunteerChangePasswordComponent,  canActivate: [AuthGuard]},
+  { path: 'app-volunteer-profile-edit', component: VolunteerProfileEditComponent,  canActivate: [AuthGuard]},
+  { path: 'edit-request/:id', component: EditRequestComponent,  canActivate: [AuthGuard] }
 ];

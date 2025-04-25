@@ -16,6 +16,8 @@ import { AidRequestService } from '../../../services/aid-request.service';
 import { ReviewService } from '../../../services/review.service';
 import { AidRequest } from '../../../schemas/aid-request';
 import { Review } from '../../../schemas/review';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-volunteer-profile',
   standalone: true,
@@ -59,6 +61,7 @@ export class VolunteerProfileComponent implements OnInit {
     private volunteerService: VolonteerService,
     private reviewService: ReviewService
   ) {}
+
   ngOnInit(): void {
     this.volunteerService.getProfile().subscribe({
       next: (data) => {
@@ -67,7 +70,6 @@ export class VolunteerProfileComponent implements OnInit {
           this.loadMyRequests(data.id);
           this.loadReviews(data.id);
         }
-  
         this.route.queryParams.subscribe(params => {
           if (params['tab'] === 'requests') {
             this.selectedTabIndex = 1;
@@ -77,7 +79,7 @@ export class VolunteerProfileComponent implements OnInit {
       error: (err) => console.error('Помилка завантаження профілю:', err)
     });
   }
-  
+
   loadMyRequests(volunteerId: number): void {
     this.aidRequestService.getRequestsByVolunteer(volunteerId).subscribe({
       next: (data) => {
@@ -104,7 +106,7 @@ export class VolunteerProfileComponent implements OnInit {
       });
     });
   }
-  
+
   showSoldierPopup(id: number): void {
     this.selectedSoldier = this.soldierMap[id];
     this.popupSoldierVisible = true;
@@ -123,6 +125,19 @@ export class VolunteerProfileComponent implements OnInit {
     this.popupRequestVisible = false;
   }
 
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'pending':
+        return 'очікує';
+      case 'in_progress':
+        return 'в процесі';
+      case 'completed':
+        return 'виконано';
+      default:
+        return status;
+    }
+  }
+
   editProfile(): void {
     this.router.navigate(['/app-volunteer-profile-edit']);
   }
@@ -137,29 +152,65 @@ export class VolunteerProfileComponent implements OnInit {
   }
 
   deleteAccount(): void {
-    const confirmed = confirm('Ви впевнені, що хочете видалити обліковий запис?');
-    if (confirmed) {
-      this.volunteerService.deleteAccount().subscribe({
-        next: () => {
-          alert('Акаунт видалено');
-          localStorage.removeItem('access_token');
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          console.error('Не вдалося видалити акаунт', err);
-          alert('Помилка при видаленні акаунту');
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Ви впевнені?',
+      text: 'Видалення акаунту не можна скасувати.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#39736b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Так, видалити',
+      cancelButtonText: 'Скасувати'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.volunteerService.deleteAccount().subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Акаунт видалено',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            }).then(() => {
+              localStorage.removeItem('access_token');
+              this.router.navigate(['/']);
+            });
+          },
+          error: (err) => {
+            console.error('Не вдалося видалити акаунт', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Помилка',
+              text: 'Помилка при видаленні акаунту',
+              confirmButtonColor: '#39736b',
+              confirmButtonText: 'Окей'
+            });
+          }
+        });
+      }
+    });
   }
 
   markAsCompleted(requestId: number): void {
     this.aidRequestService.completeRequest(requestId).subscribe({
       next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Запит виконано!',
+          text: 'Дякуємо!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
         this.loadMyRequests(this.profileData.id);
       },
       error: (err) => {
         console.error('Помилка при завершенні запиту', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося завершити запит.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }

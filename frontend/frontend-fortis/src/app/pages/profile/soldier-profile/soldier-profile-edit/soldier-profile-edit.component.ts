@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
 import { SoldierService } from '../../../../services/soldier.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-soldier-profile-edit',
@@ -53,7 +54,6 @@ export class SoldierProfileEditComponent implements OnInit {
       battalion: [''],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
-    
 
     this.loadProfile();
   }
@@ -72,6 +72,13 @@ export class SoldierProfileEditComponent implements OnInit {
       },
       error: (err) => {
         console.error('Помилка завантаження профілю:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Не вдалося завантажити дані профілю.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
@@ -83,17 +90,30 @@ export class SoldierProfileEditComponent implements OnInit {
 
     this.soldierService.updateProfile(formData).subscribe({
       next: () => {
-        alert('Профіль оновлено');
-        this.router.navigate(['/profile/soldier']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Успішно!',
+          text: 'Профіль оновлено!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        }).then(() => {
+          this.router.navigate(['/profile/soldier']);
+        });
       },
       error: (err) => {
         console.error('Помилка оновлення:', err);
-        alert('Неправильний пароль або інша помилка');
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка',
+          text: 'Неправильний пароль або інша помилка.',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
       }
     });
   }
 
   cancel() {
-    this.router.navigate(['profile/soldier']);
+    this.router.navigate(['/profile/soldier']);
   }
 }

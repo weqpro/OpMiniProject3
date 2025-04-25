@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -34,21 +35,26 @@ export class LoginComponent {
   login() {
     const endpoint = `${this.baseUrl}/${this.selectedRole}`;
     const body = new URLSearchParams();
-      body.set('username', this.email);
-      body.set('password', this.password);
+    body.set('username', this.email);
+    body.set('password', this.password);
 
-      const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
 
-      this.http.post(endpoint, body.toString(), { headers }).subscribe({
-        next: (response: any) => {
-          localStorage.setItem('access_token', response.access_token);
-          this.router.navigate(['/requests-filter']);
-        },
-        error: () => {
-          alert('Неправильна електронна адреса або пароль.\nНе маєте акаунту? Зареєструйтесь!');
-        }
-      });
-
+    this.http.post(endpoint, body.toString(), { headers }).subscribe({
+      next: (response: any) => {
+        localStorage.setItem('access_token', response.access_token);
+        this.router.navigate(['/requests-filter']);
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Помилка входу',
+          text: 'Неправильна електронна адреса або пароль.\nНе маєте акаунту? Зареєструйтесь!',
+          confirmButtonColor: '#39736b',
+          confirmButtonText: 'Окей'
+        });
+      }
+    });
   }
 
   goToRegister() {

@@ -79,7 +79,7 @@
             <img [src]="'http://127.0.0.1:8000' + request.image" alt="Request image" class="request-img" />
             <div class="request-content">
               <h3 class="request-title">{{ request.name }}</h3>
-              <p><strong>Статус</strong> — {{ request.status }}</p>
+              <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>
 
               <p *ngIf="request.status === 'in_progress' || request.status === 'completed'">
                 <a class="action-link" (click)="showVolunteerPopup(request.volunteer_id)">Контактні дані волонтера</a>
@@ -105,7 +105,7 @@
         <p><strong>Ім’я:</strong> {{ selectedVolunteer.name }}</p>
         <p><strong>Прізвище:</strong> {{ selectedVolunteer.surname }}</p>
         <p><strong>Телефон:</strong> {{ selectedVolunteer.phone_number }}</p>
-        <p><strong>Email:</strong> {{ selectedVolunteer.email }}</p>
+        <p><strong>Електронна пошта:</strong> {{ selectedVolunteer.email }}</p>
         <p><strong>Рейтинг:</strong> {{ selectedVolunteer.rating || 'Немає оцінок' }}</p>
       </div>
     </div>
