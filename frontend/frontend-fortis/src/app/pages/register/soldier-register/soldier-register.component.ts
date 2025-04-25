@@ -52,7 +52,10 @@ export class SoldierRegisterComponent {
             title: 'Успішна реєстрація!',
             text: 'Тепер ви можете увійти.',
             confirmButtonColor: '#39736b',
-            confirmButtonText: 'Увійти'
+            confirmButtonText: 'Увійти',
+            customClass: {
+              confirmButton: 'montserrat-button'
+            }
           }).then(() => {
             this.router.navigate(['/login']);
           });

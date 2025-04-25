@@ -51,7 +51,10 @@ export class VolunteerRegisterComponent {
             title: 'Реєстрація успішна!',
             text: 'Тепер увійдіть у систему.',
             confirmButtonColor: '#39736b',
-            confirmButtonText: 'Увійти'
+  confirmButtonText: 'Увійти',
+  customClass: {
+    confirmButton: 'montserrat-button'
+  }
           }).then(() => {
             this.router.navigate(['/login']);
           });

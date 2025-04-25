@@ -1,16 +1,8 @@
-/* ======================== */
-/*      GLOBAL STYLES      */
-/* ======================== */
-
 body {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
   padding: 0;
 }
-
-/* ======================== */
-/*        TOP BAR          */
-/* ======================== */
 
 .top-bar {
   display: flex;
@@ -175,4 +167,10 @@ body {
     margin-top: 16px;
     text-align: center;
   }
+}
+
+.swal2-confirm, .swal2-cancel {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 500;
+  font-size: 16px;
 }

@@ -160,6 +160,7 @@ export class SoldierProfileComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Так, видалити',
       cancelButtonText: 'Скасувати'
+      
     }).then((result) => {
       if (result.isConfirmed) {
         this.aidRequestService.deleteRequest(requestId).subscribe({
