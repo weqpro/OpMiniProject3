@@ -43,22 +43,20 @@ class RepositoryContext(metaclass=Singleton):
             self.__engine, expire_on_commit=False
         )
 
-        asyncio.create_task(self.init_db())
-
     async def init_db(self):
         print("Connecting to db...", flush=True)
         try:
             async with self.__engine.begin() as conn:
-                # await conn.execute(text("DROP TABLE IF EXISTS aid_request CASCADE"))
-                # await conn.execute(text("DROP TABLE IF EXISTS category CASCADE"))
-                # await conn.run_sync(Base.metadata.drop_all)
+                await conn.execute(text("DROP TABLE IF EXISTS aid_request CASCADE"))
+                await conn.execute(text("DROP TABLE IF EXISTS category CASCADE"))
+                await conn.execute(text("DROP TABLE IF EXISTS city CASCADE"))
+                await conn.run_sync(Base.metadata.drop_all)
                 await conn.run_sync(Base.metadata.create_all)
         except sqlalchemy.exc.OperationalError as e:
             print(f"Failed (retry after 2s)\ne:{e}")
             await asyncio.sleep(2)
             await self.init_db()
         print("Conected to database", flush=True)
-
 
     def __get_passwd(self) -> str:
         """get s a password from secrets"""
@@ -68,11 +66,9 @@ class RepositoryContext(metaclass=Singleton):
         with open(path) as f:
             return f.read().rstrip("\n")
 
-
     async def ensure_db(self):
         async with self.__engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-
 
     @asynccontextmanager
     async def session_maker(self) -> AsyncGenerator[AsyncSession, None]:

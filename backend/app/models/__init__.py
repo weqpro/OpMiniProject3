@@ -4,13 +4,6 @@ from .category import Category
 from .review import Review
 from .soldier import Soldier
 from .volunteer import Volunteer
+from .city import City
 
-__all__ = [
-    "AidRequest",
-    "Base",
-    "Category",
-    "Review",
-    "Soldier",
-    "Volunteer",
-    "City"
-]
+__all__ = ["AidRequest", "Base", "Category", "Review", "Soldier", "Volunteer", "City"]
