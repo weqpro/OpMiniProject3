@@ -195,5 +195,6 @@ async def get_image(filename: str):
 async def get_closest_requests(
     city_name: str,
     service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_user_from_token)
 ) -> list[AidRequestSchema]:
     return await service.get_requests_nearest_to_city(city_name)
