@@ -209,7 +209,7 @@ export class EditRequestComponent implements OnInit {
         this.location = data.location;
         this.deadline = new Date(data.deadline);
         this.category_id = data.category_id;
-        this.imagePreview = data.image ? `http://127.0.0.1:8000${data.image}` : null;
+        this.imagePreview = data.image ? `http://77.110.116.47:8000${data.image}` : null;
       },
       error: (err) => {
         console.error('Не вдалося завантажити запит', err);

@@ -102,7 +102,7 @@ export class SoldierProfileComponent implements OnInit {
   loadVolunteers(): void {
     const ids = [...new Set(this.requests.map(r => r.volunteer_id).filter(Boolean))];
     ids.forEach(id => {
-      this.http.get(`http://127.0.0.1:8000/api/v1/volunteers/${id}`).subscribe({
+      this.http.get(`http://77.110.116.47:8000/api/v1/volunteers/${id}`).subscribe({
         next: (volunteer: any) => this.volunteerMap[id] = volunteer,
         error: err => console.error(`Не вдалося завантажити волонтера з ID ${id}`, err)
       });

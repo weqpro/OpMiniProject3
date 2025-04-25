@@ -11,7 +11,7 @@ interface AuthResponse {
 export type UserRole = 'soldier' | 'volunteer';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authUrl = 'http://127.0.0.1:8000/api/v1/auth/token';
+  private authUrl = 'http://77.110.116.47:8000/api/v1/auth/token';
   private accessToken: string | null = null;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -52,12 +52,12 @@ export class AuthService {
   }
 
   getUserRole(): Observable<UserRole> {
-    return this.http.get<{ role: UserRole }>('http://127.0.0.1:8000/api/v1/auth/me').pipe(
+    return this.http.get<{ role: UserRole }>('http://77.110.116.47:8000/api/v1/auth/me').pipe(
       map((response: { role: any; }) => response.role)
     );
   }
   getCurrentUser(): Observable<{ id: number, role: UserRole }> {
-    return this.http.get<{ id: number, role: UserRole }>('http://127.0.0.1:8000/api/v1/auth/me');
+    return this.http.get<{ id: number, role: UserRole }>('http://77.110.116.47:8000/api/v1/auth/me');
   }
   
 }

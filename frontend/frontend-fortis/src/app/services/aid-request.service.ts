@@ -11,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AidRequestService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/aid_requests';
+  private apiUrl = 'http://77.110.116.47:8000/api/v1/aid_requests';
   constructor() { }
 
   private handleError(error: HttpErrorResponse) {
@@ -125,7 +125,7 @@ export class AidRequestService {
   }
 
   getRequestsByCity(cityName: string): Observable<AidRequest[]> {
-    return this.http.get<AidRequest[]>(`http://127.0.0.1:8000/api/v1/aid_requests/getClosest/${encodeURIComponent(cityName)}`);
+    return this.http.get<AidRequest[]>(`http://77.110.116.47:8000/api/v1/aid_requests/getClosest/${encodeURIComponent(cityName)}`);
   }
   
   

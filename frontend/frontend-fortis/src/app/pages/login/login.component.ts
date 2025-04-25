@@ -24,7 +24,7 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   selectedRole: 'volunteer' | 'soldier' = 'volunteer';
-  baseUrl: string = 'http://127.0.0.1:8000/api/v1/auth/token';
+  baseUrl: string = 'http://77.110.116.47:8000/api/v1/auth/token';
 
   constructor(private http: HttpClient, private router: Router) {}
 
