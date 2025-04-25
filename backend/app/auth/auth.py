@@ -3,7 +3,7 @@ from datetime import timedelta, datetime, timezone
 from typing import Literal
 import jwt
 from passlib.context import CryptContext
-from jwt.exceptions import InvalidTokenError,PyJWTError
+from jwt.exceptions import InvalidTokenError, PyJWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
@@ -16,9 +16,14 @@ from app.services.volunteer_service import VolunteerService, get_volunteer_servi
 from app.utils import MissingEnviromentVariableError
 
 from app.models.volunteer import Volunteer
-from app.repository.volunteer_repository import get_volunteer_repository, VolunteerRepository
+from app.repository.volunteer_repository import (
+    get_volunteer_repository,
+    VolunteerRepository,
+)
+
 
 from app.repository.soldier_repository import get_soldier_repository
+
 
 def __get_passwd() -> str:
     """get s a password from secrets"""
@@ -27,6 +32,7 @@ def __get_passwd() -> str:
         raise MissingEnviromentVariableError("Could not get DATABASE_PASSWORD_FILE")
     with open(path) as f:
         return f.read().rstrip("\n")
+
 
 JWT_SECRET: str = "secret"
 ALGORITHM: str = "HS256"
@@ -37,6 +43,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
+
 async def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
@@ -44,8 +51,10 @@ async def verify_password(plain_password: str, hashed_password: str) -> bool:
 async def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
+
 def is_password_valid(password: str) -> bool:
     return len(password) >= 8
+
 
 async def authenticate_soldier(
     username: str,
@@ -78,6 +87,7 @@ async def authenticate_volunteer(
     if not await verify_password(password, volunteer.password):
         return False
     return volunteer
+
 
 async def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
@@ -115,6 +125,7 @@ async def get_current_soldier(
         raise auth_exception
     return soldier
 
+
 async def get_current_volunteer(
     token: str = Depends(oauth2_scheme),
     volunteer_repo: VolunteerRepository = Depends(get_volunteer_repository),
@@ -135,15 +146,18 @@ async def get_current_volunteer(
     except InvalidTokenError:
         raise auth_exception
 
-    volunteer: Volunteer | None = await volunteer_repo.find_by_email(token_data.username)
+    volunteer: Volunteer | None = await volunteer_repo.find_by_email(
+        token_data.username
+    )
     if volunteer is None:
         raise auth_exception
     return volunteer
 
+
 async def get_current_user_from_token(
     token: str = Depends(oauth2_scheme),
-    volunteer_repo = Depends(get_volunteer_repository),
-    soldier_repo = Depends(get_soldier_repository),
+    volunteer_repo=Depends(get_volunteer_repository),
+    soldier_repo=Depends(get_soldier_repository),
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

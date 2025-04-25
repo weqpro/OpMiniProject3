@@ -1,14 +1,24 @@
 """aid request model"""
 
 import datetime
-from typing import List
-
-from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy import String, ForeignKey, DateTime
+from sqlalchemy.dialects.postgresql import TSVECTOR, REGCONFIG
+from sqlalchemy import (
+    TEXT,
+    Computed,
+    String,
+    ForeignKey,
+    DateTime,
+    cast,
+    func,
+    literal_column,
+)
 from sqlalchemy.orm import mapped_column, Mapped
 
 from app.models.base import Base
 from app.utils import AidRequestStatus
+
+
+_SIMPLE_CFG = literal_column("'simple'").cast(REGCONFIG)
 
 
 class AidRequest(Base):
@@ -21,7 +31,6 @@ class AidRequest(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), index=True, nullable=False)
     description: Mapped[str] = mapped_column(String(1000))
-    #tags: Mapped[List[str]] = mapped_column(ARRAY(String), index=True, nullable=True)
     image: Mapped[str] = mapped_column(String(255))
     location: Mapped[str] = mapped_column(String(100))
     status: Mapped[str] = mapped_column(
@@ -35,6 +44,19 @@ class AidRequest(Base):
     volunteer_id: Mapped[int] = mapped_column(ForeignKey("volunteer.id"), nullable=True)
     category_id: Mapped[int] = mapped_column(ForeignKey("category.id"), nullable=True)
 
+    textsearch: Mapped[TSVECTOR] = mapped_column(
+        TSVECTOR,
+        Computed(
+            func.setweight(func.to_tsvector(_SIMPLE_CFG, name), "A").op("||")(
+                func.setweight(
+                    func.to_tsvector(cast(_SIMPLE_CFG, REGCONFIG), description), "B"
+                )
+            ),
+            persisted=True,
+        ),
+        nullable=False,
+    )
+
     @staticmethod
     def create_dummy() -> "AidRequest":
         return AidRequest(
@@ -44,7 +66,6 @@ class AidRequest(Base):
             image="shit",
             deadline=datetime.datetime.now(),
             location="somewhere",
-            #tags=["josci", "duje"],
             status="not done",
             soldier_id=1234,
             category=None,

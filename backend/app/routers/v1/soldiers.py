@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.models.soldier import Soldier
+from app.models import Soldier, AidRequest
+
 
 from app.services import (
     SoldierService,
@@ -8,7 +9,14 @@ from app.services import (
     get_soldier_service,
     get_aid_request_service,
 )
-from app.schemas import SoldierSchema, AidRequestSchema, AidRequestSchemaIn, SoldierUpdateSchema, ChangePasswordSchema
+from app.schemas import (
+    SoldierSchema,
+    AidRequestSchema,
+    AidRequestSchemaIn,
+    AidRequestSchemaInWithoutVolId,
+    SoldierUpdateSchema,
+    ChangePasswordSchema,
+)
 from app.auth import get_current_soldier, get_password_hash, get_current_volunteer
 
 router = APIRouter(prefix="/soldiers", tags=["soldiers"])
@@ -21,6 +29,7 @@ async def get_all(
     return list(
         map(lambda s: SoldierSchema.model_validate(s), await soldier_service.get_all())
     )
+
 
 @router.get("/me", response_model=SoldierSchema)
 async def get_me(
@@ -39,19 +48,21 @@ async def create(
     result: Soldier = await soldier_service.create_soldier(soldier)
     return SoldierSchema.model_validate(result)
 
+
 @router.delete("/me")
-async def delete(
+async def delete_me(
     service: SoldierService = Depends(get_soldier_service),
     user=Depends(get_current_soldier),
 ):
     await service.delete(user.id)
     return {"detail": "Soldier deleted"}
 
+
 @router.get("/soldier-info/{soldier_id}")
 async def get_soldier_info(
     soldier_id: int,
     user=Depends(get_current_volunteer),
-    service: SoldierService = Depends(get_soldier_service)
+    service: SoldierService = Depends(get_soldier_service),
 ):
     soldier = await service.get_by_id(soldier_id)
     if not soldier:
@@ -64,14 +75,16 @@ async def get_soldier_info(
         "email": soldier.email,
     }
 
+
 @router.post("/create_request")
 async def create_aid_request(
-    aid_request: AidRequestSchemaIn,
+    aid_request: AidRequestSchemaInWithoutVolId,
     aid_request_service: AidRequestService = Depends(get_aid_request_service),
     soldier: Soldier = Depends(get_current_soldier),
 ) -> AidRequestSchema:
-    result = await aid_request_service.create(aid_request, soldier.id)
+    result: AidRequest = await aid_request_service.create(aid_request, soldier.id)
     return AidRequestSchema.model_validate(result)
+
 
 @router.put("/me", response_model=SoldierSchema)
 async def update_me(
@@ -81,6 +94,7 @@ async def update_me(
 ):
     return await service.update_me(user.id, data)
 
+
 @router.post("/change-password")
 async def change_password(
     data: ChangePasswordSchema,
@@ -89,3 +103,25 @@ async def change_password(
 ):
     await service.change_password(user.email, data.current_password, data.new_password)
     return {"detail": "Password changed"}
+
+
+@router.delete("/delete_request/{request_id}")
+async def delete(
+    request_id: int,
+    aid_request_service: AidRequestService = Depends(get_aid_request_service),
+    soldier: Soldier = Depends(get_current_soldier),
+):
+    soldier.requests
+
+
+@router.put("/update_request/{request_id}", response_model=AidRequestSchema)
+async def update(
+    request_id: int,
+    aid_request: AidRequestSchemaIn,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    updated = await service.update(request_id, aid_request)
+    if not updated:
+        raise HTTPException(404, detail="Request not found")
+    return updated
