@@ -75,7 +75,10 @@ export class SoldierProfileComponent implements OnInit {
           title: 'Помилка',
           text: 'Не вдалося завантажити дані профілю.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

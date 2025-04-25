@@ -169,7 +169,10 @@ export class VolunteerProfileComponent implements OnInit {
               icon: 'success',
               title: 'Акаунт видалено',
               confirmButtonColor: '#39736b',
-              confirmButtonText: 'Окей'
+              confirmButtonText: 'Гаразд',
+              customClass: {
+                confirmButton: 'montserrat-button'
+              }
             }).then(() => {
               localStorage.removeItem('access_token');
               this.router.navigate(['/']);
@@ -182,7 +185,10 @@ export class VolunteerProfileComponent implements OnInit {
               title: 'Помилка',
               text: 'Помилка при видаленні акаунту',
               confirmButtonColor: '#39736b',
-              confirmButtonText: 'Окей'
+              confirmButtonText: 'Гаразд',
+              customClass: {
+                confirmButton: 'montserrat-button'
+              }
             });
           }
         });
@@ -198,7 +204,10 @@ export class VolunteerProfileComponent implements OnInit {
           title: 'Запит виконано!',
           text: 'Дякуємо!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
         this.loadMyRequests(this.profileData.id);
       },
@@ -209,7 +218,10 @@ export class VolunteerProfileComponent implements OnInit {
           title: 'Помилка',
           text: 'Не вдалося завершити запит.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

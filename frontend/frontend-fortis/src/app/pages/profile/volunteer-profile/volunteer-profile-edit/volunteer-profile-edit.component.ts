@@ -79,7 +79,10 @@ export class VolunteerProfileEditComponent implements OnInit {
           title: 'Помилка',
           text: 'Не вдалося завантажити дані профілю.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });
@@ -107,7 +110,10 @@ export class VolunteerProfileEditComponent implements OnInit {
         title: 'Увага',
         text: 'Введіть поточний пароль для збереження змін.',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -122,10 +128,13 @@ export class VolunteerProfileEditComponent implements OnInit {
       next: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Успішно!',
-          text: 'Профіль оновлено!',
+          title: 'Профіль оновлено!',
+          text: 'Дякуємо!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         }).then(() => {
           this.router.navigate(['/profile/volunteer']);
         });
@@ -137,7 +146,10 @@ export class VolunteerProfileEditComponent implements OnInit {
           title: 'Помилка',
           text: 'Неправильний пароль або інша помилка при оновленні профілю.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

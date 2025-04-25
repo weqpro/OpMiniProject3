@@ -45,7 +45,10 @@ export class SoldierChangePasswordComponent {
         title: 'Помилка',
         text: 'Усі поля обов’язкові!',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -56,7 +59,10 @@ export class SoldierChangePasswordComponent {
         title: 'Помилка',
         text: 'Пароль має бути не менше 8 символів!',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -67,7 +73,10 @@ export class SoldierChangePasswordComponent {
         title: 'Помилка',
         text: 'Нові паролі не збігаються!',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -78,7 +87,10 @@ export class SoldierChangePasswordComponent {
         title: 'Помилка',
         text: 'Новий пароль не може бути таким самим, як старий!',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -87,10 +99,13 @@ export class SoldierChangePasswordComponent {
       next: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Успіх!',
-          text: 'Пароль змінено успішно!',
+          title: 'Пароль успішно змінено!',
+          text: 'Дякуємо!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         }).then(() => {
           this.router.navigate(['/profile/soldier']);
         });
@@ -102,7 +117,10 @@ export class SoldierChangePasswordComponent {
           title: 'Помилка',
           text: 'Не вдалося змінити пароль. Спробуйте ще раз.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

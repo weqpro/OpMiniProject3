@@ -77,7 +77,10 @@ export class SoldierProfileEditComponent implements OnInit {
           title: 'Помилка',
           text: 'Не вдалося завантажити дані профілю.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });
@@ -92,10 +95,13 @@ export class SoldierProfileEditComponent implements OnInit {
       next: () => {
         Swal.fire({
           icon: 'success',
-          title: 'Успішно!',
-          text: 'Профіль оновлено!',
+          title: 'Профіль оновлено!',
+          text: 'Дякуємо!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         }).then(() => {
           this.router.navigate(['/profile/soldier']);
         });
@@ -107,7 +113,10 @@ export class SoldierProfileEditComponent implements OnInit {
           title: 'Помилка',
           text: 'Неправильний пароль або інша помилка.',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

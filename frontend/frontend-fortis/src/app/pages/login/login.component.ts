@@ -51,7 +51,10 @@ export class LoginComponent {
           title: 'Помилка входу',
           text: 'Неправильна електронна адреса або пароль.\nНе маєте акаунту? Зареєструйтесь!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });

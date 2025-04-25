@@ -8,7 +8,6 @@ import { RoleSelectionComponent } from './pages/role-selection/role-selection.co
 import { VolunteerRegisterComponent } from './pages/register/volunteer-register/volunteer-register.component';
 import { SoldierRegisterComponent } from './pages/register/soldier-register/soldier-register.component';
 import { RequestsFilterComponent } from './pages/requests-filter/requests-filter.component';
-import { MyRequestsComponent } from './pages/my-request-soldier/my-request-soldier.component'
 import { ReviewComponent } from './pages/review/review.component'
 import {
   SoldierChangePasswordComponent
@@ -33,7 +32,6 @@ export const routes: Routes = [
   { path: 'role-selection', component: RoleSelectionComponent },
   { path: 'register', component: RoleSelectionComponent },
   { path: 'requests-filter', component: RequestsFilterComponent,  canActivate: [AuthGuard] },
-  { path: 'my-requests-soldier', component: MyRequestsComponent,  canActivate: [AuthGuard] },
   { path: 'register/soldier', component: SoldierRegisterComponent },
   { path: 'register/volunteer', component: VolunteerRegisterComponent },
   { path: 'review/:id', component: ReviewComponent,  canActivate: [AuthGuard] },

@@ -63,7 +63,10 @@ export class VolunteerRegisterComponent {
             title: 'Помилка реєстрації',
             text: 'Перевірте дані або спробуйте ще раз.',
             confirmButtonColor: '#39736b',
-            confirmButtonText: 'Окей'
+            confirmButtonText: 'Гаразд',
+            customClass: {
+              confirmButton: 'montserrat-button'
+            }
           });
         }
       });

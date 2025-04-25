@@ -229,9 +229,12 @@ textarea[matInput] {
   }
 
   .top-bar {
-    flex-direction: column;
-    height: auto;
-    padding: 8px;
+    padding: 8px 12px;
+    height: 56px;
+  }
+
+  .full-logo {
+    height: 32px;
   }
 
   .top-left img {

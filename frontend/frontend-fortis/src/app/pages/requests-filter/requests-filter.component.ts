@@ -150,10 +150,13 @@ export class RequestsFilterComponent implements OnInit {
           next: () => {
             Swal.fire({
               icon: 'success',
-              title: 'Успішно!',
-              text: 'Ви погодились допомогти!',
+              title: 'Ви погодились допомогти!',
+              text: 'Дякуємо!',
               confirmButtonColor: '#39736b',
-              confirmButtonText: 'Окей'
+              confirmButtonText: 'Гаразд',
+              customClass: {
+                confirmButton: 'montserrat-button'
+              }
             });
             this.closeRequestPopup();
             this.loadUnassignedRequests();
@@ -165,7 +168,10 @@ export class RequestsFilterComponent implements OnInit {
               title: 'Помилка',
               text: 'Не вдалося погодитись допомогти. Спробуйте ще раз.',
               confirmButtonColor: '#39736b',
-              confirmButtonText: 'Окей'
+              confirmButtonText: 'Гаразд',
+              customClass: {
+                confirmButton: 'montserrat-button'
+              }
             });
           }
         });

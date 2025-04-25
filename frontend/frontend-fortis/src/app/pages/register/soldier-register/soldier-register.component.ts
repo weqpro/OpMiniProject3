@@ -64,7 +64,10 @@ export class SoldierRegisterComponent {
             title: 'Помилка реєстрації',
             text: 'Спробуйте ще раз або перевірте дані.',
             confirmButtonColor: '#39736b',
-            confirmButtonText: 'Окей'
+            confirmButtonText: 'Гаразд',
+            customClass: {
+              confirmButton: 'montserrat-button'
+            }
           });
         }
       });

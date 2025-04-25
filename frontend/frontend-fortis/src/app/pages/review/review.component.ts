@@ -56,7 +56,10 @@ export class ReviewComponent implements OnInit {
           title: 'Помилка!',
           text: 'Не знайдено ID запиту!',
           confirmButtonColor: '#39736b',
-          confirmButtonText: 'Окей'
+          confirmButtonText: 'Гаразд',
+          customClass: {
+            confirmButton: 'montserrat-button'
+          }
         });
       }
     });
@@ -79,7 +82,10 @@ export class ReviewComponent implements OnInit {
         title: 'Увага!',
         text: 'Всі поля обовʼязкові для заповнення!',
         confirmButtonColor: '#39736b',
-        confirmButtonText: 'Окей'
+        confirmButtonText: 'Гаразд',
+        customClass: {
+          confirmButton: 'montserrat-button'
+        }
       });
       return;
     }
@@ -119,7 +125,10 @@ export class ReviewComponent implements OnInit {
             title: 'Помилка',
             text: 'Сталася помилка під час створення відгуку. Спробуйте ще раз!',
             confirmButtonColor: '#39736b',
-            confirmButtonText: 'Окей'
+            confirmButtonText: 'Гаразд',
+            customClass: {
+              confirmButton: 'montserrat-button'
+            }
           });
         }
       }
