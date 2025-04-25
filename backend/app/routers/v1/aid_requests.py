@@ -1,3 +1,4 @@
+from fastapi import APIRouter, Query, Depends
 from fastapi import APIRouter, Query, HTTPException, Form, UploadFile, File, Depends
 from app.schemas import (
     AidRequestSchema,
@@ -15,6 +16,7 @@ from app.auth import (
     get_current_user_from_token,
 )
 from fastapi.responses import FileResponse
+
 import os
 import shutil
 import json
@@ -116,7 +118,7 @@ async def assign_request_to_volunteer(
     data = AidRequestAssignStatus(
         volunteer_id=user.id, status=AidRequestStatus.IN_PROGRESS.value
     )
-    updated = await service.update(request_id, data)
+    updated = await service.update_volunteer_assignment(request_id, data)
     if not updated:
         raise HTTPException(status_code=404, detail="Request not found")
     return updated
@@ -151,17 +153,42 @@ async def update_request(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_soldier),
 ):
-    updated = await service.update(request_id, data)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Request not found")
-    return updated
+    return await service.update(request_id, soldier_id=user.id, data=data.model_dump(exclude_unset=True))
+
+@router.put("/{request_id}/with-image", response_model=AidRequestSchema)
+async def update_with_image(
+    request_id: int,
+    json_data: str = Form(...),
+    image: UploadFile | None = File(None),
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_soldier),
+):
+    try:
+        data_dict = json.loads(json_data)
+    except Exception:
+        raise HTTPException(422, detail="Invalid JSON string in form-data")
+
+    image_name = None
+    if image:
+        os.makedirs("uploads/aid_requests", exist_ok=True)
+        image_name = image.filename
+        path = os.path.join("uploads", "aid_requests", image_name)
+        with open(path, "wb") as f:
+            shutil.copyfileobj(image.file, f)
+
+    return await service.update(
+        request_id=request_id,
+        soldier_id=user.id,
+        data=data_dict,
+        image=image_name
+    )
 
 
 @router.get("/{request_id}", response_model=AidRequestSchema)
 async def get_by_id(
     request_id: int,
     service: AidRequestService = Depends(get_aid_request_service),
-    user=Depends(get_current_volunteer),
+    user=Depends(get_current_user_from_token),
 ):
     result = await service.get_by_id(request_id)
     if not result:
@@ -175,3 +202,11 @@ async def get_image(filename: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image not found")
     return FileResponse(file_path)
+
+@router.get("/getClosest/{city_name}", response_model=list[AidRequestSchema])
+async def get_closest_requests(
+    city_name: str,
+    service: AidRequestService = Depends(get_aid_request_service),
+    user=Depends(get_current_user_from_token)
+) -> list[AidRequestSchema]:
+    return await service.get_requests_nearest_to_city(city_name)

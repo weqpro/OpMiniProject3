@@ -58,6 +58,9 @@ class ReviewService:
             )
             await session.commit()
 
+    async def get_by_volunteer(self, volunteer_id: int) -> list[Review]:
+        return await self.__repo.find_by_condition(Review.volunteer_id == volunteer_id)
+
 async def get_review_service(
     review_repo: ReviewRepository = Depends(get_review_repository),
     request_repo: AidRequestRepository = Depends(get_aid_request_repository),

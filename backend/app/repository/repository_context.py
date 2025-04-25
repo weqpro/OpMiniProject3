@@ -14,6 +14,7 @@ import sqlalchemy.exc
 
 from app.utils import Singleton
 
+
 from app.models import *
 from app.models.base import Base
 from app.utils import MissingEnviromentVariableError
@@ -21,6 +22,8 @@ from app.utils import MissingEnviromentVariableError
 
 class RepositoryContext(metaclass=Singleton):
     def __init__(self) -> None:
+        # password = "9876"
+        # connection = "postgresql+asyncpg://daryna:9876@localhost:5432/fortis"
         password: str = self.__get_passwd()
         connection: str | None = os.getenv("DATABASE_URL")
 
@@ -56,8 +59,6 @@ class RepositoryContext(metaclass=Singleton):
             await self.init_db()
         print("Conected to database", flush=True)
 
-    def __del__(self) -> None:
-        asyncio.run(self.__engine.dispose())
 
     def __get_passwd(self) -> str:
         """get s a password from secrets"""
@@ -66,6 +67,12 @@ class RepositoryContext(metaclass=Singleton):
             raise MissingEnviromentVariableError("Could not get DATABASE_PASSWORD_FILE")
         with open(path) as f:
             return f.read().rstrip("\n")
+
+
+    async def ensure_db(self):
+        async with self.__engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+
 
     @asynccontextmanager
     async def session_maker(self) -> AsyncGenerator[AsyncSession, None]:

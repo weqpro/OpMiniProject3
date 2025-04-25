@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi import APIRouter, Depends, Form, HTTPException, status, BackgroundTasks
 from app.schemas import SoldierSchemaIn, VolunteerSchemaIn
 from app.services import get_soldier_service, get_volunteer_service
 from app.auth import (
@@ -8,28 +8,40 @@ from app.auth import (
 )
 from app.services import VolunteerService, SoldierService
 from app.models.volunteer import Volunteer
-from app.auth import (
-    get_current_user_from_token,
-)
-
+from app.auth import get_current_volunteer, get_current_soldier, get_current_user_from_token
+from app.mailer import send_registration_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register/soldier")
+@router.post("/register/soldier", response_model=SoldierSchemaIn)
 async def register_soldier(
     data: SoldierSchemaIn,
+    background_tasks: BackgroundTasks,
     service: SoldierService = Depends(get_soldier_service),
 ):
-    return await service.create_soldier(data)
+    soldier = await service.create_soldier(data)
+    background_tasks.add_task(
+        send_registration_email,
+        email=soldier.email,
+        full_name=f"{soldier.name} {soldier.surname}"
+    )
+    return soldier
 
-
-@router.post("/register/volunteer")
+  
+@router.post("/register/volunteer", response_model=VolunteerSchemaIn)
 async def register_volunteer(
     data: VolunteerSchemaIn,
+    background_tasks: BackgroundTasks,
     service: VolunteerService = Depends(get_volunteer_service),
 ):
-    return await service.create(data)
+    volunteer = await service.create(data)
+    background_tasks.add_task(
+        send_registration_email,
+        email=volunteer.email,
+        full_name=f"{volunteer.name} {volunteer.surname}"
+    )
+    return volunteer
 
 
 @router.post("/token/soldier")

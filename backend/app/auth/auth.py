@@ -36,7 +36,7 @@ def __get_passwd() -> str:
 
 JWT_SECRET: str = "secret"
 ALGORITHM: str = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES: int = 20
+ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

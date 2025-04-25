@@ -12,4 +12,5 @@ __all__ = [
     "Review",
     "Soldier",
     "Volunteer",
+    "City"
 ]

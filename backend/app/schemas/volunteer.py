@@ -27,7 +27,8 @@ class VolunteerSchemaOut(BaseModel):
     name: str
     surname: str
     email: EmailStr
-    phone_number: constr(pattern=r"^\+380\d{9}$")
+    phone_number: constr(pattern=r'^\+380\d{9}$')
+    rating: float = 0.0
 
     class Config:
         from_attributes = True
