@@ -190,3 +190,10 @@ async def get_image(filename: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image not found")
     return FileResponse(file_path)
+
+@router.get("/getClosest/{city_name}", response_model=list[AidRequestSchema])
+async def get_closest_requests(
+    city_name: str,
+    service: AidRequestService = Depends(get_aid_request_service),
+) -> list[AidRequestSchema]:
+    return await service.get_requests_nearest_to_city(city_name)

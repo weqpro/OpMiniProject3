@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 from fastapi import Depends, HTTPException
-
+from haversine import haversine
 from app.models import Category
 from app.schemas import SearchOptionsSchema
 from app.schemas import AidRequestSchema, AidRequestSchemaIn, AidRequestSchemaInWithoutVolId, AidRequestSchemaUpdate
@@ -8,16 +8,20 @@ from app.models import AidRequest
 from app.repository import (
     AidRequestRepository,
     get_aid_request_repository,
+    CityRepository,
+    get_city_repository
 )
 from app.utils import AidRequestStatus
-
+from app.repository.city_repository import get_city_repository, CityRepository
 
 class AidRequestService:
     def __init__(
         self,
-        aid_request_repository: AidRequestRepository,
+        aid_request_repository: AidRequestRepository = Depends(get_aid_request_repository),
+        city_repository: CityRepository = Depends(get_city_repository),
     ) -> None:
-        self.__repository: AidRequestRepository = aid_request_repository
+        self.__repository = aid_request_repository
+        self.__cityrepo = city_repository
 
     async def search(self, search_options: SearchOptionsSchema | None = None) -> list[AidRequest]:
         if search_options is None:
@@ -42,34 +46,6 @@ class AidRequestService:
         )
 
         return await self.__repository.create(new_aid_request)
-
-    # async def update_aid_request_status(
-    #     self, db, aid_request_id: int, status: str
-    # ) -> AidRequest:
-    #     return await self.__repository.update_aid_request_status(
-    #         db=db, aid_request_id=aid_request_id, status=status
-    #     )
-    #
-    # async def set_volunteer_deadline(
-    #     self, db, aid_request_id: int, deadline: datetime.datetime
-    # ) -> AidRequestOut:
-    #     return await self.__repository.set_volunteer_deadline(
-    #         db=db, aid_request_id=aid_request_id, deadline=deadline
-    #     )
-    #
-    # async def delete_aid_request(
-    #     self, db, aid_request_id: int, soldier_id: int
-    # ) -> bool:
-    #     return await self.__repository.delete_aid_request(
-    #         db=db, aid_request_id=aid_request_id, soldier_id=soldier_id
-    #     )
-    #
-    # async def reject_aid_request(
-    #     self, db, aid_request_id: int, volunteer_id: int
-    # ) -> bool:
-    #     return await self.__repository.reject_aid_request(
-    #         db=db, aid_request_id=aid_request_id, volunteer_id=volunteer_id
-    #     )
 
     async def get_all(self) -> list[AidRequest]:
         requests = await self.__repository.find()
@@ -183,8 +159,31 @@ class AidRequestService:
         await self.__repository.update(condition=(AidRequest.id == request.id), status=request.status)
         return request
 
+    async def get_requests_nearest_to_city(
+            self,
+            volunteer_city_name: str,
+    ) -> list[AidRequest]:
+        city_from = await self.__cityrepo.get_by_name(volunteer_city_name)
+        if not city_from:
+            raise HTTPException(status_code=400, detail="City not found")
+
+        active_reqs = await self.__repository.find_by_condition(AidRequest.volunteer_id.is_(None))
+        distances: list[tuple[AidRequest, float]] = []
+        for req in active_reqs:
+            city_to = await self.__cityrepo.get_by_name(req.location)
+            if city_to:
+                d = haversine(
+                    (city_from.latitude, city_from.longitude),
+                    (city_to.latitude, city_to.longitude)
+                )
+                distances.append((req, d))
+
+        distances.sort(key=lambda x: x[1])
+        return [self._add_image_url(req) for req, _ in distances]
 
 async def get_aid_request_service(
     aid_request_repository: AidRequestRepository = Depends(get_aid_request_repository),
+    city_repository:    CityRepository       = Depends(get_city_repository),
 ) -> AidRequestService:
-    return AidRequestService(aid_request_repository)
+    return AidRequestService(aid_request_repository, city_repository)
+
