@@ -155,3 +155,66 @@ button[mat-raised-button] {
   align-self: flex-end;
   margin-top: 16px;
 }
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+  }
+
+  .full-logo {
+    height: 48px;
+  }
+
+  .top-right {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-button {
+    margin: 6px 0;
+    font-size: 16px;
+  }
+
+  .form-wrapper {
+    padding: 20px;
+    margin: 20px 10px;
+    width: 90%;
+  }
+
+  .publish-button {
+    width: 100%;
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  .image-preview img {
+    max-height: 150px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 40px;
+  }
+
+  .footer-left,
+  .footer-center {
+    width: 100%;
+    padding: 10px 0;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-right {
+    margin-top: 30px; 
+    align-self: center;
+  }
+}

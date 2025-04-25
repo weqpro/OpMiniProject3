@@ -265,3 +265,93 @@ html, body {
   max-width: 90%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
+
+@media (max-width: 600px) {
+  .top-bar {
+    padding: 8px 12px;
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .full-logo {
+    height: 32px;
+  }
+
+  .top-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .content-wrap {
+    padding: 12px;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0 12px 24px 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .request-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .request-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .request-content {
+    width: 100%;
+  }
+
+  .request-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .complete-button {
+    position: static;
+    margin-top: 12px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-center {
+    padding: 0;
+    align-items: center;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-left,
+  .footer-right {
+    margin-top: 16px;
+    align-self: center;
+  }
+
+  .footer-right {
+    font-size: 10px;
+  }
+
+  .popup-window {
+    width: 90%;
+    padding: 16px 20px;
+  }
+}
