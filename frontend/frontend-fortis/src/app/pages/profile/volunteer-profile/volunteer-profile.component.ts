@@ -119,6 +119,20 @@ export class VolunteerProfileComponent implements OnInit {
     this.popupRequestVisible = true;
   }
 
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'pending':
+        return 'очікує';
+      case 'in_progress':
+        return 'в процесі';
+      case 'completed':
+        return 'завершено';
+      default:
+        return status;
+    }
+  }
+  
+
   closeRequestPopup(): void {
     this.popupRequestVisible = false;
   }

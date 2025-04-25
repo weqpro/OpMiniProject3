@@ -113,6 +113,20 @@ export class SoldierProfileComponent implements OnInit {
     }
   }
 
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'pending':
+        return 'очікує';
+      case 'in_progress':
+        return 'в процесі';
+      case 'completed':
+        return 'завершено';
+      default:
+        return status;
+    }
+  }
+  
+
   logout(): void {
     localStorage.removeItem('access_token');
     this.router.navigateByUrl('/login', { replaceUrl: true });
