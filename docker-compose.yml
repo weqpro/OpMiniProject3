@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgresql:
+  postgres:
     image: postgres
     environment:
       POSTGRES_USER: fastapi
@@ -22,13 +22,15 @@ services:
   api:
     image: docker.io/library/backend_api:latest
     environment:
-      DATABASE_URL: postgresql+psycopg://fastapi:{passwd}@postgresql:5432/postgres
+      DATABASE_URL: postgresql+psycopg://fastapi:{passwd}@postgres:5432/postgres
       DATABASE_PASSWORD_FILE: /run/secrets/postgres_passwd
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
     networks:
       - backend
       - frontend
     secrets:
       - postgres_passwd
+      - jwt_secret
     depends_on:
       - postgresql
 
@@ -59,5 +61,7 @@ networks:
 
 secrets:
   postgres_passwd:
+    external: true
+  jwt_secret:
     external: true
 
