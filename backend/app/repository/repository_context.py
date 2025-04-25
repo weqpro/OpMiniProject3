@@ -1,6 +1,6 @@
 import asyncio
-import os
 from collections.abc import AsyncGenerator
+import os
 from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio import (
@@ -12,20 +12,22 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy import text
 import sqlalchemy.exc
 
-from app.utils import Singleton, MissingEnviromentVariableError
-from app.models.base import Base
+from app.utils import Singleton
+
 from app.models.soldier import Soldier
 from app.models.volunteer import Volunteer
 from app.models.aid_request import AidRequest
+from app.models.base import Base
+from app.utils import MissingEnviromentVariableError
 
 
 class RepositoryContext(metaclass=Singleton):
     def __init__(self) -> None:
-        password = "1234"
-        connection = "postgresql+asyncpg://postgres:1234@localhost:5432/fortistest"
+        password = "9876"
+        connection = "postgresql+asyncpg://daryna:9876@localhost:5432/fortis"
 
         if connection is None:
-            raise MissingEnviromentVariableError("Missing DB connection string")
+            raise MissingEnviromentVariableError("Could not get DATABASE_URL")
 
         self.__engine: AsyncEngine = create_async_engine(
             connection,
@@ -52,7 +54,7 @@ class RepositoryContext(metaclass=Singleton):
             print(f"Failed (retry after 2s)\ne:{e}")
             await asyncio.sleep(2)
             await self.init_db()
-        print("Connected to database", flush=True)
+        print("Conected to database", flush=True)
 
     def __del__(self):
         if hasattr(self, "_RepositoryContext__engine"):
@@ -64,6 +66,12 @@ class RepositoryContext(metaclass=Singleton):
                     loop.run_until_complete(self.__engine.dispose())
             except Exception:
                 pass
+
+
+    async def ensure_db(self):
+        async with self.__engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+
 
     @asynccontextmanager
     async def session_maker(self) -> AsyncGenerator[AsyncSession, None]:
