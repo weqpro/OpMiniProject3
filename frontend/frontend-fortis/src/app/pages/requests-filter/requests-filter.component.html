@@ -29,31 +29,23 @@
         >
           Мої запити
         </button>
-          
         </mat-menu>
       </div>
     </div>
 
-    <div class="search-bar">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Пошук..." />
-      <button (click)="onSearch()">
-        <i class="fas fa-search"></i> Пошук
+    <div class="search-bar" style="display: flex; gap: 12px; align-items: center; margin-top: 20px;">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Пошук..." style="width: 300px; padding: 10px; font-size: 16px;" />
+      <button (click)="onSearch()" style="background-color: #39736b; color: white; border: none; padding: 10px 20px; font-weight: 500; font-family: 'Montserrat', sans-serif; cursor: pointer; border-radius: 4px;">
+        Пошук
       </button>
     </div>
 
-    <div class="filters">
+    <div class="filters" style="margin-top: 24px;">
       <div class="filter">
         <label>Категорія</label>
         <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
           <option value="">Будь-яка категорія</option>
           <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-        </select>
-      </div>
-
-      <div class="sort">
-        <label>Сортування за:</label>
-        <select [(ngModel)]="sortOption">
-          <option *ngFor="let opt of sortOptions" [value]="opt">{{ opt }}</option>
         </select>
       </div>
     </div>
