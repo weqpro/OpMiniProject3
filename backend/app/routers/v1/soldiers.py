@@ -20,16 +20,6 @@ async def get_me(
 ):
     return await service.get_by_id(user.id)
 
-
-@router.post("/create")
-async def create(
-    soldier: SoldierSchema,
-    soldier_service: SoldierService = Depends(get_soldier_service),
-) -> SoldierSchema:
-    soldier.password = await get_password_hash(soldier.password)
-    result: Soldier = await soldier_service.create_soldier(soldier)
-    return SoldierSchema.model_validate(result)
-
 @router.delete("/me")
 async def delete(
     service: SoldierService = Depends(get_soldier_service),
