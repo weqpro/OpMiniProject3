@@ -203,23 +203,35 @@ button[mat-raised-button] {
   .footer-content {
     flex-direction: column;
     align-items: center;
+    gap: 24px;
     text-align: center;
-    padding-bottom: 40px;
+    position: static;
   }
 
   .footer-left,
-  .footer-center {
+  .footer-center,
+  .footer-right {
     width: 100%;
-    padding: 10px 0;
-  }
-
-  .footer-links {
-    flex-direction: column;
-    gap: 12px;
+    text-align: center;
+    padding: 0;
   }
 
   .footer-right {
-    margin-top: 30px; 
-    align-self: center;
+    position: static;
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+  }
+
+  .footer-contacts {
+    align-items: center;
+    font-size: 13px;
   }
 }

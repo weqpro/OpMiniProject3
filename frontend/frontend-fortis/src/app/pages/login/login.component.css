@@ -232,24 +232,36 @@ body {
 
   .footer-content {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+    position: static;
   }
 
-  .footer-links {
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    font-size: 14px;
-  }
-
-  .footer-center {
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    width: 100%;
+    text-align: center;
     padding: 0;
   }
 
   .footer-right {
     position: static;
-    text-align: left;
     margin-top: 10px;
-    padding: 0;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+  }
+
+  .footer-contacts {
+    align-items: center;
+    font-size: 13px;
   }
 }
