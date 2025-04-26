@@ -16,19 +16,7 @@ import os, shutil
 from fastapi import UploadFile, File, Form, HTTPException
 import json
 
-
-
 router = APIRouter(prefix="/aid_requests", tags=["aid_requests"])
-
-@router.get("/search")
-async def search(
-    tags: list[str] = Query([], description="List of tags to filter by"),
-    aid_request_service: AidRequestService = Depends(get_aid_request_service),
-    text: str = Query(..., description="Search text"),
-):
-    search_options = SearchOptionsSchema(text=text, tags=tags)
-    return await aid_request_service.search(search_options)
-
 
 @router.delete("/{request_id}")
 async def delete(
