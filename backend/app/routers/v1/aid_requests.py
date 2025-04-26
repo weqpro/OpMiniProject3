@@ -173,7 +173,10 @@ async def get_by_id(
 
 
 @router.get("/uploads/{filename}")
-async def get_image(filename: str):
+async def get_image(
+    filename: str,
+    user=Depends(get_current_user_from_token),
+):
     file_path = os.path.join("uploads", "aid_requests", filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image not found")
