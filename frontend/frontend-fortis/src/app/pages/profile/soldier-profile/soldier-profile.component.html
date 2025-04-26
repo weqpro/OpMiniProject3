@@ -76,7 +76,7 @@
         <div class="container">
           <hr class="divider" />
           <div class="request-card" *ngFor="let request of requests">
-            <img [src]="'http://127.0.0.1:8000' + request.image" alt="Request image" class="request-img" />
+            <img [src]="'http://77.110.116.47:8000' + request.image" alt="Request image" class="request-img" />
             <div class="request-content">
               <h3 class="request-title">{{ request.name }}</h3>
               <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>

@@ -43,7 +43,7 @@
 
     <div class="request-list">
       <div class="request-item" *ngFor="let r of requests" (click)="openRequestPopup(r)">
-        <img [src]="'http://127.0.0.1:8000' + r.image" class="request-img" />
+        <img [src]="'http://77.110.116.47:8000' + r.image" class="request-img" />
         <div class="info">
           <h3>{{ r.name }}</h3>
           <span class="location">{{ r.location }}</span>
@@ -56,7 +56,7 @@
     <div class="popup-window" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeRequestPopup()">&times;</button>
       <h2>{{ selectedRequest.name }}</h2>
-      <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" alt="Зображення запиту" class="popup-image" />
+      <img *ngIf="selectedRequest.image" [src]="'http://77.110.116.47:8000' + selectedRequest.image" alt="Зображення запиту" class="popup-image" />
       <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
       <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
       <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
