@@ -11,7 +11,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class AidRequestService {
   private http = inject(HttpClient);
-  private apiUrl = '#'
+  private apiUrl = 'http://77.110.116.47:8000/api/v1/aid_requests';
   constructor() { }
 
   private handleError(error: HttpErrorResponse) {
@@ -32,9 +32,15 @@ export class AidRequestService {
     return this.http.get(this.apiUrl);
   }
 
-  createRequest(data: AidRequest): Observable<any> {
-    return this.http.post(this.apiUrl, data);
+  createRequest(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData).pipe(
+      catchError((error) => {
+        console.error('Помилка при створенні запиту:', error);
+        return throwError(() => new Error('Не вдалося створити запит.'));
+      })
+    );
   }
+  
 
   deleteRequest(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
@@ -42,11 +48,16 @@ export class AidRequestService {
 
   publishRequest(id: number): Observable<AidRequest> {
     return this.http.post<AidRequest>(`${this.apiUrl}/${id}/publish`, {});
-  }
+  } 
+
   updateRequest(id: number, data: Partial<AidRequest>): Observable<AidRequest> {
     return this.http.put<AidRequest>(`${this.apiUrl}/${id}`, data);
   }
-
+  
+  updateWithImage(id: number, formData: FormData): Observable<AidRequest> {
+    return this.http.put<AidRequest>(`${this.apiUrl}/${id}/with-image`, formData);
+  }
+  
   getRequestById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
   }
@@ -65,6 +76,15 @@ export class AidRequestService {
       catchError((error) => {
         console.error(`Error loading requests for soldier ${soldierId}:`, error);
         return throwError(() => new Error('Failed to load soldier’s requests.'));
+      })
+    );
+  }
+
+  getRequestsByVolunteer(volunteerId: number): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`${this.apiUrl}/by-volunteer/${volunteerId}`).pipe(
+      catchError((error) => {
+        console.error(`Error loading requests for volunteer ${volunteerId}:`, error);
+        return throwError(() => new Error('Failed to load volunteer’s requests.'));
       })
     );
   }
@@ -88,5 +108,25 @@ export class AidRequestService {
     }
     return this.http.get<AidRequest[]>(this.apiUrl, { params });
   }
+  
 
+  getById(id: number): Observable<AidRequest> {
+    return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
+  }
+  
+  assignToVolunteer(requestId: number, volunteerId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${requestId}/assign`, {
+      volunteer_id: volunteerId
+    });
+  }
+
+  completeRequest(id: number) {
+    return this.http.post(`${this.apiUrl}/${id}/complete`, null);
+  }
+
+  getRequestsByCity(cityName: string): Observable<AidRequest[]> {
+    return this.http.get<AidRequest[]>(`http://77.110.116.47:8000/api/v1/aid_requests/getClosest/${encodeURIComponent(cityName)}`);
+  }
+  
+  
 }

@@ -1,188 +1,133 @@
-<div class="top-bar">
+<div class="page-container">
+  <div class="top-bar">
     <div class="top-left">
-      <a routerLink="/">
+      <a routerLink="/requests-filter">
         <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
       </a>
     </div>
     <div class="top-right">
-      <button mat-icon-button [matMenuTriggerFor]="catalogMenu">
-        <mat-icon>apps</mat-icon>
+      <button mat-button class="text-link-button" routerLink="/create">
+        Опублікувати оголошення
       </button>
-      <mat-menu #catalogMenu="matMenu">
-        <button mat-menu-item>Техніка</button>
-        <button mat-menu-item>Медикаменти</button>
-        <button mat-menu-item>Спорядження</button>
-        <button mat-menu-item>Продукти</button>
-      </mat-menu>
-      <button mat-icon-button (click)="toggleSearch()">
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <mat-form-field *ngIf="showSearch" class="search-field" appearance="outline">
-        <mat-label>Пошук</mat-label>
-        <input matInput [(ngModel)]="searchQuery" placeholder="Введіть запит..." />
-      </mat-form-field>
-
-      <button mat-button class="header-button" routerLink="/create">Опублікувати оголошення</button>
       <button mat-icon-button [matMenuTriggerFor]="profileMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item routerLink="/profile/soldier">Мій профіль</button>
-        <button mat-menu-item (click)="logout()">Вийти</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
+        <button mat-menu-item [routerLink]="'/profile/soldier'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
       </mat-menu>
     </div>
   </div>
-  
-  <div class="profile-wrapper">
-    <mat-tab-group>
-      <mat-tab label="Про себе">
-        <div class="profile-section">
+
+  <div class="content-wrap" *ngIf="profileData">
+    <mat-tab-group [selectedIndex]="selectedTabIndex">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="label-text-font">Мій профіль</span>
+        </ng-template>
+
+        <div class="profile-wrapper">
           <div class="profile-header">
-            <button mat-icon-button disabled>
+            <button mat-icon-button disabled class="profile-icon">
               <mat-icon>account_circle</mat-icon>
             </button>
-            <div>
-              <h2>Ім’я Прізвище</h2>
-            </div>
+            <h2>{{ profileData.name }} {{ profileData.surname }}</h2>
           </div>
-  
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>add_circle</mat-icon> Додати фото профілю
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>Форма для завантаження фото...</p>
-          </mat-expansion-panel>
-  
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>edit</mat-icon> Редагувати інформацію про себе
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>....</p>
-          </mat-expansion-panel>
-  
-          <h3 class="section-title">Підтвердьте свій профіль</h3>
-          <mat-accordion>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title><mat-icon>verified_user</mat-icon> Підтвердити особу</mat-panel-title>
-              </mat-expansion-panel-header>
-              <div class="confirmation-fields">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Підрозділ</mat-label>
-                  <input matInput placeholder="Введіть підрозділ" />
-                </mat-form-field>
-              
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Військова частина</mat-label>
-                  <input matInput placeholder="Введіть номер частини" />
-                </mat-form-field>
-              
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Батальйон</mat-label>
-                  <input matInput placeholder="Введіть батальйон" />
-                </mat-form-field>
-              </div>              
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title><mat-icon>email</mat-icon> Електронна адреса</mat-panel-title>
-              </mat-expansion-panel-header>
-              <p>Перевірка та зміна електронної адреси</p>
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title><mat-icon>phone</mat-icon> Номер телефону</mat-panel-title>
-              </mat-expansion-panel-header>
-              <p>Додавання або підтвердження телефону</p>
-            </mat-expansion-panel>
-          </mat-accordion>
-  
-          <h3 class="section-title">Про себе</h3>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>info</mat-icon> Додати інформацію про себе
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <textarea matInput placeholder="Опишіть ваш досвід, обов’язки, потреби..."></textarea>
-          </mat-expansion-panel>
+
+          <mat-form-field class="full-width">
+            <mat-label>Номер телефону</mat-label>
+            <input matInput readonly [value]="profileData.phone_number" />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Електронна адреса</mat-label>
+            <input matInput readonly [value]="profileData.email" />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Військова частина</mat-label>
+            <input matInput readonly [value]="profileData.unit" />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Підрозділ</mat-label>
+            <input matInput readonly [value]="profileData.subsubunit" />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Батальйон</mat-label>
+            <input matInput readonly [value]="profileData.battalion" />
+          </mat-form-field>
+
+          <div class="settings-actions">
+            <button mat-flat-button class="green-button" (click)="editProfile()">Редагувати профіль</button>
+            <button mat-flat-button class="green-button" (click)="changePassword()">Змінити пароль</button>
+            <button mat-stroked-button class="delete-button" (click)="logout()">Вийти</button>
+            <button mat-stroked-button class="delete-button" (click)="deleteAccount()">Видалити обліковий запис</button>
+          </div>
         </div>
       </mat-tab>
-  
-      <mat-tab label="Налаштування">
-        <div class="settings-section">
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Відгуки</mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>Тут будуть відгуки</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Налаштування сповіщень</mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>Налаштування сповіщень</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Пароль</mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>Зміна паролю</p>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>Електронна адреса адреса</mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>Редагування електронної адреси</p>
-          </mat-expansion-panel>
-  
-          <div class="settings-actions">
-            <button mat-button color="primary">Вийти</button><br>
-            <button mat-button color="warn">Видалити обліковий запис</button>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <span class="label-text-font">Мої запити</span>
+        </ng-template>
+
+        <div class="container">
+          <hr class="divider" />
+          <div class="request-card" *ngFor="let request of requests">
+            <img [src]="'http://127.0.0.1:8000' + request.image" alt="Request image" class="request-img" />
+            <div class="request-content">
+              <h3 class="request-title">{{ request.name }}</h3>
+              <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>
+
+              <p *ngIf="request.status === 'in_progress' || request.status === 'completed'">
+                <a class="action-link" (click)="showVolunteerPopup(request.volunteer_id)">Контактні дані волонтера</a>
+              </p>
+
+              <div class="request-actions">
+                <a class="action-link" *ngIf="request.status === 'pending'" [routerLink]="['/edit-request', request.id]">Редагувати</a>
+                <a class="action-link" *ngIf="request.status === 'pending'" (click)="deleteRequest(request.id)">Видалити</a>
+                <a class="action-link" *ngIf="request.status === 'completed'" [routerLink]="['/review', request.id]">Залишити відгук</a>
+              </div>
+            </div>
           </div>
         </div>
       </mat-tab>
     </mat-tab-group>
   </div>
+
+  <div class="popup-backdrop" *ngIf="popupVolunteerVisible" (click)="closeVolunteerPopup()">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeVolunteerPopup()">×</button>
+      <h3>Контактні дані волонтера</h3>
+      <div *ngIf="selectedVolunteer">
+        <p><strong>Ім’я:</strong> {{ selectedVolunteer.name }}</p>
+        <p><strong>Прізвище:</strong> {{ selectedVolunteer.surname }}</p>
+        <p><strong>Телефон:</strong> {{ selectedVolunteer.phone_number }}</p>
+        <p><strong>Електронна пошта:</strong> {{ selectedVolunteer.email }}</p>
+        <p><strong>Рейтинг:</strong> {{ selectedVolunteer.rating || 'Немає оцінок' }}</p>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-left">
-        <a routerLink="/">
+        <a routerLink="/requests-filter">
           <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
         </a>
       </div>
-  
       <div class="footer-center">
-        <div class="footer-links">
-          <a routerLink="/contacts">Контакти</a>
-          <a routerLink="/">Головна</a>
-          <a routerLink="/about">Про нас</a>
-        </div>
-  
+        <div class="footer-links"><a routerLink="/contacts">Контакти</a></div>
         <div class="footer-contacts">
-          <div class="contact-item">
-            <mat-icon>location_on</mat-icon>
-            <span>Lviv, Ukraine</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>email</mat-icon>
-            <span>foris&#64;gmail.com</span>
-          </div>
-          <div class="contact-item">
-            <mat-icon>call</mat-icon>
-            <span>+380 567 239 175</span>
-          </div>
+          <div class="contact-item"><mat-icon>location_on</mat-icon><span>Lviv, Ukraine</span></div>
+          <div class="contact-item"><mat-icon>email</mat-icon><span>fortis.project.ua&#64;gmail.com</span></div>
+          <div class="contact-item"><mat-icon>call</mat-icon><span>+380 567 239 175</span></div>
         </div>
       </div>
-  
-      <div class="footer-right">
-        <p>Fortis © 2025 All rights reserved</p>
-      </div>
+      <div class="footer-right"><p>Fortis © 2025 All rights reserved</p></div>
     </div>
   </footer>
-  
+</div>
+ 

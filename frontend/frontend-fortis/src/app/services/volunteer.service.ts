@@ -8,10 +8,10 @@ import { Observable, catchError, throwError } from 'rxjs';
 })
 export class VolonteerService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://your-api.com/volunteers';
+  private apiUrl = 'http://77.110.116.47:8000/api/v1/volunteers';
 
   create(volonteer: Volonteer): Observable<any> {
-    return this.http.post(this.apiUrl, volonteer).pipe(
+    return this.http.post('http://77.110.116.47:8000/api/v1/auth/register/volunteer', volonteer).pipe(
       catchError((error) => {
         console.error('Error creating volonteer:', error);
         return throwError(() => new Error('Could not create volonteer. Please try again.'));
@@ -34,4 +34,23 @@ export class VolonteerService {
       })
     );
   }
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
+
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/me`, data);
+  }
+
+  changePassword(payload: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password`, payload);
+  }
+
+  deleteAccount(): Observable<any> {
+    return this.http.delete('http://77.110.116.47:8000/api/v1/volunteers/me');
+  }
+  getSoldierById(id: number): Observable<any> {
+    return this.http.get(`http://77.110.116.47:8000/api/v1/soldiers/soldier-info/${id}`);
+  }
+
 }

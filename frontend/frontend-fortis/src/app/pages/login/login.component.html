@@ -1,71 +1,83 @@
-<div class="top-bar">
-  <div class="top-left">
-    <a routerLink="/">
-      <img src="assets/logo.png" alt="Fortis Logo" />
-    </a>
-  </div>
-  <div class="top-right">
-    <button mat-icon-button>
-      <mat-icon>search</mat-icon>
-    </button>
-    <button mat-icon-button>
-      <mat-icon>account_circle</mat-icon>
-    </button>
-  </div>
-</div>
-
-<div class="login-wrapper">
-  <h2 class="login-title">Увійти</h2>
-
-  <mat-form-field class="login-field" appearance="outline">
-    <mat-label>Email</mat-label>
-    <input matInput type="email" required [(ngModel)]="email" />
-  </mat-form-field>
-  
-  <mat-form-field class="login-field" appearance="outline">
-    <mat-label>Пароль</mat-label>
-    <input matInput type="password" required [(ngModel)]="password" />
-  </mat-form-field>
-  
-  <button mat-raised-button class="login-button" color="primary" (click)="login()">
-    Увійти
-  </button>
-
-
-  <a class="register-link" routerLink="/register">Ще не маєте акаунта? Зареєструватися</a>
-</div>
-
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
-      <a routerLink="/">
-        <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
-      </a>
-    </div>
-
-    <div class="footer-center">
-      <div class="footer-links">
-        <a routerLink="/contacts">Контакти</a>
+  <div class="page-container">
+    <div class="top-bar">
+      <div class="top-left">
+        <a routerLink="/">
+          <img src="assets/logo.png" alt="Fortis Logo" />
+        </a>
       </div>
+      <div class="top-right"></div>
+    </div>
+  
+    <main class="main-content">
+      <div class="login-wrapper">
+        <div class="role-toggle">
+          <button 
+            class="role-button" 
+            [class.active]="selectedRole === 'volunteer'" 
+            (click)="selectRole('volunteer')" style="font-family: 'Montserrat', sans-serif;">
+            Волонтер
+          </button>
+          <button 
+            class="role-button" 
+            [class.active]="selectedRole === 'soldier'" 
+            (click)="selectRole('soldier')" style="font-family: 'Montserrat', sans-serif;">
+            Військовий
+          </button>
+        </div>
+        <h2 class="login-title">Увійти</h2>
+  
+        <mat-form-field class="login-field" appearance="outline">
+          <mat-label>Електронна пошта</mat-label>
+          <input matInput type="email" [(ngModel)]="email" required />
+        </mat-form-field>
+  
+        <mat-form-field class="login-field" appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput type="password" [(ngModel)]="password" required />
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" class="login-button" (click)="login()" style="font-family: 'Montserrat', sans-serif;">
+          Увійти
+        </button>
 
-      <div class="footer-contacts">
-        <div class="contact-item">
-          <mat-icon>location_on</mat-icon>
-          <span>Lviv, Ukraine</span>
+    <button class="register-link" mat-button color="accent" (click)="goToRegister()">
+      Ще не маєте акаунта? Зареєструватися
+    </button> 
+  </div>
+</main>
+  
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-left">
+          <a routerLink="/">
+            <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+          </a>
         </div>
-        <div class="contact-item">
-          <mat-icon>email</mat-icon>
-          <span>foris&#64;gmail.com</span>
+  
+        <div class="footer-center">
+          <div class="footer-links">
+            <a routerLink="/contacts">Контакти</a>
+          </div>
+  
+          <div class="footer-contacts">
+            <div class="contact-item">
+              <mat-icon>location_on</mat-icon>
+              <span>Lviv, Ukraine</span>
+            </div>
+            <div class="contact-item">
+              <mat-icon>email</mat-icon>
+              <span>fortis.project.ua&#64;gmail.com</span>
+            </div>
+            <div class="contact-item">
+              <mat-icon>call</mat-icon>
+              <span>+380 567 239 175</span>
+            </div>
+          </div>
         </div>
-        <div class="contact-item">
-          <mat-icon>call</mat-icon>
-          <span>+380 567 239 175</span>
+  
+        <div class="footer-right">
+          <p>Fortis © 2025 All rights reserved</p>
         </div>
       </div>
-    </div>
-
-    <div class="footer-right">
-      <p>Fortis © 2025 All rights reserved</p>
-    </div>
+    </footer>
   </div>
-</footer>

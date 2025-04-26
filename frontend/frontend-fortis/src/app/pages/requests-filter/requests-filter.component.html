@@ -1,0 +1,102 @@
+<div class="page-container">
+  <main class="content-wrap">
+    <div class="top-bar">
+      <div class="top-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
+        </a>
+      </div>
+      <div class="top-right">
+        <button *ngIf="userRole === 'soldier'" mat-button class="text-link-button" routerLink="/create">
+          Опублікувати оголошення
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #profileMenu="matMenu">
+          <button mat-menu-item [routerLink]="userRole === 'soldier' ? '/profile/soldier' : '/profile/volunteer'">
+            Мій профіль
+          </button>
+          <button mat-menu-item [routerLink]="userRole === 'volunteer' ? '/profile/volunteer' : '/profile/soldier'" [queryParams]="{ tab: 'requests' }">
+            Мої запити
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchCity" placeholder="Введіть зручну для вас локацію" class="search-input" />
+      <button (click)="onCitySearch()" class="search-button">Пошук</button>
+    </div>
+
+    <div class="filters">
+      <div class="filter">
+        <label>Категорія</label>
+        <select [(ngModel)]="selectedCategoryId" (change)="onCategoryChange()" class="category-select">
+          <option [ngValue]="null">Будь-яка категорія</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>        
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="request-list">
+      <div class="request-item" *ngFor="let r of requests" (click)="openRequestPopup(r)">
+        <img [src]="'http://127.0.0.1:8000' + r.image" class="request-img" />
+        <div class="info">
+          <h3>{{ r.name }}</h3>
+          <span class="location">{{ r.location }}</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="popup-backdrop" *ngIf="selectedRequest" (click)="closeRequestPopup()">
+    <div class="popup-window" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeRequestPopup()">&times;</button>
+      <h2>{{ selectedRequest.name }}</h2>
+      <img *ngIf="selectedRequest.image" [src]="'http://127.0.0.1:8000' + selectedRequest.image" alt="Зображення запиту" class="popup-image" />
+      <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
+      <p><strong>Локація:</strong> {{ selectedRequest.location }}</p>
+      <p><strong>Крайній термін:</strong> {{ selectedRequest.deadline | date: 'dd.MM.yyyy' }}</p>
+      <button *ngIf="userRole === 'volunteer'" mat-raised-button class="complete-button" (click)="acceptRequest()">
+        Погодитись допомогти
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+        <div class="footer-contacts">
+          <div class="contact-item">
+            <mat-icon>location_on</mat-icon>
+            <span>Lviv, Ukraine</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>email</mat-icon>
+            <span>fortis.project.ua&#64;gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <mat-icon>call</mat-icon>
+            <span>+380 567 239 175</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+</div>
