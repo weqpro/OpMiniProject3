@@ -21,7 +21,6 @@ import os
 import shutil
 import json
 
-
 router = APIRouter(prefix="/aid_requests", tags=["aid_requests"])
 
 
@@ -153,7 +152,10 @@ async def update_request(
     service: AidRequestService = Depends(get_aid_request_service),
     user=Depends(get_current_soldier),
 ):
-    return await service.update(request_id, soldier_id=user.id, data=data.model_dump(exclude_unset=True))
+    return await service.update(
+        request_id, soldier_id=user.id, data=data.model_dump(exclude_unset=True)
+    )
+
 
 @router.put("/{request_id}/with-image", response_model=AidRequestSchema)
 async def update_with_image(
@@ -177,10 +179,7 @@ async def update_with_image(
             shutil.copyfileobj(image.file, f)
 
     return await service.update(
-        request_id=request_id,
-        soldier_id=user.id,
-        data=data_dict,
-        image=image_name
+        request_id=request_id, soldier_id=user.id, data=data_dict, image=image_name
     )
 
 
@@ -203,10 +202,12 @@ async def get_image(filename: str):
         raise HTTPException(status_code=404, detail="Image not found")
     return FileResponse(file_path)
 
+
 @router.get("/getClosest/{city_name}", response_model=list[AidRequestSchema])
 async def get_closest_requests(
     city_name: str,
     service: AidRequestService = Depends(get_aid_request_service),
-    user=Depends(get_current_user_from_token)
+    user=Depends(get_current_user_from_token),
 ) -> list[AidRequestSchema]:
     return await service.get_requests_nearest_to_city(city_name)
+

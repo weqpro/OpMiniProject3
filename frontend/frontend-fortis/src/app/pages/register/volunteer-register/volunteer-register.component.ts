@@ -27,6 +27,8 @@ import Swal from 'sweetalert2';
 })
 export class VolunteerRegisterComponent {
   volunteerForm: FormGroup;
+  hidePassword = true;
+
 
   constructor(
     private fb: FormBuilder,

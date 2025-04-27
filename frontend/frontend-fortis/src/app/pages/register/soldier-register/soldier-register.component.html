@@ -39,11 +39,19 @@
 
       <mat-form-field appearance="fill" class="input-field">
         <mat-label>Пароль</mat-label>
-        <input matInput type="password" formControlName="password" />
+        <input matInput 
+               [type]="hidePassword ? 'password' : 'text'" 
+               formControlName="password" />
+        
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Перемкнути перегляд пароля'">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      
         <mat-error *ngIf="soldierForm.get('password')?.hasError('minlength')">
           Пароль повинен містити щонайменше 8 символів
         </mat-error>
       </mat-form-field>
+      
 
       <div class="dual-inputs">
         <mat-form-field appearance="fill" class="input-half">

@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [
@@ -25,8 +26,9 @@ export class LoginComponent {
   password: string = '';
   selectedRole: 'volunteer' | 'soldier' = 'volunteer';
   baseUrl: string = 'http://77.110.116.47:8000/api/v1/auth/token';
+  hidePassword = true;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   selectRole(role: 'volunteer' | 'soldier') {
     this.selectedRole = role;

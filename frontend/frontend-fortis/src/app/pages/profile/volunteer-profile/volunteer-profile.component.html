@@ -1,151 +1,161 @@
-<div class="top-bar">
-  <div class="top-left">
-    <a routerLink="/requests-filter">
-      <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
-    </a>
-  </div>
-  <div class="top-right">
-    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
-      <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
-    </mat-menu>
-  </div>
-</div>
+<div class="page-container">
 
-<div class="page-wrapper" *ngIf="profileData">
-  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span class="label-text-font">Мій профіль</span>
-      </ng-template>
-
-      <div class="profile-wrapper">
-        <div class="profile-header">
-          <button mat-icon-button disabled class="profile-icon">
-            <mat-icon>account_circle</mat-icon>
-          </button>
-          <h2 class="profile-name">{{ profileData.name }} {{ profileData.surname }}</h2>
-        </div>
-
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Номер телефону</mat-label>
-          <input matInput readonly [value]="profileData.phone_number" />
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Електронна адреса</mat-label>
-          <input matInput readonly [value]="profileData.email" />
-        </mat-form-field>
-
-        <div>
-          <h3>Мій рейтинг</h3>
-          <div class="rating-row">
-            <mat-icon *ngFor="let star of [1,2,3,4,5]">
-              {{ star <= profileData.rating ? 'star' : 'star_border' }}
-            </mat-icon>
-            <span>{{ profileData.rating | number:'1.1-1' }} / 5</span>
-          </div>
-        </div>
-
-        <h3> Відгуки</h3>
-        <div class="reviews-box">
-          <div *ngIf="reviews.length === 0" class="no-reviews">У вас наразі немає відгуків</div>
-          <div class="review-item" *ngFor="let review of reviews">
-            <p><strong>Оцінка:</strong> {{ review.rating | number:'1.1-1' }} / 5</p>
-            <p *ngIf="review.review_text"><strong>Текст:</strong> "{{ review.review_text }}"</p>
-            <p *ngIf="review.tags?.length"><strong>Теги:</strong> {{ review.tags.join(', ') }}</p>
-          </div>
-        </div>
-
-        <div class="settings-actions">
-          <button mat-flat-button class="green-button" (click)="editProfile()">Редагувати профіль</button>
-          <button mat-flat-button class="green-button" (click)="changePassword()">Змінити пароль</button>
-          <button mat-stroked-button class="delete-button" (click)="logout()">Вийти</button>
-          <button mat-stroked-button class="delete-button" (click)="deleteAccount()">Видалити обліковий запис</button>
-        </div>
-      </div>
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <span class="label-text-font">Мої запити</span>
-      </ng-template>
-
-      <div class="container">
-        <h2 class="title">Мої запити</h2>
-        <hr class="divider" />
-
-        <div class="request-card" *ngFor="let request of requests">
-          <img class="request-img" [src]="'http://127.0.0.1:8000' + request.image" alt="Зображення запиту" />
-          <div class="request-content">
-            <h3 class="request-title">{{ request.name }}</h3>
-            <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>
-
-            <div *ngIf="userRole === 'volunteer' && request.status !== 'pending'">
-              <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані військового</a>
-            </div>
-
-            <div class="request-actions" *ngIf="userRole === 'volunteer'">
-              <a class="action-link" (click)="showRequestPopup(request)">Деталі запиту</a>
-              <button *ngIf="request.status === 'in_progress'" mat-raised-button class="complete-button" (click)="markAsCompleted(request.id)">
-                Позначити як виконано
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="popup-backdrop" *ngIf="popupSoldierVisible" (click)="closeSoldierPopup()">
-        <div class="popup-window" (click)="$event.stopPropagation()">
-          <button class="close-btn" (click)="closeSoldierPopup()">×</button>
-          <h3>Контактні дані військового</h3>
-          <div *ngIf="selectedSoldier">
-            <p><strong>Ім’я:</strong> {{ selectedSoldier.name }}</p>
-            <p><strong>Прізвище:</strong> {{ selectedSoldier.surname }}</p>
-            <p><strong>Телефон:</strong> {{ selectedSoldier.phone_number }}</p>
-            <p><strong>Електронна пошта:</strong> {{ selectedSoldier.email }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="popup-backdrop" *ngIf="popupRequestVisible" (click)="closeRequestPopup()">
-        <div class="popup-window" (click)="$event.stopPropagation()">
-          <button class="close-btn" (click)="closeRequestPopup()">×</button>
-          <h3>Деталі запиту</h3>
-          <div *ngIf="selectedRequest">
-            <p><strong>Назва:</strong> {{ selectedRequest.name }}</p>
-            <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
-            <p><strong>Місто:</strong> {{ selectedRequest.location }}</p>
-            <p><strong>Завершення:</strong> {{ selectedRequest.deadline | date }}</p>
-          </div>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</div>
-
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
+  <div class="top-bar">
+    <div class="top-left">
       <a routerLink="/requests-filter">
-        <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        <img src="assets/logo.png" alt="Fortis Logo" class="full-logo" />
       </a>
     </div>
-    <div class="footer-center">
-      <div class="footer-links">
-        <a routerLink="/contacts">Контакти</a>
-      </div>
-      <div class="footer-contacts">
-        <div class="contact-item"><mat-icon>location_on</mat-icon><span>Lviv, Ukraine</span></div>
-        <div class="contact-item"><mat-icon>email</mat-icon><span>fortis.project.ua&#64;gmail.com</span></div>
-        <div class="contact-item"><mat-icon>call</mat-icon><span>+380 567 239 175</span></div>
-      </div>
-    </div>
-    <div class="footer-right">
-      <p>Fortis © 2025 All rights reserved</p>
+    <div class="top-right">
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'profile' }">Мій профіль</button>
+        <button mat-menu-item [routerLink]="'/profile/volunteer'" [queryParams]="{ tab: 'requests' }">Мої запити</button>
+      </mat-menu>
     </div>
   </div>
-</footer>
+
+  <div class="content-wrap">
+    <div class="page-wrapper" *ngIf="profileData">
+
+      <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="label-text-font">Мій профіль</span>
+          </ng-template>
+
+          <div class="profile-wrapper">
+            <div class="profile-header">
+              <button mat-icon-button disabled class="profile-icon">
+                <mat-icon>account_circle</mat-icon>
+              </button>
+              <h2 class="profile-name">{{ profileData.name }} {{ profileData.surname }}</h2>
+            </div>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Номер телефону</mat-label>
+              <input matInput readonly [value]="profileData.phone_number" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Електронна адреса</mat-label>
+              <input matInput readonly [value]="profileData.email" />
+            </mat-form-field>
+
+            <div>
+              <h3>Мій рейтинг</h3>
+              <div class="rating-row">
+                <mat-icon *ngFor="let star of [1,2,3,4,5]">
+                  {{ star <= profileData.rating ? 'star' : 'star_border' }}
+                </mat-icon>
+                <span>{{ profileData.rating | number:'1.1-1' }} / 5</span>
+              </div>
+            </div>
+
+            <h3>Відгуки</h3>
+            <div class="reviews-box">
+              <div *ngIf="reviews.length === 0" class="no-reviews">У вас наразі немає відгуків</div>
+              <div class="review-item" *ngFor="let review of reviews">
+                <p><strong>Оцінка:</strong> {{ review.rating | number:'1.1-1' }} / 5</p>
+                <p *ngIf="review.review_text"><strong>Текст:</strong> "{{ review.review_text }}"</p>
+                <p *ngIf="review.tags?.length"><strong>Теги:</strong> {{ review.tags.join(', ') }}</p>
+              </div>
+            </div>
+
+            <div class="settings-actions">
+              <button mat-flat-button class="green-button" (click)="editProfile()">Редагувати профіль</button>
+              <button mat-flat-button class="green-button" (click)="changePassword()">Змінити пароль</button>
+              <button mat-stroked-button class="delete-button" (click)="logout()">Вийти</button>
+              <button mat-stroked-button class="delete-button" (click)="deleteAccount()">Видалити обліковий запис</button>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="label-text-font">Мої запити</span>
+          </ng-template>
+
+          <div class="container">
+            <hr class="divider" />
+
+            <div class="request-card" *ngFor="let request of requests">
+              <img class="request-img" [src]="'http://77.110.116.47:8000' + request.image" alt="Зображення запиту" />
+              <div class="request-content">
+                <h3 class="request-title">{{ request.name }}</h3>
+                <p><strong>Статус:</strong> {{ getStatusLabel(request.status) }}</p>
+
+                <div *ngIf="userRole === 'volunteer' && request.status !== 'pending'">
+                  <a class="action-link" (click)="showSoldierPopup(request.soldier_id)">Контактні дані військового</a>
+                </div>
+
+                <div class="request-actions" *ngIf="userRole === 'volunteer'">
+                  <a class="action-link" (click)="showRequestPopup(request)">Деталі запиту</a>
+                  <button *ngIf="request.status === 'in_progress'" mat-raised-button class="complete-button" (click)="markAsCompleted(request.id)">
+                    Позначити як виконано
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-backdrop" *ngIf="popupSoldierVisible" (click)="closeSoldierPopup()">
+            <div class="popup-window" (click)="$event.stopPropagation()">
+              <button class="close-btn" (click)="closeSoldierPopup()">×</button>
+              <h3>Контактні дані військового</h3>
+              <div *ngIf="selectedSoldier">
+                <p><strong>Ім’я:</strong> {{ selectedSoldier.name }}</p>
+                <p><strong>Прізвище:</strong> {{ selectedSoldier.surname }}</p>
+                <p><strong>Телефон:</strong> {{ selectedSoldier.phone_number }}</p>
+                <p><strong>Електронна пошта:</strong> {{ selectedSoldier.email }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-backdrop" *ngIf="popupRequestVisible" (click)="closeRequestPopup()">
+            <div class="popup-window" (click)="$event.stopPropagation()">
+              <button class="close-btn" (click)="closeRequestPopup()">×</button>
+              <h3>Деталі запиту</h3>
+              <div *ngIf="selectedRequest">
+                <p><strong>Назва:</strong> {{ selectedRequest.name }}</p>
+                <p><strong>Опис:</strong> {{ selectedRequest.description }}</p>
+                <p><strong>Місто:</strong> {{ selectedRequest.location }}</p>
+                <p><strong>Завершення:</strong> {{ selectedRequest.deadline | date }}</p>
+              </div>
+            </div>
+          </div>
+
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-left">
+        <a routerLink="/requests-filter">
+          <img src="assets/logo-small.png" alt="Fortis Logo" class="footer-logo" />
+        </a>
+      </div>
+      <div class="footer-center">
+        <div class="footer-links">
+          <a routerLink="/contacts">Контакти</a>
+        </div>
+        <div class="footer-contacts">
+          <div class="contact-item"><mat-icon>location_on</mat-icon><span>Lviv, Ukraine</span></div>
+          <div class="contact-item"><mat-icon>email</mat-icon><span>fortis.project.ua&#64;gmail.com</span></div>
+          <div class="contact-item"><mat-icon>call</mat-icon><span>+380 567 239 175</span></div>
+        </div>
+      </div>
+      <div class="footer-right">
+        <p>Fortis © 2025 All rights reserved</p>
+      </div>
+    </div>
+  </footer>
+
+</div>

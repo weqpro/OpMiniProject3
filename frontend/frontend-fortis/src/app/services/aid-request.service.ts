@@ -1,9 +1,9 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {SearchOptions} from '../schemas/search-options';
-import {AidRequest} from '../schemas/aid-request';
-import {catchError} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { SearchOptions } from '../schemas/search-options';
+import { AidRequest } from '../schemas/aid-request';
+import { catchError } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -40,7 +40,7 @@ export class AidRequestService {
       })
     );
   }
-  
+
 
   deleteRequest(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
@@ -48,16 +48,16 @@ export class AidRequestService {
 
   publishRequest(id: number): Observable<AidRequest> {
     return this.http.post<AidRequest>(`${this.apiUrl}/${id}/publish`, {});
-  } 
+  }
 
   updateRequest(id: number, data: Partial<AidRequest>): Observable<AidRequest> {
     return this.http.put<AidRequest>(`${this.apiUrl}/${id}`, data);
   }
-  
+
   updateWithImage(id: number, formData: FormData): Observable<AidRequest> {
     return this.http.put<AidRequest>(`${this.apiUrl}/${id}/with-image`, formData);
   }
-  
+
   getRequestById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
   }
@@ -108,12 +108,12 @@ export class AidRequestService {
     }
     return this.http.get<AidRequest[]>(this.apiUrl, { params });
   }
-  
+
 
   getById(id: number): Observable<AidRequest> {
     return this.http.get<AidRequest>(`${this.apiUrl}/${id}`);
   }
-  
+
   assignToVolunteer(requestId: number, volunteerId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${requestId}/assign`, {
       volunteer_id: volunteerId
@@ -127,6 +127,6 @@ export class AidRequestService {
   getRequestsByCity(cityName: string): Observable<AidRequest[]> {
     return this.http.get<AidRequest[]>(`http://77.110.116.47:8000/api/v1/aid_requests/getClosest/${encodeURIComponent(cityName)}`);
   }
-  
-  
+
+
 }

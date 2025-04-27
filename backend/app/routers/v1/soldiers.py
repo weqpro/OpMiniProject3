@@ -22,15 +22,6 @@ from app.auth import get_current_soldier, get_password_hash, get_current_volunte
 router = APIRouter(prefix="/soldiers", tags=["soldiers"])
 
 
-@router.get("/")
-async def get_all(
-    soldier_service: SoldierService = Depends(get_soldier_service),
-) -> list[SoldierSchema]:
-    return list(
-        map(lambda s: SoldierSchema.model_validate(s), await soldier_service.get_all())
-    )
-
-
 @router.get("/me", response_model=SoldierSchema)
 async def get_me(
     service: SoldierService = Depends(get_soldier_service),
@@ -38,6 +29,7 @@ async def get_me(
 ):
     return await service.get_by_id(user.id)
 
+<<<<<<< HEAD
 
 @router.post("/create")
 async def create(
@@ -49,6 +41,8 @@ async def create(
     return SoldierSchema.model_validate(result)
 
 
+=======
+>>>>>>> additional
 @router.delete("/me")
 async def delete_me(
     service: SoldierService = Depends(get_soldier_service),
