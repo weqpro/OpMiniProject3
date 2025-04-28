@@ -29,5 +29,3 @@ class Review(Base):
     __table_args__ = (
         CheckConstraint('rating BETWEEN 1 AND 5', name='rating_range_check'),
     )
-    # soldier: Mapped["Soldier"] = relationship("Soldier", back_populates="reviews")
-    # volunteer: Mapped["Volunteer"] = relationship("Volunteer", back_populates="reviews")

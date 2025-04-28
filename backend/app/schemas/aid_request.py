@@ -14,7 +14,6 @@ class AidRequestSchema(BaseModel):
     id: int
     name: str
     description: str
-    #tags: list[str]
     image: str
     location: str
     status: str
@@ -36,7 +35,6 @@ class AidRequestSchemaIn(BaseModel):
 
     name: str
     description: str
-    #tags: list[str]
     image: str
     location: str
     deadline: datetime.datetime
@@ -47,7 +45,6 @@ class AidRequestSchemaIn(BaseModel):
 class AidRequestSchemaInWithoutVolId(BaseModel):
     name: str
     description: str
-    #tags: list[str]
     image: str
     location: str
     deadline: datetime.datetime
@@ -59,7 +56,6 @@ class AidRequestSchemaInWithoutVolId(BaseModel):
 class AidRequestCreateMultipart(BaseModel):
     name: str
     description: str
-    #tags: list[str]
     location: str
     deadline: datetime.datetime
     category_id: int
@@ -67,7 +63,6 @@ class AidRequestCreateMultipart(BaseModel):
 class AidRequestSchemaUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
-    #tags: Optional[list[str]] = None
     image: Optional[str] = None
     status: Optional[str] = None
     location: Optional[str] = None
@@ -82,7 +77,6 @@ class AidRequestSchemaUpdate(BaseModel):
 class AidRequestAssignStatus(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
-    # tags: Optional[list[str]] = None
     status: Optional[str] = None
     image: Optional[str] = None
     location: Optional[str] = None

@@ -37,8 +37,6 @@ class VolunteerService:
             phone_number=volunteer.phone_number,
             rating=avg_rating if avg_rating is not None else 0.0,
         )
-        # result = await self.__repo.find_by_condition(Volunteer.id == volunteer_id)
-        # return next(iter(result), None)
         
     async def _get_average_rating(self, volunteer_id: int) -> float | None:
         async with self.__session_maker() as session:

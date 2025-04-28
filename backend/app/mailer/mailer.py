@@ -3,12 +3,12 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 
 conf = ConnectionConfig(
     MAIL_USERNAME="fortis.project.ua@gmail.com",
-    MAIL_PASSWORD="wfpx biaq fwdo ovlx",
+    MAIL_PASSWORD="",
     MAIL_FROM="fortis.project.ua@gmail.com",
     MAIL_SERVER="smtp.gmail.com",
     MAIL_PORT=587,
-    MAIL_STARTTLS=True,    # start TLS upgrade
-    MAIL_SSL_TLS=False,    # direct SSL/TLS wrapper off
+    MAIL_STARTTLS=True,    
+    MAIL_SSL_TLS=False,
     TEMPLATE_FOLDER="app/templates/email"
 )
 

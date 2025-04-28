@@ -28,7 +28,7 @@ def __get_passwd() -> str:
     with open(path) as f:
         return f.read().rstrip("\n")
 
-JWT_SECRET: str = "secret"
+JWT_SECRET: str = ""
 ALGORITHM: str = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
