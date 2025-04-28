@@ -3,7 +3,7 @@
 
 
 ## Link for the website
-...
+http://77.110.116.47
 
 ## Description
 
@@ -20,17 +20,20 @@ This project was developed as part of the “Basics of Programming” course. Ou
 - **User roles**: Two types of accounts — soldiers and volunteers.
 - **Request creation**: Soldiers can describe what they need (text, tags, location, etc.).
 - **Browse requests**: Volunteers can view a list of open requests.
-- **Search & filter**: Volunteers can filter requests by keywords or categories.
+- **Search & filter**: Volunteers can filter requests by categories and the closest request to the choosen location.
 - **Claim request**: Volunteers can "take request" to begin helping.
 - **Mark as completed**: Volunteers mark requests as fulfilled once the task is done.
 
 
 ## Tech Stack
 
-- **Frontend**: Angular 19, TypeScript, HTML/CSS
+- **Frontend**: Angular 19, TypeScript, HTML/CSS,SweetAlert2, FormsModule, ReactiveFormsModule, Angular Router
 - **Backend**: FastAPI (Python)
 - **Database**: PostgreSQL
 - **Other**: Docker, REST API, JWT for authentication
+- **Server**: Uvicorn
+- **Validation**: Pydantic
+- **orm**: SQLAlchemy
 
 
 ## Getting Started
