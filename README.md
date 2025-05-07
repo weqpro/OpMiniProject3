@@ -46,11 +46,11 @@ git clone https://github.com/weqpro/OpMiniProject3.git
 
 2. Navigate to the project directory:
 ```bash
-j
+cd OpMiniProject3
 ```
 3. Launch the project with Docker Compose:
 ```bash
-0
+docker-compose up --build
 ```
 ## Example of use:
 
